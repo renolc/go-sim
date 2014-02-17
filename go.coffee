@@ -171,7 +171,7 @@ class GoGame
 
 	onMouseClick : =>
 		cell = @board[@mousePosition.cellRow][@mousePosition.cellCol]
-		if !cell.piece
+		if cell and !cell.piece
 			cell.piece = @turn
 			@nextTurn()
 

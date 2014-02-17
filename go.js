@@ -203,7 +203,7 @@ GoGame = (function() {
   GoGame.prototype.onMouseClick = function() {
     var cell;
     cell = this.board[this.mousePosition.cellRow][this.mousePosition.cellCol];
-    if (!cell.piece) {
+    if (cell && !cell.piece) {
       cell.piece = this.turn;
       return this.nextTurn();
     }
