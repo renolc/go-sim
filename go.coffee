@@ -10,6 +10,7 @@ class GoGame
 	cellSize       : 20
 	boardSize      : 19
 	FPS            : 30
+	currentAlpha   : 0.5
 
 	Images =
 		INERSECTION : 'int'
@@ -47,6 +48,8 @@ class GoGame
 					x : Math.floor(e.layerX / @cellSize) * @cellSize
 					y : Math.floor(e.layerY / @cellSize) * @cellSize
 
+		@canvas.onclick = =>
+
 	initBoard : ->
 		@board = []
 
@@ -78,6 +81,8 @@ class GoGame
 		@images[Images.BLACK]       = new Image()
 		@images[Images.WHITE]       = new Image()
 
+		# count the number of images and wait until they all
+		# are loaded before issuing the first draw call
 		imagesLoadedCount = 0
 		for k,v of @images
 			imagesLoadedCount++
@@ -109,13 +114,22 @@ class GoGame
 			for col in [0...@boardSize]
 				@drawCell(@board[row][col])
 
-		if @mousePosition
-			@drawingContext.drawImage(@images[Images.BLACK], @mousePosition.x, @mousePosition.y, @cellSize, @cellSize)
+		# if the mouse is over the board, draw the current piece
+		# with half transparency
+		@drawCurrentPiece()
 
 		# loop the draw call
 		setTimeout((=> @draw()), 1000/@FPS)
 
+	drawCurrentPiece : ->
+		if @mousePosition
+			@drawingContext.save()
+			@drawingContext.globalAlpha = @currentAlpha
+			@drawingContext.drawImage(@images[Images.BLACK], @mousePosition.x, @mousePosition.y, @cellSize, @cellSize)
+			@drawingContext.restore()
+
 	drawCell : (cell) ->
+		# draw the correct intersection
 		if cell.row == 0 and cell.col == 0
 			img = @images[Images.TOPLEFT]
 		else if cell.row == 0 and cell.col == @boardSize - 1

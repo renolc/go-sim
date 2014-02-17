@@ -20,6 +20,8 @@ GoGame = (function() {
 
   GoGame.prototype.FPS = 30;
 
+  GoGame.prototype.currentAlpha = 0.5;
+
   Images = {
     INERSECTION: 'int',
     TOPLEFT: 'tl',
@@ -46,7 +48,7 @@ GoGame = (function() {
     this.canvas.width = this.canvas.height;
     this.drawingContext = this.canvas.getContext('2d');
     document.body.appendChild(this.canvas);
-    return this.canvas.onmousemove = (function(_this) {
+    this.canvas.onmousemove = (function(_this) {
       return function(e) {
         if (e.offsetX) {
           return _this.mousePosition = {
@@ -60,6 +62,9 @@ GoGame = (function() {
           };
         }
       };
+    })(this);
+    return this.canvas.onclick = (function(_this) {
+      return function() {};
     })(this);
   };
 
@@ -142,14 +147,21 @@ GoGame = (function() {
         this.drawCell(this.board[row][col]);
       }
     }
-    if (this.mousePosition) {
-      this.drawingContext.drawImage(this.images[Images.BLACK], this.mousePosition.x, this.mousePosition.y, this.cellSize, this.cellSize);
-    }
+    this.drawCurrentPiece();
     return setTimeout(((function(_this) {
       return function() {
         return _this.draw();
       };
     })(this)), 1000 / this.FPS);
+  };
+
+  GoGame.prototype.drawCurrentPiece = function() {
+    if (this.mousePosition) {
+      this.drawingContext.save();
+      this.drawingContext.globalAlpha = this.currentAlpha;
+      this.drawingContext.drawImage(this.images[Images.BLACK], this.mousePosition.x, this.mousePosition.y, this.cellSize, this.cellSize);
+      return this.drawingContext.restore();
+    }
   };
 
   GoGame.prototype.drawCell = function(cell) {
