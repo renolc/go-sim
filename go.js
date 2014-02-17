@@ -130,11 +130,15 @@ GoGame = (function() {
   };
 
   GoGame.prototype.drawCurrentPiece = function() {
+    var cell;
     if (this.mousePosition) {
-      this.drawingContext.save();
-      this.drawingContext.globalAlpha = this.currentAlpha;
-      this.drawingContext.drawImage(this.turn, this.mousePosition.x, this.mousePosition.y, this.cellSize, this.cellSize);
-      return this.drawingContext.restore();
+      cell = this.board[this.mousePosition.cellRow][this.mousePosition.cellCol];
+      if (!cell.piece) {
+        this.drawingContext.save();
+        this.drawingContext.globalAlpha = this.currentAlpha;
+        this.drawingContext.drawImage(this.turn, this.mousePosition.x, this.mousePosition.y, this.cellSize, this.cellSize);
+        return this.drawingContext.restore();
+      }
     }
   };
 
@@ -191,8 +195,10 @@ GoGame = (function() {
   GoGame.prototype.onMouseClick = function() {
     var cell;
     cell = this.board[this.mousePosition.cellRow][this.mousePosition.cellCol];
-    cell.piece = this.turn;
-    return this.nextTurn();
+    if (!cell.piece) {
+      cell.piece = this.turn;
+      return this.nextTurn();
+    }
   };
 
   GoGame.prototype.nextTurn = function() {

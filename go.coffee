@@ -105,11 +105,15 @@ class GoGame
 
 	drawCurrentPiece : ->
 		if @mousePosition
-			@drawingContext.save()
-			@drawingContext.globalAlpha = @currentAlpha
-			@drawingContext.drawImage(@turn, @mousePosition.x,
-				@mousePosition.y, @cellSize, @cellSize)
-			@drawingContext.restore()
+			cell = @board[@mousePosition.cellRow][@mousePosition.cellCol]
+
+			# do not draw current piece if there is already a piece present
+			if !cell.piece
+				@drawingContext.save()
+				@drawingContext.globalAlpha = @currentAlpha
+				@drawingContext.drawImage(@turn, @mousePosition.x,
+					@mousePosition.y, @cellSize, @cellSize)
+				@drawingContext.restore()
 
 	drawCell : (cell) ->
 		# draw the correct intersection
@@ -162,8 +166,9 @@ class GoGame
 
 	onMouseClick : =>
 		cell = @board[@mousePosition.cellRow][@mousePosition.cellCol]
-		cell.piece = @turn
-		@nextTurn()
+		if !cell.piece
+			cell.piece = @turn
+			@nextTurn()
 
 	# game functions ##################################################
 	nextTurn : ->
