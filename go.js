@@ -22,17 +22,17 @@ GoGame = (function() {
   GoGame.prototype.currentAlpha = 0.5;
 
   Images = {
-    INERSECTION: null,
-    TOPLEFT: null,
-    TOPRIGHT: null,
-    BOTTOMLEFT: null,
-    BOTTOMRIGHT: null,
-    TOP: null,
-    RIGHT: null,
-    LEFT: null,
-    BOTTOM: null,
-    BLACK: null,
-    WHITE: null
+    INERSECTION: new Image(),
+    TOPLEFT: new Image(),
+    TOPRIGHT: new Image(),
+    BOTTOMLEFT: new Image(),
+    BOTTOMRIGHT: new Image(),
+    TOP: new Image(),
+    RIGHT: new Image(),
+    LEFT: new Image(),
+    BOTTOM: new Image(),
+    BLACK: new Image(),
+    WHITE: new Image()
   };
 
   function GoGame() {
@@ -83,17 +83,6 @@ GoGame = (function() {
 
   GoGame.prototype.loadImagesAndDraw = function() {
     var imagesLoadedCount, k, v;
-    Images.TOP = new Image();
-    Images.RIGHT = new Image();
-    Images.BOTTOM = new Image();
-    Images.LEFT = new Image();
-    Images.TOPRIGHT = new Image();
-    Images.TOPLEFT = new Image();
-    Images.BOTTOMRIGHT = new Image();
-    Images.BOTTOMLEFT = new Image();
-    Images.INERSECTION = new Image();
-    Images.BLACK = new Image();
-    Images.WHITE = new Image();
     imagesLoadedCount = 0;
     for (k in Images) {
       v = Images[k];

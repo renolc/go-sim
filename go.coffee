@@ -13,17 +13,17 @@ class GoGame
 
 	# images ##########################################################
 	Images =
-		INERSECTION : null
-		TOPLEFT     : null
-		TOPRIGHT    : null
-		BOTTOMLEFT  : null
-		BOTTOMRIGHT : null
-		TOP         : null
-		RIGHT       : null
-		LEFT        : null
-		BOTTOM      : null
-		BLACK       : null
-		WHITE       : null
+		INERSECTION : new Image()
+		TOPLEFT     : new Image()
+		TOPRIGHT    : new Image()
+		BOTTOMLEFT  : new Image()
+		BOTTOMRIGHT : new Image()
+		TOP         : new Image()
+		RIGHT       : new Image()
+		LEFT        : new Image()
+		BOTTOM      : new Image()
+		BLACK       : new Image()
+		WHITE       : new Image()
 
 	# init functions ##################################################
 	constructor : ->
@@ -60,19 +60,6 @@ class GoGame
 		y     : row * @cellSize
 
 	loadImagesAndDraw : ->
-
-		Images.TOP         = new Image()
-		Images.RIGHT       = new Image()
-		Images.BOTTOM      = new Image()
-		Images.LEFT        = new Image()
-		Images.TOPRIGHT    = new Image()
-		Images.TOPLEFT     = new Image()
-		Images.BOTTOMRIGHT = new Image()
-		Images.BOTTOMLEFT  = new Image()
-		Images.INERSECTION = new Image()
-		Images.BLACK       = new Image()
-		Images.WHITE       = new Image()
-
 		# count the number of images and wait until they all
 		# are loaded before issuing the first draw call
 		imagesLoadedCount = 0
