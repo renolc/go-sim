@@ -8,7 +8,6 @@ class GoGame
 
 	# enums and constants
 	cellSize       : 20
-	halfCellSize   : 10
 	boardSize      : 19
 	FPS            : 30
 
@@ -41,12 +40,12 @@ class GoGame
 		@canvas.onmousemove = (e) =>
 			if e.offsetX
 				@mousePosition =
-					x: e.offsetX
-					y: e.offsetY
+					x : Math.floor(e.offsetX / @cellSize) * @cellSize
+					y : Math.floor(e.offsetY / @cellSize) * @cellSize
 			else if e.layerX
-				@mousePosition = 
-					x: e.layerX
-					y: e.layerY
+				@mousePosition =
+					x : Math.floor(e.layerX / @cellSize) * @cellSize
+					y : Math.floor(e.layerY / @cellSize) * @cellSize
 
 	initBoard : ->
 		@board = []
@@ -111,7 +110,7 @@ class GoGame
 				@drawCell(@board[row][col])
 
 		if @mousePosition
-			@drawingContext.drawImage(@images[Images.BLACK], @mousePosition.x - @halfCellSize, @mousePosition.y - @halfCellSize, @cellSize, @cellSize)
+			@drawingContext.drawImage(@images[Images.BLACK], @mousePosition.x, @mousePosition.y, @cellSize, @cellSize)
 
 		# loop the draw call
 		setTimeout((=> @draw()), 1000/@FPS)

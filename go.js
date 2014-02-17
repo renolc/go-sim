@@ -16,8 +16,6 @@ GoGame = (function() {
 
   GoGame.prototype.cellSize = 20;
 
-  GoGame.prototype.halfCellSize = 10;
-
   GoGame.prototype.boardSize = 19;
 
   GoGame.prototype.FPS = 30;
@@ -52,13 +50,13 @@ GoGame = (function() {
       return function(e) {
         if (e.offsetX) {
           return _this.mousePosition = {
-            x: e.offsetX,
-            y: e.offsetY
+            x: Math.floor(e.offsetX / _this.cellSize) * _this.cellSize,
+            y: Math.floor(e.offsetY / _this.cellSize) * _this.cellSize
           };
         } else if (e.layerX) {
           return _this.mousePosition = {
-            x: e.layerX,
-            y: e.layerY
+            x: Math.floor(e.layerX / _this.cellSize) * _this.cellSize,
+            y: Math.floor(e.layerY / _this.cellSize) * _this.cellSize
           };
         }
       };
@@ -145,7 +143,7 @@ GoGame = (function() {
       }
     }
     if (this.mousePosition) {
-      this.drawingContext.drawImage(this.images[Images.BLACK], this.mousePosition.x - this.halfCellSize, this.mousePosition.y - this.halfCellSize, this.cellSize, this.cellSize);
+      this.drawingContext.drawImage(this.images[Images.BLACK], this.mousePosition.x, this.mousePosition.y, this.cellSize, this.cellSize);
     }
     return setTimeout(((function(_this) {
       return function() {
