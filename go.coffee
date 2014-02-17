@@ -11,6 +11,7 @@ class GoGame
 	boardSize    : 19
 	FPS          : 30
 	currentAlpha : 0.5
+	DEBUG        : true
 
 	# images ##########################################################
 	Images =
@@ -42,6 +43,7 @@ class GoGame
 		# setup handlers
 		@canvas.onmousemove = @onMouseMove
 		@canvas.onclick = @onMouseClick
+		@canvas.onmouseout = @onMouseOut
 
 	initBoard : ->
 		# black goes first
@@ -108,7 +110,7 @@ class GoGame
 			cell = @board[@mousePosition.cellRow][@mousePosition.cellCol]
 
 			# do not draw current piece if there is already a piece present
-			if !cell.piece
+			if !cell?.piece
 				@drawingContext.save()
 				@drawingContext.globalAlpha = @currentAlpha
 				@drawingContext.drawImage(@turn, @mousePosition.x,
@@ -163,6 +165,9 @@ class GoGame
 				cellRow : row
 				x       : col * @cellSize
 				y       : row * @cellSize
+
+	onMouseOut : =>
+		@mousePosition = null
 
 	onMouseClick : =>
 		cell = @board[@mousePosition.cellRow][@mousePosition.cellCol]
