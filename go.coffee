@@ -4,6 +4,7 @@ class GoGame
 	drawingContext : null
 	board          : null
 	mousePosition  : null
+	turn           : null
 
 	# enums and constants #############################################
 	cellSize     : 20
@@ -34,16 +35,18 @@ class GoGame
 
 	initCanvasAndContext : ->
 		@canvas = document.createElement('canvas')
-		@canvas.height = @cellSize * @boardSize
-		@canvas.width  = @canvas.height
+		@canvas.height = @canvas.width = @cellSize * @boardSize
 		@drawingContext = @canvas.getContext('2d')
 		document.body.appendChild(@canvas)
 
+		# setup handlers
 		@canvas.onmousemove = @onMouseMove
-
 		@canvas.onclick = @onMouseClick
 
 	initBoard : ->
+		# black goes first
+		@turn = Images.BLACK
+
 		@board = []
 
 		for row in [0...@boardSize]
@@ -84,7 +87,7 @@ class GoGame
 
 	# draw functions ##################################################
 	draw : ->
-		# clear and board color fill
+		# board color fill
 		fillStyle = 'rgb(195, 142, 72)'
 		@drawingContext.fillStyle = fillStyle
 		@drawingContext.fillRect(0, 0, @canvas.width, @canvas.height)
@@ -104,7 +107,7 @@ class GoGame
 		if @mousePosition
 			@drawingContext.save()
 			@drawingContext.globalAlpha = @currentAlpha
-			@drawingContext.drawImage(Images.BLACK, @mousePosition.x,
+			@drawingContext.drawImage(@turn, @mousePosition.x,
 				@mousePosition.y, @cellSize, @cellSize)
 			@drawingContext.restore()
 
@@ -159,7 +162,13 @@ class GoGame
 
 	onMouseClick : =>
 		cell = @board[@mousePosition.cellRow][@mousePosition.cellCol]
-		cell.piece = Images.BLACK
+		cell.piece = @turn
+		@nextTurn()
+
+	# game functions ##################################################
+	nextTurn : ->
+		@turn =
+			if @turn == Images.BLACK then Images.WHITE else Images.BLACK
 
 # DOM is ready
 window.onload = -> new GoGame()

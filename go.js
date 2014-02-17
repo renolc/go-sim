@@ -13,6 +13,8 @@ GoGame = (function() {
 
   GoGame.prototype.mousePosition = null;
 
+  GoGame.prototype.turn = null;
+
   GoGame.prototype.cellSize = 20;
 
   GoGame.prototype.boardSize = 19;
@@ -45,8 +47,7 @@ GoGame = (function() {
 
   GoGame.prototype.initCanvasAndContext = function() {
     this.canvas = document.createElement('canvas');
-    this.canvas.height = this.cellSize * this.boardSize;
-    this.canvas.width = this.canvas.height;
+    this.canvas.height = this.canvas.width = this.cellSize * this.boardSize;
     this.drawingContext = this.canvas.getContext('2d');
     document.body.appendChild(this.canvas);
     this.canvas.onmousemove = this.onMouseMove;
@@ -55,6 +56,7 @@ GoGame = (function() {
 
   GoGame.prototype.initBoard = function() {
     var col, row, _i, _ref, _results;
+    this.turn = Images.BLACK;
     this.board = [];
     _results = [];
     for (row = _i = 0, _ref = this.boardSize; 0 <= _ref ? _i < _ref : _i > _ref; row = 0 <= _ref ? ++_i : --_i) {
@@ -131,7 +133,7 @@ GoGame = (function() {
     if (this.mousePosition) {
       this.drawingContext.save();
       this.drawingContext.globalAlpha = this.currentAlpha;
-      this.drawingContext.drawImage(Images.BLACK, this.mousePosition.x, this.mousePosition.y, this.cellSize, this.cellSize);
+      this.drawingContext.drawImage(this.turn, this.mousePosition.x, this.mousePosition.y, this.cellSize, this.cellSize);
       return this.drawingContext.restore();
     }
   };
@@ -189,7 +191,12 @@ GoGame = (function() {
   GoGame.prototype.onMouseClick = function() {
     var cell;
     cell = this.board[this.mousePosition.cellRow][this.mousePosition.cellCol];
-    return cell.piece = Images.BLACK;
+    cell.piece = this.turn;
+    return this.nextTurn();
+  };
+
+  GoGame.prototype.nextTurn = function() {
+    return this.turn = this.turn === Images.BLACK ? Images.WHITE : Images.BLACK;
   };
 
   return GoGame;
