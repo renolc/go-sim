@@ -1,34 +1,38 @@
 class GoGame
 	# properties ######################################################
+	DEBUG          : null
 	canvas         : null
 	drawingContext : null
 	board          : null
 	mousePosition  : null
 	turn           : null
+	liberties      : null
 
 	# enums and constants #############################################
 	cellSize     : 20
 	boardSize    : 19
 	FPS          : 30
 	currentAlpha : 0.5
-	DEBUG        : true
 
 	# images ##########################################################
 	Images =
-		INERSECTION : new Image()
-		TOPLEFT     : new Image()
-		TOPRIGHT    : new Image()
-		BOTTOMLEFT  : new Image()
-		BOTTOMRIGHT : new Image()
-		TOP         : new Image()
-		RIGHT       : new Image()
-		LEFT        : new Image()
-		BOTTOM      : new Image()
-		BLACK       : new Image()
-		WHITE       : new Image()
+		INERSECTION   : new Image()
+		TOPLEFT       : new Image()
+		TOPRIGHT      : new Image()
+		BOTTOMLEFT    : new Image()
+		BOTTOMRIGHT   : new Image()
+		TOP           : new Image()
+		RIGHT         : new Image()
+		LEFT          : new Image()
+		BOTTOM        : new Image()
+		BLACK         : new Image()
+		WHITE         : new Image()
+		DEBUG_LIBERTY : new Image()
 
 	# init functions ##################################################
-	constructor : ->
+	constructor : (debug = false) ->
+		@DEBUG = debug
+		
 		@initCanvasAndContext()
 		@initBoard()
 
@@ -49,6 +53,7 @@ class GoGame
 		# black goes first
 		@turn = Images.BLACK
 
+		@liberties = []
 		@board = []
 
 		for row in [0...@boardSize]
@@ -61,8 +66,6 @@ class GoGame
 		piece : null
 		row   : row
 		col   : col
-		x     : col * @cellSize
-		y     : row * @cellSize
 
 	loadImagesAndDraw : ->
 		# count the number of images and wait until they all
@@ -75,17 +78,19 @@ class GoGame
 				if imagesLoadedCount == 0
 					@draw()
 
-		Images.TOP.src         = 'img/topEdge.png'
-		Images.RIGHT.src       = 'img/rightEdge.png'
-		Images.BOTTOM.src      = 'img/bottomEdge.png'
-		Images.LEFT.src        = 'img/leftEdge.png'
-		Images.TOPRIGHT.src    = 'img/topRight.png'
-		Images.TOPLEFT.src     = 'img/topLeft.png'
-		Images.BOTTOMRIGHT.src = 'img/bottomRight.png'
-		Images.BOTTOMLEFT.src  = 'img/bottomLeft.png'
-		Images.INERSECTION.src = 'img/intersection.png'
-		Images.BLACK.src       = 'img/black.png'
-		Images.WHITE.src       = 'img/white.png'
+		# set all the image sources which kicks off the loading
+		Images.TOP.src           = 'img/topEdge.png'
+		Images.RIGHT.src         = 'img/rightEdge.png'
+		Images.BOTTOM.src        = 'img/bottomEdge.png'
+		Images.LEFT.src          = 'img/leftEdge.png'
+		Images.TOPRIGHT.src      = 'img/topRight.png'
+		Images.TOPLEFT.src       = 'img/topLeft.png'
+		Images.BOTTOMRIGHT.src   = 'img/bottomRight.png'
+		Images.BOTTOMLEFT.src    = 'img/bottomLeft.png'
+		Images.INERSECTION.src   = 'img/intersection.png'
+		Images.BLACK.src         = 'img/black.png'
+		Images.WHITE.src         = 'img/white.png'
+		Images.DEBUG_LIBERTY.src = 'img/debugLiberty.png'
 
 	# draw functions ##################################################
 	draw : ->
@@ -102,19 +107,23 @@ class GoGame
 		# draw the current piece with half transparency
 		@drawCurrentPiece()
 
+		if @DEBUG
+			for l in @liberties
+				@drawImage(Images.DEBUG_LIBERTY, l.row, l.col)
+
 		# loop the draw call
 		setTimeout((=> @draw()), 1000/@FPS)
 
 	drawCurrentPiece : ->
 		if @mousePosition
-			cell = @board[@mousePosition.cellRow][@mousePosition.cellCol]
+			cell = @board[@mousePosition.row][@mousePosition.col]
 
 			# do not draw current piece if there is already a piece present
 			if !cell?.piece
 				@drawingContext.save()
 				@drawingContext.globalAlpha = @currentAlpha
-				@drawingContext.drawImage(@turn, @mousePosition.x,
-					@mousePosition.y, @cellSize, @cellSize)
+				@drawImage(@turn, @mousePosition.row,
+					@mousePosition.col)
 				@drawingContext.restore()
 
 	drawCell : (cell) ->
@@ -138,40 +147,36 @@ class GoGame
 		else
 			img = Images.INERSECTION
 		
-		@drawingContext.drawImage(img, cell.x, cell.y, @cellSize,
-			@cellSize)
+		@drawImage(img, cell.row, cell.col)
 
 		# draw the cell piece, if it has any
 		if cell.piece
-			@drawingContext.drawImage(cell.piece, cell.x, cell.y, @cellSize,
-				@cellSize)
+			@drawImage(cell.piece, cell.row, cell.col)
 
 	# handler functions ###############################################
 	onMouseMove : (e) =>
 		# snap the x and y positions to the closest cell
 		if e.offsetX
-			col = Math.floor(e.offsetX / @cellSize)
-			row = Math.floor(e.offsetY / @cellSize)
 			@mousePosition =
-				cellCol : col
-				cellRow : row
-				x       : col * @cellSize
-				y       : row * @cellSize
+				col : Math.floor(e.offsetX / @cellSize)
+				row : Math.floor(e.offsetY / @cellSize)
 		else if e.layerX
-			col = Math.floor(e.layerX / @cellSize)
-			row = Math.floor(e.layerY / @cellSize)
 			@mousePosition =
-				cellCol : col
-				cellRow : row
-				x       : col * @cellSize
-				y       : row * @cellSize
+				col : Math.floor(e.layerX / @cellSize)
+				row : Math.floor(e.layerY / @cellSize)
 
 	onMouseOut : =>
 		@mousePosition = null
 
 	onMouseClick : =>
-		cell = @board[@mousePosition.cellRow][@mousePosition.cellCol]
+		cell = @board[@mousePosition.row][@mousePosition.col]
 		if cell and !cell.piece
+
+			@liberties.push(@board[cell.row-1][cell.col])
+			@liberties.push(@board[cell.row+1][cell.col])
+			@liberties.push(@board[cell.row][cell.col-1])
+			@liberties.push(@board[cell.row][cell.col+1])
+
 			cell.piece = @turn
 			@nextTurn()
 
@@ -180,5 +185,10 @@ class GoGame
 		@turn =
 			if @turn == Images.BLACK then Images.WHITE else Images.BLACK
 
+	# util functions ##################################################
+	drawImage : (img, row, col) ->
+		@drawingContext.drawImage(img, col * @cellSize, row * @cellSize,
+			@cellSize, @cellSize)
+
 # DOM is ready
-window.onload = -> new GoGame()
+window.onload = -> new GoGame(true)

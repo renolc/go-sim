@@ -5,6 +5,8 @@ var GoGame,
 GoGame = (function() {
   var Images;
 
+  GoGame.prototype.DEBUG = null;
+
   GoGame.prototype.canvas = null;
 
   GoGame.prototype.drawingContext = null;
@@ -15,6 +17,8 @@ GoGame = (function() {
 
   GoGame.prototype.turn = null;
 
+  GoGame.prototype.liberties = null;
+
   GoGame.prototype.cellSize = 20;
 
   GoGame.prototype.boardSize = 19;
@@ -22,8 +26,6 @@ GoGame = (function() {
   GoGame.prototype.FPS = 30;
 
   GoGame.prototype.currentAlpha = 0.5;
-
-  GoGame.prototype.DEBUG = true;
 
   Images = {
     INERSECTION: new Image(),
@@ -36,13 +38,18 @@ GoGame = (function() {
     LEFT: new Image(),
     BOTTOM: new Image(),
     BLACK: new Image(),
-    WHITE: new Image()
+    WHITE: new Image(),
+    DEBUG_LIBERTY: new Image()
   };
 
-  function GoGame() {
+  function GoGame(debug) {
+    if (debug == null) {
+      debug = false;
+    }
     this.onMouseClick = __bind(this.onMouseClick, this);
     this.onMouseOut = __bind(this.onMouseOut, this);
     this.onMouseMove = __bind(this.onMouseMove, this);
+    this.DEBUG = debug;
     this.initCanvasAndContext();
     this.initBoard();
     this.loadImagesAndDraw();
@@ -61,6 +68,7 @@ GoGame = (function() {
   GoGame.prototype.initBoard = function() {
     var col, row, _i, _ref, _results;
     this.turn = Images.BLACK;
+    this.liberties = [];
     this.board = [];
     _results = [];
     for (row = _i = 0, _ref = this.boardSize; 0 <= _ref ? _i < _ref : _i > _ref; row = 0 <= _ref ? ++_i : --_i) {
@@ -81,9 +89,7 @@ GoGame = (function() {
     return {
       piece: null,
       row: row,
-      col: col,
-      x: col * this.cellSize,
-      y: row * this.cellSize
+      col: col
     };
   };
 
@@ -112,11 +118,12 @@ GoGame = (function() {
     Images.BOTTOMLEFT.src = 'img/bottomLeft.png';
     Images.INERSECTION.src = 'img/intersection.png';
     Images.BLACK.src = 'img/black.png';
-    return Images.WHITE.src = 'img/white.png';
+    Images.WHITE.src = 'img/white.png';
+    return Images.DEBUG_LIBERTY.src = 'img/debugLiberty.png';
   };
 
   GoGame.prototype.draw = function() {
-    var col, fillStyle, row, _i, _j, _ref, _ref1;
+    var col, fillStyle, l, row, _i, _j, _k, _len, _ref, _ref1, _ref2;
     fillStyle = 'rgb(195, 142, 72)';
     this.drawingContext.fillStyle = fillStyle;
     this.drawingContext.fillRect(0, 0, this.canvas.width, this.canvas.height);
@@ -126,6 +133,13 @@ GoGame = (function() {
       }
     }
     this.drawCurrentPiece();
+    if (this.DEBUG) {
+      _ref2 = this.liberties;
+      for (_k = 0, _len = _ref2.length; _k < _len; _k++) {
+        l = _ref2[_k];
+        this.drawImage(Images.DEBUG_LIBERTY, l.row, l.col);
+      }
+    }
     return setTimeout(((function(_this) {
       return function() {
         return _this.draw();
@@ -136,11 +150,11 @@ GoGame = (function() {
   GoGame.prototype.drawCurrentPiece = function() {
     var cell;
     if (this.mousePosition) {
-      cell = this.board[this.mousePosition.cellRow][this.mousePosition.cellCol];
+      cell = this.board[this.mousePosition.row][this.mousePosition.col];
       if (!(cell != null ? cell.piece : void 0)) {
         this.drawingContext.save();
         this.drawingContext.globalAlpha = this.currentAlpha;
-        this.drawingContext.drawImage(this.turn, this.mousePosition.x, this.mousePosition.y, this.cellSize, this.cellSize);
+        this.drawImage(this.turn, this.mousePosition.row, this.mousePosition.col);
         return this.drawingContext.restore();
       }
     }
@@ -167,31 +181,22 @@ GoGame = (function() {
     } else {
       img = Images.INERSECTION;
     }
-    this.drawingContext.drawImage(img, cell.x, cell.y, this.cellSize, this.cellSize);
+    this.drawImage(img, cell.row, cell.col);
     if (cell.piece) {
-      return this.drawingContext.drawImage(cell.piece, cell.x, cell.y, this.cellSize, this.cellSize);
+      return this.drawImage(cell.piece, cell.row, cell.col);
     }
   };
 
   GoGame.prototype.onMouseMove = function(e) {
-    var col, row;
     if (e.offsetX) {
-      col = Math.floor(e.offsetX / this.cellSize);
-      row = Math.floor(e.offsetY / this.cellSize);
       return this.mousePosition = {
-        cellCol: col,
-        cellRow: row,
-        x: col * this.cellSize,
-        y: row * this.cellSize
+        col: Math.floor(e.offsetX / this.cellSize),
+        row: Math.floor(e.offsetY / this.cellSize)
       };
     } else if (e.layerX) {
-      col = Math.floor(e.layerX / this.cellSize);
-      row = Math.floor(e.layerY / this.cellSize);
       return this.mousePosition = {
-        cellCol: col,
-        cellRow: row,
-        x: col * this.cellSize,
-        y: row * this.cellSize
+        col: Math.floor(e.layerX / this.cellSize),
+        row: Math.floor(e.layerY / this.cellSize)
       };
     }
   };
@@ -202,8 +207,12 @@ GoGame = (function() {
 
   GoGame.prototype.onMouseClick = function() {
     var cell;
-    cell = this.board[this.mousePosition.cellRow][this.mousePosition.cellCol];
+    cell = this.board[this.mousePosition.row][this.mousePosition.col];
     if (cell && !cell.piece) {
+      this.liberties.push(this.board[cell.row - 1][cell.col]);
+      this.liberties.push(this.board[cell.row + 1][cell.col]);
+      this.liberties.push(this.board[cell.row][cell.col - 1]);
+      this.liberties.push(this.board[cell.row][cell.col + 1]);
       cell.piece = this.turn;
       return this.nextTurn();
     }
@@ -213,10 +222,14 @@ GoGame = (function() {
     return this.turn = this.turn === Images.BLACK ? Images.WHITE : Images.BLACK;
   };
 
+  GoGame.prototype.drawImage = function(img, row, col) {
+    return this.drawingContext.drawImage(img, col * this.cellSize, row * this.cellSize, this.cellSize, this.cellSize);
+  };
+
   return GoGame;
 
 })();
 
 window.onload = function() {
-  return new GoGame();
+  return new GoGame(true);
 };
