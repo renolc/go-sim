@@ -12,9 +12,15 @@ GoGame = (function() {
 
   GoGame.prototype.board = null;
 
+  GoGame.prototype.mousePosition = null;
+
   GoGame.prototype.cellSize = 20;
 
+  GoGame.prototype.halfCellSize = 10;
+
   GoGame.prototype.boardSize = 19;
+
+  GoGame.prototype.FPS = 30;
 
   Images = {
     INERSECTION: 'int',
@@ -41,7 +47,22 @@ GoGame = (function() {
     this.canvas.height = this.cellSize * this.boardSize;
     this.canvas.width = this.canvas.height;
     this.drawingContext = this.canvas.getContext('2d');
-    return document.body.appendChild(this.canvas);
+    document.body.appendChild(this.canvas);
+    return this.canvas.onmousemove = (function(_this) {
+      return function(e) {
+        if (e.offsetX) {
+          return _this.mousePosition = {
+            x: e.offsetX,
+            y: e.offsetY
+          };
+        } else if (e.layerX) {
+          return _this.mousePosition = {
+            x: e.layerX,
+            y: e.layerY
+          };
+        }
+      };
+    })(this);
   };
 
   GoGame.prototype.initBoard = function() {
@@ -114,22 +135,23 @@ GoGame = (function() {
   };
 
   GoGame.prototype.draw = function() {
-    var col, fillStyle, row, _i, _ref, _results;
+    var col, fillStyle, row, _i, _j, _ref, _ref1;
     fillStyle = 'rgb(195, 142, 72)';
     this.drawingContext.fillStyle = fillStyle;
     this.drawingContext.fillRect(0, 0, this.canvas.width, this.canvas.height);
-    _results = [];
     for (row = _i = 0, _ref = this.boardSize; 0 <= _ref ? _i < _ref : _i > _ref; row = 0 <= _ref ? ++_i : --_i) {
-      _results.push((function() {
-        var _j, _ref1, _results1;
-        _results1 = [];
-        for (col = _j = 0, _ref1 = this.boardSize; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; col = 0 <= _ref1 ? ++_j : --_j) {
-          _results1.push(this.drawCell(this.board[row][col]));
-        }
-        return _results1;
-      }).call(this));
+      for (col = _j = 0, _ref1 = this.boardSize; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; col = 0 <= _ref1 ? ++_j : --_j) {
+        this.drawCell(this.board[row][col]);
+      }
     }
-    return _results;
+    if (this.mousePosition) {
+      this.drawingContext.drawImage(this.images[Images.BLACK], this.mousePosition.x - this.halfCellSize, this.mousePosition.y - this.halfCellSize, this.cellSize, this.cellSize);
+    }
+    return setTimeout(((function(_this) {
+      return function() {
+        return _this.draw();
+      };
+    })(this)), 1000 / this.FPS);
   };
 
   GoGame.prototype.drawCell = function(cell) {

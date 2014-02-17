@@ -4,10 +4,13 @@ class GoGame
 	drawingContext : null
 	images         : null
 	board          : null
+	mousePosition  : null
 
 	# enums and constants
 	cellSize       : 20
+	halfCellSize   : 10
 	boardSize      : 19
+	FPS            : 30
 
 	Images =
 		INERSECTION : 'int'
@@ -34,6 +37,16 @@ class GoGame
 		@canvas.width  = @canvas.height
 		@drawingContext = @canvas.getContext('2d')
 		document.body.appendChild(@canvas)
+
+		@canvas.onmousemove = (e) =>
+			if e.offsetX
+				@mousePosition =
+					x: e.offsetX
+					y: e.offsetY
+			else if e.layerX
+				@mousePosition = 
+					x: e.layerX
+					y: e.layerY
 
 	initBoard : ->
 		@board = []
@@ -96,6 +109,12 @@ class GoGame
 		for row in [0...@boardSize]
 			for col in [0...@boardSize]
 				@drawCell(@board[row][col])
+
+		if @mousePosition
+			@drawingContext.drawImage(@images[Images.BLACK], @mousePosition.x - @halfCellSize, @mousePosition.y - @halfCellSize, @cellSize, @cellSize)
+
+		# loop the draw call
+		setTimeout((=> @draw()), 1000/@FPS)
 
 	drawCell : (cell) ->
 		if cell.row == 0 and cell.col == 0
