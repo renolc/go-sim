@@ -138,7 +138,8 @@ GoGame = (function() {
 
   GoGame.prototype.createCluster = function(cell) {
     return {
-      cells: [cell]
+      cells: [cell],
+      liberties: []
     };
   };
 
@@ -183,7 +184,7 @@ GoGame = (function() {
     }
     this.drawCurrentPiece();
     if (this.DEBUG) {
-      this.drawDEBUGLiberties;
+      this.drawDEBUGLiberties();
     }
     return setTimeout(((function(_this) {
       return function() {
@@ -232,6 +233,39 @@ GoGame = (function() {
     }
   };
 
+  GoGame.prototype.drawDEBUGLiberties = function() {
+    var cell, cluster, n, _i, _len, _ref, _results;
+    _ref = this.clusters;
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      cluster = _ref[_i];
+      _results.push((function() {
+        var _j, _len1, _ref1, _results1;
+        _ref1 = cluster.cells;
+        _results1 = [];
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          cell = _ref1[_j];
+          _results1.push((function() {
+            var _k, _len2, _ref2, _results2;
+            _ref2 = cell.getNeighbors();
+            _results2 = [];
+            for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
+              n = _ref2[_k];
+              if (!n.piece) {
+                _results2.push(this.drawImage(Images.DEBUG_LIBERTY, n.row, n.col));
+              } else {
+                _results2.push(void 0);
+              }
+            }
+            return _results2;
+          }).call(this));
+        }
+        return _results1;
+      }).call(this));
+    }
+    return _results;
+  };
+
   GoGame.prototype.onMouseMove = function(e) {
     if (e.offsetX) {
       return this.mousePosition = {
@@ -253,7 +287,8 @@ GoGame = (function() {
   GoGame.prototype.onMouseClick = function() {
     var cell;
     cell = this.board[this.mousePosition.row][this.mousePosition.col];
-    return this.placePiece(cell);
+    this.placePiece(cell);
+    return console.log(this.clusters);
   };
 
   GoGame.prototype.nextTurn = function() {
@@ -264,7 +299,8 @@ GoGame = (function() {
     if (cell && !cell.piece) {
       cell.piece = this.turn;
     }
-    return this.joinCluster(cell);
+    this.joinCluster(cell);
+    return this.updateLiberties();
   };
 
   GoGame.prototype.joinCluster = function(cell) {
@@ -288,6 +324,40 @@ GoGame = (function() {
     if (this.clusters.indexOf(cell.cluster) === -1) {
       return this.clusters.push(cell.cluster);
     }
+  };
+
+  GoGame.prototype.updateLiberties = function() {
+    var cell, cluster, n, _i, _len, _ref, _results;
+    _ref = this.clusters;
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      cluster = _ref[_i];
+      cluster.liberties = [];
+      _results.push((function() {
+        var _j, _len1, _ref1, _results1;
+        _ref1 = cluster.cells;
+        _results1 = [];
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          cell = _ref1[_j];
+          _results1.push((function() {
+            var _k, _len2, _ref2, _results2;
+            _ref2 = cell.getNeighbors();
+            _results2 = [];
+            for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
+              n = _ref2[_k];
+              if (!n.piece) {
+                _results2.push(cluster.liberties.push(n));
+              } else {
+                _results2.push(void 0);
+              }
+            }
+            return _results2;
+          })());
+        }
+        return _results1;
+      })());
+    }
+    return _results;
   };
 
   GoGame.prototype.drawImage = function(img, row, col) {

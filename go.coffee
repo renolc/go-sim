@@ -98,7 +98,8 @@ class GoGame
 			@addCellToCluster(cell, cluster)
 
 	createCluster : (cell) ->
-		cells : [cell]
+		cells     : [cell]
+		liberties : []
 
 	loadImagesAndDraw : ->
 		# count the number of images and wait until they all
@@ -142,7 +143,7 @@ class GoGame
 
 		# draw the cluster liberties if in DEBUG mode
 		if @DEBUG
-			@drawDEBUGLiberties
+			@drawDEBUGLiberties()
 
 		# loop the draw call
 		setTimeout((=> @draw()), 1000/@FPS)
@@ -186,6 +187,13 @@ class GoGame
 		if cell.piece
 			@drawImage(cell.piece, cell.row, cell.col)
 
+	drawDEBUGLiberties : () ->
+		for cluster in @clusters
+			for cell in cluster.cells
+				for n in cell.getNeighbors()
+					if !n.piece
+						@drawImage(Images.DEBUG_LIBERTY, n.row, n.col)
+
 	# handler functions ###############################################
 	onMouseMove : (e) =>
 		# snap the x and y positions to the closest cell
@@ -204,6 +212,7 @@ class GoGame
 	onMouseClick : =>
 		cell = @board[@mousePosition.row][@mousePosition.col]
 		@placePiece(cell)
+		console.log @clusters
 		# @nextTurn()
 
 	# game functions ##################################################
@@ -216,6 +225,7 @@ class GoGame
 			cell.piece = @turn
 
 		@joinCluster(cell)
+		@updateLiberties()
 
 	joinCluster : (cell) ->
 		for n in cell.getNeighbors()
@@ -239,6 +249,13 @@ class GoGame
 		# the board
 		if @clusters.indexOf(cell.cluster) == -1
 			@clusters.push(cell.cluster)
+
+	updateLiberties : ->
+		for cluster in @clusters
+			cluster.liberties = []
+			for cell in cluster.cells
+				for n in cell.getNeighbors()
+					if !n.piece then cluster.liberties.push(n)
 
 	# util functions ##################################################
 	drawImage : (img, row, col) ->
