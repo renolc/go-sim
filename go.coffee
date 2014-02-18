@@ -191,8 +191,8 @@ class GoGame
 		for cluster in @clusters
 			for cell in cluster.cells
 				for n in cell.getNeighbors()
-					if !n.piece
-						@drawImage(Images.DEBUG_LIBERTY, n.row, n.col)
+					if !n?.piece
+						@drawImage(Images.DEBUG_LIBERTY, n?.row, n?.col)
 
 	# handler functions ###############################################
 	onMouseMove : (e) =>
@@ -229,7 +229,7 @@ class GoGame
 
 	joinCluster : (cell) ->
 		for n in cell.getNeighbors()
-			if n.piece
+			if n?.piece
 				if n.piece == cell.piece
 					# if the neighbor cell is the same type and we don't
 					# already have a cluster, merge into theirs
@@ -255,7 +255,7 @@ class GoGame
 			cluster.liberties = []
 			for cell in cluster.cells
 				for n in cell.getNeighbors()
-					if !n.piece then cluster.liberties.push(n)
+					if !n?.piece then cluster.liberties.push(n)
 
 	# util functions ##################################################
 	drawImage : (img, row, col) ->

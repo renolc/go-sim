@@ -251,8 +251,8 @@ GoGame = (function() {
             _results2 = [];
             for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
               n = _ref2[_k];
-              if (!n.piece) {
-                _results2.push(this.drawImage(Images.DEBUG_LIBERTY, n.row, n.col));
+              if (!(n != null ? n.piece : void 0)) {
+                _results2.push(this.drawImage(Images.DEBUG_LIBERTY, n != null ? n.row : void 0, n != null ? n.col : void 0));
               } else {
                 _results2.push(void 0);
               }
@@ -308,7 +308,7 @@ GoGame = (function() {
     _ref = cell.getNeighbors();
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       n = _ref[_i];
-      if (n.piece) {
+      if (n != null ? n.piece : void 0) {
         if (n.piece === cell.piece) {
           if (!cell.cluster) {
             cell.setCluster(n.cluster);
@@ -345,7 +345,7 @@ GoGame = (function() {
             _results2 = [];
             for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
               n = _ref2[_k];
-              if (!n.piece) {
+              if (!(n != null ? n.piece : void 0)) {
                 _results2.push(cluster.liberties.push(n));
               } else {
                 _results2.push(void 0);
