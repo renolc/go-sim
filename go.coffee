@@ -6,13 +6,19 @@ class GoGame
 	board          : null
 	mousePosition  : null
 	turn           : null
-	liberties      : null
+	clusters       : null
 
 	# enums and constants #############################################
 	cellSize     : 20
 	boardSize    : 19
 	FPS          : 30
 	currentAlpha : 0.5
+
+	Position =
+		UP    : 'up'
+		DOWN  : 'down'
+		LEFT  : 'left'
+		RIGHT : 'right'
 
 	# images ##########################################################
 	Images =
@@ -28,6 +34,7 @@ class GoGame
 		BLACK         : new Image()
 		WHITE         : new Image()
 		DEBUG_LIBERTY : new Image()
+		DEBUG_CLUSTER : new Image()
 
 	# init functions ##################################################
 	constructor : (debug = false) ->
@@ -53,7 +60,7 @@ class GoGame
 		# black goes first
 		@turn = Images.BLACK
 
-		@liberties = []
+		@clusters = []
 		@board = []
 
 		for row in [0...@boardSize]
@@ -63,9 +70,36 @@ class GoGame
 				@board[row][col] = @createCell(row, col)
 
 	createCell : (row, col) ->
-		piece : null
-		row   : row
-		col   : col
+		piece   : null
+		cluster : null
+		row     : row
+		col     : col
+
+		getNeighbors : =>
+			cell = @board[row][col]
+			neighbors = []
+			for k, v of Position
+				neighbors.push(cell.getNeighbor(v))
+			neighbors
+
+		getNeighbor : (position) =>
+			switch position
+				when Position.UP
+					@board[row-1]?[col]
+				when Position.DOWN
+					@board[row+1]?[col]
+				when Position.LEFT
+					@board[row][col-1]
+				when Position.RIGHT
+					@board[row][col+1]
+
+		setCluster : (cluster) =>
+			cell = @board[row][col]
+			cell.cluster = cluster
+			@addCellToCluster(cell, cluster)
+
+	createCluster : (cell) ->
+		cells : [cell]
 
 	loadImagesAndDraw : ->
 		# count the number of images and wait until they all
@@ -107,9 +141,9 @@ class GoGame
 		# draw the current piece with half transparency
 		@drawCurrentPiece()
 
+		# draw the cluster liberties if in DEBUG mode
 		if @DEBUG
-			for l in @liberties
-				@drawImage(Images.DEBUG_LIBERTY, l.row, l.col)
+			@drawDEBUGLiberties
 
 		# loop the draw call
 		setTimeout((=> @draw()), 1000/@FPS)
@@ -170,25 +204,60 @@ class GoGame
 
 	onMouseClick : =>
 		cell = @board[@mousePosition.row][@mousePosition.col]
-		if cell and !cell.piece
-
-			@liberties.push(@board[cell.row-1][cell.col])
-			@liberties.push(@board[cell.row+1][cell.col])
-			@liberties.push(@board[cell.row][cell.col-1])
-			@liberties.push(@board[cell.row][cell.col+1])
-
-			cell.piece = @turn
-			@nextTurn()
+		@placePiece(cell)
+		console.log @clusters
+		# @nextTurn()
 
 	# game functions ##################################################
 	nextTurn : ->
 		@turn =
 			if @turn == Images.BLACK then Images.WHITE else Images.BLACK
 
+	placePiece : (cell) ->
+		if cell and !cell.piece
+			cell.piece = @turn
+
+		@joinCluster(cell)
+
+	joinCluster : (cell) ->
+		for n in cell.getNeighbors()
+			if n.piece
+				if n.piece == cell.piece
+					# if the neighbor cell is the same type and we don't
+					# already have a cluster, merge into theirs
+					if !cell.cluster
+						cell.setCluster(n.cluster)
+					# if we are already part of a cluster and encounter a
+					# different cluster as a neighbor, migrate their cluster
+					# into ours
+					else if n.cluster != cell.cluster
+						@migrateCluster(n.cluster, cell.cluster)
+		
+		# if no cluster was joined, create a new one just for us
+		if !cell.cluster
+			cell.cluster = @createCluster(cell)
+
+		# if this cluster is new, add it to the list of clusters on
+		# the board
+		if @clusters.indexOf(cell.cluster) == -1
+			@clusters.push(cell.cluster)
+
 	# util functions ##################################################
 	drawImage : (img, row, col) ->
 		@drawingContext.drawImage(img, col * @cellSize, row * @cellSize,
 			@cellSize, @cellSize)
+
+	addCellToCluster : (cell, cluster) ->
+		cluster.cells.push(cell)
+
+	migrateCluster : (from, to) ->
+		for cell in from.cells
+			cell.setCluster(to)
+		from.cells = []
+		@removeFromArray(from, @clusters)
+
+	removeFromArray : (toRemove, array) ->
+		array.splice(array.indexOf(toRemove), 1)
 
 # DOM is ready
 window.onload = -> new GoGame(true)

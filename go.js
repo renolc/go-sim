@@ -3,7 +3,7 @@ var GoGame,
   __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 GoGame = (function() {
-  var Images;
+  var Images, Position;
 
   GoGame.prototype.DEBUG = null;
 
@@ -17,7 +17,7 @@ GoGame = (function() {
 
   GoGame.prototype.turn = null;
 
-  GoGame.prototype.liberties = null;
+  GoGame.prototype.clusters = null;
 
   GoGame.prototype.cellSize = 20;
 
@@ -26,6 +26,13 @@ GoGame = (function() {
   GoGame.prototype.FPS = 30;
 
   GoGame.prototype.currentAlpha = 0.5;
+
+  Position = {
+    UP: 'up',
+    DOWN: 'down',
+    LEFT: 'left',
+    RIGHT: 'right'
+  };
 
   Images = {
     INERSECTION: new Image(),
@@ -39,7 +46,8 @@ GoGame = (function() {
     BOTTOM: new Image(),
     BLACK: new Image(),
     WHITE: new Image(),
-    DEBUG_LIBERTY: new Image()
+    DEBUG_LIBERTY: new Image(),
+    DEBUG_CLUSTER: new Image()
   };
 
   function GoGame(debug) {
@@ -68,7 +76,7 @@ GoGame = (function() {
   GoGame.prototype.initBoard = function() {
     var col, row, _i, _ref, _results;
     this.turn = Images.BLACK;
-    this.liberties = [];
+    this.clusters = [];
     this.board = [];
     _results = [];
     for (row = _i = 0, _ref = this.boardSize; 0 <= _ref ? _i < _ref : _i > _ref; row = 0 <= _ref ? ++_i : --_i) {
@@ -88,8 +96,50 @@ GoGame = (function() {
   GoGame.prototype.createCell = function(row, col) {
     return {
       piece: null,
+      cluster: null,
       row: row,
-      col: col
+      col: col,
+      getNeighbors: (function(_this) {
+        return function() {
+          var cell, k, neighbors, v;
+          cell = _this.board[row][col];
+          neighbors = [];
+          for (k in Position) {
+            v = Position[k];
+            neighbors.push(cell.getNeighbor(v));
+          }
+          return neighbors;
+        };
+      })(this),
+      getNeighbor: (function(_this) {
+        return function(position) {
+          var _ref, _ref1;
+          switch (position) {
+            case Position.UP:
+              return (_ref = _this.board[row - 1]) != null ? _ref[col] : void 0;
+            case Position.DOWN:
+              return (_ref1 = _this.board[row + 1]) != null ? _ref1[col] : void 0;
+            case Position.LEFT:
+              return _this.board[row][col - 1];
+            case Position.RIGHT:
+              return _this.board[row][col + 1];
+          }
+        };
+      })(this),
+      setCluster: (function(_this) {
+        return function(cluster) {
+          var cell;
+          cell = _this.board[row][col];
+          cell.cluster = cluster;
+          return _this.addCellToCluster(cell, cluster);
+        };
+      })(this)
+    };
+  };
+
+  GoGame.prototype.createCluster = function(cell) {
+    return {
+      cells: [cell]
     };
   };
 
@@ -119,11 +169,12 @@ GoGame = (function() {
     Images.INERSECTION.src = 'img/intersection.png';
     Images.BLACK.src = 'img/black.png';
     Images.WHITE.src = 'img/white.png';
-    return Images.DEBUG_LIBERTY.src = 'img/debugLiberty.png';
+    Images.DEBUG_LIBERTY.src = 'img/debugLiberty.png';
+    return Images.DEBUG_CLUSTER.src = 'img/debugCluster.png';
   };
 
   GoGame.prototype.draw = function() {
-    var col, fillStyle, l, row, _i, _j, _k, _len, _ref, _ref1, _ref2;
+    var col, fillStyle, row, _i, _j, _ref, _ref1;
     fillStyle = 'rgb(195, 142, 72)';
     this.drawingContext.fillStyle = fillStyle;
     this.drawingContext.fillRect(0, 0, this.canvas.width, this.canvas.height);
@@ -134,11 +185,7 @@ GoGame = (function() {
     }
     this.drawCurrentPiece();
     if (this.DEBUG) {
-      _ref2 = this.liberties;
-      for (_k = 0, _len = _ref2.length; _k < _len; _k++) {
-        l = _ref2[_k];
-        this.drawImage(Images.DEBUG_LIBERTY, l.row, l.col);
-      }
+      this.drawDEBUGClusters();
     }
     return setTimeout(((function(_this) {
       return function() {
@@ -187,6 +234,26 @@ GoGame = (function() {
     }
   };
 
+  GoGame.prototype.drawDEBUGClusters = function() {
+    var cell, cluster, _i, _len, _ref, _results;
+    _ref = this.clusters;
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      cluster = _ref[_i];
+      _results.push((function() {
+        var _j, _len1, _ref1, _results1;
+        _ref1 = cluster.cells;
+        _results1 = [];
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          cell = _ref1[_j];
+          _results1.push(this.drawImage(Images.DEBUG_CLUSTER, cell.row, cell.col));
+        }
+        return _results1;
+      }).call(this));
+    }
+    return _results;
+  };
+
   GoGame.prototype.onMouseMove = function(e) {
     if (e.offsetX) {
       return this.mousePosition = {
@@ -208,22 +275,65 @@ GoGame = (function() {
   GoGame.prototype.onMouseClick = function() {
     var cell;
     cell = this.board[this.mousePosition.row][this.mousePosition.col];
-    if (cell && !cell.piece) {
-      this.liberties.push(this.board[cell.row - 1][cell.col]);
-      this.liberties.push(this.board[cell.row + 1][cell.col]);
-      this.liberties.push(this.board[cell.row][cell.col - 1]);
-      this.liberties.push(this.board[cell.row][cell.col + 1]);
-      cell.piece = this.turn;
-      return this.nextTurn();
-    }
+    this.placePiece(cell);
+    return console.log(this.clusters);
   };
 
   GoGame.prototype.nextTurn = function() {
     return this.turn = this.turn === Images.BLACK ? Images.WHITE : Images.BLACK;
   };
 
+  GoGame.prototype.placePiece = function(cell) {
+    if (cell && !cell.piece) {
+      cell.piece = this.turn;
+    }
+    return this.joinCluster(cell);
+  };
+
+  GoGame.prototype.joinCluster = function(cell) {
+    var n, _i, _len, _ref;
+    _ref = cell.getNeighbors();
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      n = _ref[_i];
+      if (n.piece) {
+        if (n.piece === cell.piece) {
+          if (!cell.cluster) {
+            cell.setCluster(n.cluster);
+          } else if (n.cluster !== cell.cluster) {
+            this.migrateCluster(n.cluster, cell.cluster);
+          }
+        }
+      }
+    }
+    if (!cell.cluster) {
+      cell.cluster = this.createCluster(cell);
+    }
+    if (this.clusters.indexOf(cell.cluster) === -1) {
+      return this.clusters.push(cell.cluster);
+    }
+  };
+
   GoGame.prototype.drawImage = function(img, row, col) {
     return this.drawingContext.drawImage(img, col * this.cellSize, row * this.cellSize, this.cellSize, this.cellSize);
+  };
+
+  GoGame.prototype.addCellToCluster = function(cell, cluster) {
+    return cluster.cells.push(cell);
+  };
+
+  GoGame.prototype.migrateCluster = function(from, to) {
+    var cell, _i, _len, _ref;
+    _ref = from.cells;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      cell = _ref[_i];
+      cell.setCluster(to);
+    }
+    from.cells = [];
+    return this.removeFromArray(from, this.clusters);
+  };
+
+  GoGame.prototype.removeFromArray = function(toRemove, array) {
+    return array.splice(array.indexOf(toRemove), 1);
   };
 
   return GoGame;
