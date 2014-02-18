@@ -34,7 +34,6 @@ class GoGame
 		BLACK         : new Image()
 		WHITE         : new Image()
 		DEBUG_LIBERTY : new Image()
-		DEBUG_CLUSTER : new Image()
 
 	# init functions ##################################################
 	constructor : (debug = false) ->
@@ -205,7 +204,6 @@ class GoGame
 	onMouseClick : =>
 		cell = @board[@mousePosition.row][@mousePosition.col]
 		@placePiece(cell)
-		console.log @clusters
 		# @nextTurn()
 
 	# game functions ##################################################

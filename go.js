@@ -46,8 +46,7 @@ GoGame = (function() {
     BOTTOM: new Image(),
     BLACK: new Image(),
     WHITE: new Image(),
-    DEBUG_LIBERTY: new Image(),
-    DEBUG_CLUSTER: new Image()
+    DEBUG_LIBERTY: new Image()
   };
 
   function GoGame(debug) {
@@ -169,8 +168,7 @@ GoGame = (function() {
     Images.INERSECTION.src = 'img/intersection.png';
     Images.BLACK.src = 'img/black.png';
     Images.WHITE.src = 'img/white.png';
-    Images.DEBUG_LIBERTY.src = 'img/debugLiberty.png';
-    return Images.DEBUG_CLUSTER.src = 'img/debugCluster.png';
+    return Images.DEBUG_LIBERTY.src = 'img/debugLiberty.png';
   };
 
   GoGame.prototype.draw = function() {
@@ -185,7 +183,7 @@ GoGame = (function() {
     }
     this.drawCurrentPiece();
     if (this.DEBUG) {
-      this.drawDEBUGClusters();
+      this.drawDEBUGLiberties;
     }
     return setTimeout(((function(_this) {
       return function() {
@@ -234,26 +232,6 @@ GoGame = (function() {
     }
   };
 
-  GoGame.prototype.drawDEBUGClusters = function() {
-    var cell, cluster, _i, _len, _ref, _results;
-    _ref = this.clusters;
-    _results = [];
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      cluster = _ref[_i];
-      _results.push((function() {
-        var _j, _len1, _ref1, _results1;
-        _ref1 = cluster.cells;
-        _results1 = [];
-        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-          cell = _ref1[_j];
-          _results1.push(this.drawImage(Images.DEBUG_CLUSTER, cell.row, cell.col));
-        }
-        return _results1;
-      }).call(this));
-    }
-    return _results;
-  };
-
   GoGame.prototype.onMouseMove = function(e) {
     if (e.offsetX) {
       return this.mousePosition = {
@@ -275,8 +253,7 @@ GoGame = (function() {
   GoGame.prototype.onMouseClick = function() {
     var cell;
     cell = this.board[this.mousePosition.row][this.mousePosition.col];
-    this.placePiece(cell);
-    return console.log(this.clusters);
+    return this.placePiece(cell);
   };
 
   GoGame.prototype.nextTurn = function() {
