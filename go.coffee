@@ -197,14 +197,9 @@ class GoGame
 	# handler functions ###############################################
 	onMouseMove : (e) =>
 		# snap the x and y positions to the closest cell
-		if e.offsetX
-			@mousePosition =
-				col : Math.floor(e.offsetX / @cellSize)
-				row : Math.floor(e.offsetY / @cellSize)
-		else if e.layerX
-			@mousePosition =
-				col : Math.floor(e.layerX / @cellSize)
-				row : Math.floor(e.layerY / @cellSize)
+		@mousePosition =
+			col : Math.floor((e.pageX - @canvas.offsetLeft) / @cellSize)
+			row : Math.floor((e.pageY - @canvas.offsetTop) / @cellSize)
 
 	onMouseOut : =>
 		@mousePosition = null
