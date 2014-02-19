@@ -287,7 +287,10 @@ GoGame = (function() {
   GoGame.prototype.onMouseClick = function() {
     var cell;
     cell = this.board[this.mousePosition.row][this.mousePosition.col];
-    return this.placePiece(cell);
+    this.placePiece(cell);
+    if (this.DEBUG) {
+      return console.log(cell.cluster.liberties);
+    }
   };
 
   GoGame.prototype.nextTurn = function() {
@@ -348,7 +351,7 @@ GoGame = (function() {
           _ref1 = cell.getNeighbors();
           for (_k = 0, _len2 = _ref1.length; _k < _len2; _k++) {
             n = _ref1[_k];
-            if (!(n != null ? n.piece : void 0)) {
+            if (n && !n.piece) {
               cluster.liberties.push(n);
             }
           }
@@ -365,7 +368,7 @@ GoGame = (function() {
       _ref3 = cell.getNeighbors();
       for (_m = 0, _len4 = _ref3.length; _m < _len4; _m++) {
         n = _ref3[_m];
-        if (!(n != null ? n.piece : void 0)) {
+        if (n && !n.piece) {
           currentCluster.liberties.push(n);
         }
       }
@@ -414,5 +417,5 @@ GoGame = (function() {
 })();
 
 window.onload = function() {
-  return new GoGame(true);
+  return new GoGame();
 };

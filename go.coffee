@@ -212,6 +212,7 @@ class GoGame
 	onMouseClick : =>
 		cell = @board[@mousePosition.row][@mousePosition.col]
 		@placePiece(cell)
+		if @DEBUG then console.log cell.cluster.liberties
 
 	# game functions ##################################################
 	nextTurn : ->
@@ -270,7 +271,7 @@ class GoGame
 				cluster.liberties = []
 				for cell in cluster.cells
 					for n in cell.getNeighbors()
-						if !n?.piece then cluster.liberties.push(n)
+						if n and !n.piece then cluster.liberties.push(n)
 				if cluster.liberties.length == 0
 					@removeCluster(cluster)
 
@@ -279,7 +280,7 @@ class GoGame
 		currentCluster.liberties = []
 		for cell in currentCluster.cells
 			for n in cell.getNeighbors()
-				if !n?.piece then currentCluster.liberties.push(n)
+				if n and !n.piece then currentCluster.liberties.push(n)
 		if currentCluster.liberties.length == 0
 			return false
 
@@ -308,4 +309,4 @@ class GoGame
 		@removeFromArray(cluster, @clusters)
 
 # DOM is ready
-window.onload = -> new GoGame(true)
+window.onload = -> new GoGame()
