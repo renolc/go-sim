@@ -287,8 +287,7 @@ GoGame = (function() {
   GoGame.prototype.onMouseClick = function() {
     var cell;
     cell = this.board[this.mousePosition.row][this.mousePosition.col];
-    this.placePiece(cell);
-    return console.log(this.clusters);
+    return this.placePiece(cell);
   };
 
   GoGame.prototype.nextTurn = function() {
@@ -296,15 +295,21 @@ GoGame = (function() {
   };
 
   GoGame.prototype.placePiece = function(cell) {
+    var success;
     if (cell && !cell.piece) {
       cell.piece = this.turn;
+      success = this.joinCluster(cell);
+      if (success) {
+        return this.nextTurn();
+      } else {
+        return cell.piece = null;
+      }
     }
-    this.joinCluster(cell);
-    return this.updateLiberties();
   };
 
   GoGame.prototype.joinCluster = function(cell) {
-    var n, _i, _len, _ref;
+    var clustersToCheck, n, _i, _len, _ref;
+    clustersToCheck = [];
     _ref = cell.getNeighbors();
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       n = _ref[_i];
@@ -315,6 +320,10 @@ GoGame = (function() {
           } else if (n.cluster !== cell.cluster) {
             this.migrateCluster(n.cluster, cell.cluster);
           }
+        } else {
+          if (clustersToCheck.indexOf(n.cluster) === -1) {
+            clustersToCheck.push(n.cluster);
+          }
         }
       }
     }
@@ -322,42 +331,37 @@ GoGame = (function() {
       cell.cluster = this.createCluster(cell);
     }
     if (this.clusters.indexOf(cell.cluster) === -1) {
-      return this.clusters.push(cell.cluster);
+      this.clusters.push(cell.cluster);
     }
+    clustersToCheck.push(cell.cluster);
+    return this.updateLiberties(clustersToCheck, cell.cluster);
   };
 
-  GoGame.prototype.updateLiberties = function() {
-    var cell, cluster, n, _i, _len, _ref, _results;
-    _ref = this.clusters;
-    _results = [];
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      cluster = _ref[_i];
-      cluster.liberties = [];
-      _results.push((function() {
-        var _j, _len1, _ref1, _results1;
-        _ref1 = cluster.cells;
-        _results1 = [];
-        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-          cell = _ref1[_j];
-          _results1.push((function() {
-            var _k, _len2, _ref2, _results2;
-            _ref2 = cell.getNeighbors();
-            _results2 = [];
-            for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
-              n = _ref2[_k];
-              if (!(n != null ? n.piece : void 0)) {
-                _results2.push(cluster.liberties.push(n));
-              } else {
-                _results2.push(void 0);
-              }
+  GoGame.prototype.updateLiberties = function(clusters, currentCluster) {
+    var cell, cluster, n, success, _i, _j, _k, _len, _len1, _len2, _ref, _ref1;
+    success = true;
+    for (_i = 0, _len = clusters.length; _i < _len; _i++) {
+      cluster = clusters[_i];
+      if (cluster) {
+        cluster.liberties = [];
+        _ref = cluster.cells;
+        for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+          cell = _ref[_j];
+          _ref1 = cell.getNeighbors();
+          for (_k = 0, _len2 = _ref1.length; _k < _len2; _k++) {
+            n = _ref1[_k];
+            if (!(n != null ? n.piece : void 0)) {
+              cluster.liberties.push(n);
             }
-            return _results2;
-          })());
+          }
         }
-        return _results1;
-      })());
+        if (cluster.liberties.length === 0) {
+          success = success && cluster !== currentCluster;
+          this.removeCluster(cluster);
+        }
+      }
     }
-    return _results;
+    return success;
   };
 
   GoGame.prototype.drawImage = function(img, row, col) {
@@ -381,6 +385,16 @@ GoGame = (function() {
 
   GoGame.prototype.removeFromArray = function(toRemove, array) {
     return array.splice(array.indexOf(toRemove), 1);
+  };
+
+  GoGame.prototype.removeCluster = function(cluster) {
+    var cell, _i, _len, _ref;
+    _ref = cluster.cells;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      cell = _ref[_i];
+      cell.piece = null;
+    }
+    return this.removeFromArray(cluster, this.clusters);
   };
 
   return GoGame;

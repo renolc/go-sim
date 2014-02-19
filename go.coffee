@@ -212,8 +212,6 @@ class GoGame
 	onMouseClick : =>
 		cell = @board[@mousePosition.row][@mousePosition.col]
 		@placePiece(cell)
-		console.log @clusters
-		# @nextTurn()
 
 	# game functions ##################################################
 	nextTurn : ->
@@ -222,12 +220,21 @@ class GoGame
 
 	placePiece : (cell) ->
 		if cell and !cell.piece
+			# tentatively set the piece
 			cell.piece = @turn
 
-		@joinCluster(cell)
-		@updateLiberties()
+			# attempt to join a cluster
+			success = @joinCluster(cell)
+
+			# if we placed a piece, next turn
+			if success
+				@nextTurn()
+			# else remove the piece since the move was invalid
+			else
+				cell.piece = null
 
 	joinCluster : (cell) ->
+		clustersToCheck = []
 		for n in cell.getNeighbors()
 			if n?.piece
 				if n.piece == cell.piece
@@ -240,6 +247,11 @@ class GoGame
 					# into ours
 					else if n.cluster != cell.cluster
 						@migrateCluster(n.cluster, cell.cluster)
+				# if we encounter an enemy cluster, add it to the list
+				# to check if it is still alive
+				else
+					if clustersToCheck.indexOf(n.cluster) == -1
+						clustersToCheck.push(n.cluster)
 		
 		# if no cluster was joined, create a new one just for us
 		if !cell.cluster
@@ -250,12 +262,24 @@ class GoGame
 		if @clusters.indexOf(cell.cluster) == -1
 			@clusters.push(cell.cluster)
 
-	updateLiberties : ->
-		for cluster in @clusters
-			cluster.liberties = []
-			for cell in cluster.cells
-				for n in cell.getNeighbors()
-					if !n?.piece then cluster.liberties.push(n)
+		# always check our own cluster to make sure our move was valid
+		clustersToCheck.push(cell.cluster)
+
+		@updateLiberties(clustersToCheck, cell.cluster)
+
+	updateLiberties : (clusters, currentCluster) ->
+		success = true
+		for cluster in clusters
+			if cluster
+				cluster.liberties = []
+				for cell in cluster.cells
+					for n in cell.getNeighbors()
+						if !n?.piece then cluster.liberties.push(n)
+				if cluster.liberties.length == 0
+					success = (success and cluster != currentCluster)
+					@removeCluster(cluster)
+		
+		success
 
 	# util functions ##################################################
 	drawImage : (img, row, col) ->
@@ -273,6 +297,11 @@ class GoGame
 
 	removeFromArray : (toRemove, array) ->
 		array.splice(array.indexOf(toRemove), 1)
+
+	removeCluster : (cluster) ->
+		for cell in cluster.cells
+			cell.piece = null
+		@removeFromArray(cluster, @clusters)
 
 # DOM is ready
 window.onload = -> new GoGame(true)
