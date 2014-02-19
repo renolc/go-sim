@@ -267,17 +267,10 @@ GoGame = (function() {
   };
 
   GoGame.prototype.onMouseMove = function(e) {
-    if (e.offsetX) {
-      return this.mousePosition = {
-        col: Math.floor(e.offsetX / this.cellSize),
-        row: Math.floor(e.offsetY / this.cellSize)
-      };
-    } else if (e.layerX) {
-      return this.mousePosition = {
-        col: Math.floor(e.layerX / this.cellSize),
-        row: Math.floor(e.layerY / this.cellSize)
-      };
-    }
+    return this.mousePosition = {
+      col: Math.floor((e.pageX - this.canvas.offsetLeft) / this.cellSize),
+      row: Math.floor((e.pageY - this.canvas.offsetTop) / this.cellSize)
+    };
   };
 
   GoGame.prototype.onMouseOut = function() {
