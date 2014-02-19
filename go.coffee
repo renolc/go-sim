@@ -262,13 +262,9 @@ class GoGame
 		if @clusters.indexOf(cell.cluster) == -1
 			@clusters.push(cell.cluster)
 
-		# always check our own cluster to make sure our move was valid
-		clustersToCheck.push(cell.cluster)
-
 		@updateLiberties(clustersToCheck, cell.cluster)
 
 	updateLiberties : (clusters, currentCluster) ->
-		success = true
 		for cluster in clusters
 			if cluster
 				cluster.liberties = []
@@ -276,10 +272,18 @@ class GoGame
 					for n in cell.getNeighbors()
 						if !n?.piece then cluster.liberties.push(n)
 				if cluster.liberties.length == 0
-					success = (success and cluster != currentCluster)
 					@removeCluster(cluster)
-		
-		success
+
+		# always check our own cluster last to make sure our move
+		# was valid
+		currentCluster.liberties = []
+		for cell in currentCluster.cells
+			for n in cell.getNeighbors()
+				if !n?.piece then currentCluster.liberties.push(n)
+		if currentCluster.liberties.length == 0
+			return false
+
+		return true
 
 	# util functions ##################################################
 	drawImage : (img, row, col) ->

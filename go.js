@@ -333,13 +333,11 @@ GoGame = (function() {
     if (this.clusters.indexOf(cell.cluster) === -1) {
       this.clusters.push(cell.cluster);
     }
-    clustersToCheck.push(cell.cluster);
     return this.updateLiberties(clustersToCheck, cell.cluster);
   };
 
   GoGame.prototype.updateLiberties = function(clusters, currentCluster) {
-    var cell, cluster, n, success, _i, _j, _k, _len, _len1, _len2, _ref, _ref1;
-    success = true;
+    var cell, cluster, n, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref, _ref1, _ref2, _ref3;
     for (_i = 0, _len = clusters.length; _i < _len; _i++) {
       cluster = clusters[_i];
       if (cluster) {
@@ -356,12 +354,26 @@ GoGame = (function() {
           }
         }
         if (cluster.liberties.length === 0) {
-          success = success && cluster !== currentCluster;
           this.removeCluster(cluster);
         }
       }
     }
-    return success;
+    currentCluster.liberties = [];
+    _ref2 = currentCluster.cells;
+    for (_l = 0, _len3 = _ref2.length; _l < _len3; _l++) {
+      cell = _ref2[_l];
+      _ref3 = cell.getNeighbors();
+      for (_m = 0, _len4 = _ref3.length; _m < _len4; _m++) {
+        n = _ref3[_m];
+        if (!(n != null ? n.piece : void 0)) {
+          currentCluster.liberties.push(n);
+        }
+      }
+    }
+    if (currentCluster.liberties.length === 0) {
+      return false;
+    }
+    return true;
   };
 
   GoGame.prototype.drawImage = function(img, row, col) {
