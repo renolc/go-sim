@@ -49,7 +49,7 @@ GoGame = (function() {
     DEBUG_LIBERTY: new Image()
   };
 
-  function GoGame(debug) {
+  function GoGame(elementId, debug) {
     if (debug == null) {
       debug = false;
     }
@@ -57,16 +57,16 @@ GoGame = (function() {
     this.onMouseOut = __bind(this.onMouseOut, this);
     this.onMouseMove = __bind(this.onMouseMove, this);
     this.DEBUG = debug;
-    this.initCanvasAndContext();
+    this.initCanvasAndContext(elementId);
     this.initBoard();
     this.loadImagesAndDraw();
   }
 
-  GoGame.prototype.initCanvasAndContext = function() {
+  GoGame.prototype.initCanvasAndContext = function(elementId) {
     this.canvas = document.createElement('canvas');
     this.canvas.height = this.canvas.width = this.cellSize * this.boardSize;
     this.drawingContext = this.canvas.getContext('2d');
-    document.body.appendChild(this.canvas);
+    document.getElementById(elementId).appendChild(this.canvas);
     this.canvas.onmousemove = this.onMouseMove;
     this.canvas.onclick = this.onMouseClick;
     return this.canvas.onmouseout = this.onMouseOut;
@@ -408,7 +408,3 @@ GoGame = (function() {
   return GoGame;
 
 })();
-
-window.onload = function() {
-  return new GoGame();
-};

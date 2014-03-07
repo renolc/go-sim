@@ -36,19 +36,19 @@ class GoGame
 		DEBUG_LIBERTY : new Image()
 
 	# init functions ##################################################
-	constructor : (debug = false) ->
+	constructor : (elementId, debug = false) ->
 		@DEBUG = debug
 		
-		@initCanvasAndContext()
+		@initCanvasAndContext(elementId)
 		@initBoard()
 
 		@loadImagesAndDraw()
 
-	initCanvasAndContext : ->
+	initCanvasAndContext : (elementId) ->
 		@canvas = document.createElement('canvas')
 		@canvas.height = @canvas.width = @cellSize * @boardSize
 		@drawingContext = @canvas.getContext('2d')
-		document.body.appendChild(@canvas)
+		document.getElementById(elementId).appendChild(@canvas)
 
 		# setup handlers
 		@canvas.onmousemove = @onMouseMove
@@ -302,6 +302,3 @@ class GoGame
 		for cell in cluster.cells
 			cell.piece = null
 		@removeFromArray(cluster, @clusters)
-
-# DOM is ready
-window.onload = -> new GoGame()
