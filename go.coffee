@@ -1,17 +1,17 @@
 class GoGame
 	# properties ######################################################
-	DEBUG          : null
-	canvas         : null
-	drawingContext : null
-	board          : null
-	mousePosition  : null
-	turn           : null
-	clusters       : null
+	DEBUG             : null
+	canvas            : null
+	drawingContext    : null
+	board             : null
+	lastMousePosition : null
+	mousePosition     : null
+	turn              : null
+	clusters          : null
 
 	# enums and constants #############################################
 	cellSize     : 20
 	boardSize    : 19
-	FPS          : 30
 	currentAlpha : 0.5
 
 	Position =
@@ -48,7 +48,13 @@ class GoGame
 		@canvas = document.createElement('canvas')
 		@canvas.height = @canvas.width = @cellSize * @boardSize
 		@drawingContext = @canvas.getContext('2d')
-		document.getElementById(elementId).appendChild(@canvas)
+
+		if elementId
+			document.getElementById(elementId).appendChild(@canvas)
+		
+		# if no elementId passed in, append to the body
+		else
+			document.body.appendChild(@canvas)
 
 		# setup handlers
 		@canvas.onmousemove = @onMouseMove
@@ -128,11 +134,6 @@ class GoGame
 
 	# draw functions ##################################################
 	draw : ->
-		# board color fill
-		fillStyle = 'rgb(195, 142, 72)'
-		@drawingContext.fillStyle = fillStyle
-		@drawingContext.fillRect(0, 0, @canvas.width, @canvas.height)
-
 		# draw individual cells
 		for row in [0...@boardSize]
 			for col in [0...@boardSize]
@@ -144,9 +145,6 @@ class GoGame
 		# draw the cluster liberties if in DEBUG mode
 		if @DEBUG
 			@drawDEBUGLiberties()
-
-		# loop the draw call
-		setTimeout((=> @draw()), 1000/@FPS)
 
 	drawCurrentPiece : ->
 		if @mousePosition
@@ -197,17 +195,22 @@ class GoGame
 	# handler functions ###############################################
 	onMouseMove : (e) =>
 		# snap the x and y positions to the closest cell
+		@lastMousePosition = @mousePosition
 		@mousePosition =
 			col : Math.floor((e.pageX - @canvas.offsetLeft) / @cellSize)
 			row : Math.floor((e.pageY - @canvas.offsetTop) / @cellSize)
+		if @lastMousePosition?.col != @mousePosition.col or @lastMousePosition?.row != @mousePosition.row
+			@draw()
 
 	onMouseOut : =>
 		@mousePosition = null
+		@draw()
 
 	onMouseClick : =>
 		cell = @board[@mousePosition.row][@mousePosition.col]
 		@placePiece(cell)
 		if @DEBUG then console.log cell.cluster.liberties
+		@draw()
 
 	# game functions ##################################################
 	nextTurn : ->
