@@ -57,9 +57,9 @@ class GoGame
 			document.body.appendChild(@canvas)
 
 		# setup handlers
-		@canvas.onmousemove = @onMouseMove
-		@canvas.onclick = @onMouseClick
-		@canvas.onmouseout = @onMouseOut
+		@addEvent(@canvas, "mousemove", @onMouseMove)
+		@addEvent(@canvas, "click", @onMouseClick)
+		@addEvent(@canvas, "mouseout", @onMouseOut)
 
 	initBoard : ->
 		# black goes first
@@ -194,11 +194,15 @@ class GoGame
 
 	# handler functions ###############################################
 	onMouseMove : (e) =>
-		# snap the x and y positions to the closest cell
+		# calculate the cellSize based on the current board width (which could change
+		# if the window is resized)
+		cellSize = (@canvas.offsetWidth / @boardSize)
+		
 		@lastMousePosition = @mousePosition
+		# snap the x and y positions to the closest cell
 		@mousePosition =
-			col : Math.floor((e.pageX - @canvas.offsetLeft) / @cellSize)
-			row : Math.floor((e.pageY - @canvas.offsetTop) / @cellSize)
+			col : Math.floor((e.pageX - @canvas.offsetLeft) / cellSize)
+			row : Math.floor((e.pageY - @canvas.offsetTop) / cellSize)
 		if @lastMousePosition?.col != @mousePosition.col or @lastMousePosition?.row != @mousePosition.row
 			@draw()
 
@@ -305,3 +309,11 @@ class GoGame
 		for cell in cluster.cells
 			cell.piece = null
 		@removeFromArray(cluster, @clusters)
+
+	addEvent : (element, event, handler) ->
+		if element.addEventListener
+			element.addEventListener(event, handler, false)
+		else if element.attachEvent
+			element.attachEvent('on' + event, handler)
+		else
+			element['on' + event] = handler

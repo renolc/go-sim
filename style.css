@@ -5,3 +5,12 @@ body {
 a {
 	display: block;
 }
+
+#go-game {
+	width: 50%;
+	margin: 0 auto;
+}
+
+canvas {
+	max-width: 100%;
+}

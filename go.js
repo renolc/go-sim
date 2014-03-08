@@ -71,9 +71,9 @@ GoGame = (function() {
     } else {
       document.body.appendChild(this.canvas);
     }
-    this.canvas.onmousemove = this.onMouseMove;
-    this.canvas.onclick = this.onMouseClick;
-    return this.canvas.onmouseout = this.onMouseOut;
+    this.addEvent(this.canvas, "mousemove", this.onMouseMove);
+    this.addEvent(this.canvas, "click", this.onMouseClick);
+    return this.addEvent(this.canvas, "mouseout", this.onMouseOut);
   };
 
   GoGame.prototype.initBoard = function() {
@@ -263,11 +263,12 @@ GoGame = (function() {
   };
 
   GoGame.prototype.onMouseMove = function(e) {
-    var _ref, _ref1;
+    var cellSize, _ref, _ref1;
+    cellSize = this.canvas.offsetWidth / this.boardSize;
     this.lastMousePosition = this.mousePosition;
     this.mousePosition = {
-      col: Math.floor((e.pageX - this.canvas.offsetLeft) / this.cellSize),
-      row: Math.floor((e.pageY - this.canvas.offsetTop) / this.cellSize)
+      col: Math.floor((e.pageX - this.canvas.offsetLeft) / cellSize),
+      row: Math.floor((e.pageY - this.canvas.offsetTop) / cellSize)
     };
     if (((_ref = this.lastMousePosition) != null ? _ref.col : void 0) !== this.mousePosition.col || ((_ref1 = this.lastMousePosition) != null ? _ref1.row : void 0) !== this.mousePosition.row) {
       return this.draw();
@@ -406,6 +407,16 @@ GoGame = (function() {
       cell.piece = null;
     }
     return this.removeFromArray(cluster, this.clusters);
+  };
+
+  GoGame.prototype.addEvent = function(element, event, handler) {
+    if (element.addEventListener) {
+      return element.addEventListener(event, handler, false);
+    } else if (element.attachEvent) {
+      return element.attachEvent('on' + event, handler);
+    } else {
+      return element['on' + event] = handler;
+    }
   };
 
   return GoGame;
