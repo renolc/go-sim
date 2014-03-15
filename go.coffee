@@ -98,11 +98,6 @@ class GoGame
 				when Position.RIGHT
 					@board[row][col+1]
 
-		setCluster : (cluster) =>
-			cell = @board[row][col]
-			cell.cluster = cluster
-			@addCellToCluster(cell, cluster)
-
 	createCluster : (cell) ->
 		cells     : [cell]
 		liberties : []
@@ -244,7 +239,7 @@ class GoGame
 					# if the neighbor cell is the same type and we don't
 					# already have a cluster, merge into theirs
 					if !cell.cluster
-						cell.setCluster(n.cluster)
+						@addCellToCluster(cell, n.cluster)
 					# if we are already part of a cluster and encounter a
 					# different cluster as a neighbor, migrate their cluster
 					# into ours
@@ -294,11 +289,12 @@ class GoGame
 			@cellSize, @cellSize)
 
 	addCellToCluster : (cell, cluster) ->
+		cell.cluster = cluster
 		cluster.cells.push(cell)
 
 	migrateCluster : (from, to) ->
 		for cell in from.cells
-			cell.setCluster(to)
+			@addCellToCluster(cell, to)
 		from.cells = []
 		@removeFromArray(from, @clusters)
 

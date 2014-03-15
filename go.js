@@ -128,14 +128,6 @@ GoGame = (function() {
               return _this.board[row][col + 1];
           }
         };
-      })(this),
-      setCluster: (function(_this) {
-        return function(cluster) {
-          var cell;
-          cell = _this.board[row][col];
-          cell.cluster = cluster;
-          return _this.addCellToCluster(cell, cluster);
-        };
       })(this)
     };
   };
@@ -316,7 +308,7 @@ GoGame = (function() {
       if (n != null ? n.piece : void 0) {
         if (n.piece === cell.piece) {
           if (!cell.cluster) {
-            cell.setCluster(n.cluster);
+            this.addCellToCluster(cell, n.cluster);
           } else if (n.cluster !== cell.cluster) {
             this.migrateCluster(n.cluster, cell.cluster);
           }
@@ -381,6 +373,7 @@ GoGame = (function() {
   };
 
   GoGame.prototype.addCellToCluster = function(cell, cluster) {
+    cell.cluster = cluster;
     return cluster.cells.push(cell);
   };
 
@@ -389,7 +382,7 @@ GoGame = (function() {
     _ref = from.cells;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       cell = _ref[_i];
-      cell.setCluster(to);
+      this.addCellToCluster(cell, to);
     }
     from.cells = [];
     return this.removeFromArray(from, this.clusters);
