@@ -1,18 +1,80 @@
+<!DOCTYPE html>
 <html>
 	<head>
-		<title>Go</title>
-		<link rel="stylesheet" type="text/css" href="style.css">
-		<script type="text/javascript" src="go.js"></script>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no">
+		<title>Phillip Gibson | Go Game</title>
+		<link rel="stylesheet" type="text/css" href="http://phillipjgibson.com/css/normalize.css">
+		<link href='http://fonts.googleapis.com/css?family=Changa+One|Open+Sans:400italic,400,700,800' rel='stylesheet' type='text/css' data-noprefix>
+		<link rel="stylesheet" type="text/css" href="http://phillipjgibson.com/css/style.css">
+
+		<!-- GitHub Ribbon -->
+		<link rel="stylesheet" href="http://phillipjgibson.com/css/gh-fork-ribbon.css" data-noprefix>
+    <!--[if lt IE 9]>
+        <link rel="stylesheet" href="http://phillipjgibson.com/css/gh-fork-ribbon.ie.css" data-noprefix>
+    <![endif]-->
+
+		<!-- this project's css and js -->
+		<link rel="stylesheet" type="text/css" href="css/go.css">
+		<script type="text/javascript" src="js/go.js"></script>
+
+		<script type="text/javascript" src="http://phillipjgibson.com/js/prefixfree.min.js"></script>
 	</head>
-	<body>
-		<div id="go-game"></div>
 
-		<a href="https://github.com/renolc/gogame-coffeescript"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://github-camo.global.ssl.fastly.net/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>
+	<body class=" hasGoogleVoiceExt">
+		<header>
+			<!-- "logo" content -->
+			<a href="http://phillipjgibson.com/index.html" id="logo">
+				<h1>Phillip Gibson</h1>
+				<h2>Developer</h2>
+			</a>
 
+			<!-- navigation bar -->
+			<nav>
+				<ul>
+					<li><a href="http://phillipjgibson.com/index.html">Projects</a></li>
+					<li><a href="http://phillipjgibson.com/about.html">About</a></li>
+					<li><a href="http://phillipjgibson.com/contact.html">Contact</a></li>
+				</ul>
+			</nav>
+		</header>
+
+		<!-- main content wrapper -->
+		<div id="wrapper">
+			<section id="go-game"></section>
+			<section id="details">
+				<h3>Go</h3>
+				<p>I started playing Go back in highschool. After introducing it to a few of my friends, we even bought some scrap lumber and made our own boards. It's a game I love playing, and I love teaching it to other people. Despite this, I'm also not very good at it.</p>
+				<p>While researching CoffeeScript, I decided this would be a perfect test bed. Go is a simple game with few rules, but it still has its intricacies that make it a great way to learn the language. This was also my first time working with the HTML5 canvas, but after finishing, I am now much more comfortable with both technologies.</p>
+				<p>
+				<a href="https://github.com/renolc/gogame-coffeescript" class="github-link">Fork me on GitHub</a></p>
+			</section>
+
+			<!-- github ribbon -->
+			<div class="github-fork-ribbon-wrapper left-bottom">
+        <div class="github-fork-ribbon">
+            <a href="https://github.com/renolc/gogame-coffeescript">Fork me on GitHub</a>
+        </div>
+    	</div>
+		</div>
+
+		<footer>
+			<!-- network icons/links -->
+			<a href="http://teamtreehouse.com/phillipgibson"><img src="http://phillipjgibson.com/img/networks/treehouse-wrap.png" alt="Treehouse Logo" title="Treehouse"></a>
+			<a href="https://github.com/renolc"><img src="http://phillipjgibson.com/img/networks/github-wrap.png" alt="GitHub Logo" title="GitHub"></a>
+			<a href="http://www.linkedin.com/pub/phillip-gibson/69/868/632"><img src="http://phillipjgibson.com/img/networks/linkedin-wrap.png" alt="LinkedIn Logo" title="LinkedIn"></a>
+			<a href="https://www.facebook.com/renolc"><img src="http://phillipjgibson.com/img/networks/facebook-wrap.png" alt="Facebook Logo" title="Facebook"></a>
+			<a href="https://twitter.com/renolc"><img src="http://phillipjgibson.com/img/networks/twitter-wrap.png" alt="Twitter Logo" title="Twitter"></a>
+
+			<!-- copywrite info -->
+			<p>© 2014 Phillip Gibson.</p>
+		</footer>
+
+		<!-- load the go game -->
 		<script type="text/javascript">
 			window.onload = function() {
 				new GoGame("go-game");
 			};
 		</script>
-	</body>
-</html>
+	
+</body></html>
