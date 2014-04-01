@@ -191,13 +191,14 @@ class GoGame
 	onMouseMove : (e) =>
 		# calculate the cellSize based on the current board width (which could change
 		# if the window is resized)
-		cellSize = (@canvas.offsetWidth / @boardSize)
+		cellWidth = (@canvas.offsetWidth / @boardSize)
+		cellHeight = (@canvas.offsetHeight / @boardSize)
 		
 		@lastMousePosition = @mousePosition
 		# snap the x and y positions to the closest cell
 		@mousePosition =
-			col : Math.floor((e.pageX - @canvas.offsetLeft) / cellSize)
-			row : Math.floor((e.pageY - @canvas.offsetTop) / cellSize)
+			col : Math.floor((e.pageX - @canvas.offsetLeft) / cellWidth)
+			row : Math.floor((e.pageY - @canvas.offsetTop) / cellHeight)
 		if @lastMousePosition?.col != @mousePosition.col or @lastMousePosition?.row != @mousePosition.row
 			@draw()
 

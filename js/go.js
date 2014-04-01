@@ -255,12 +255,13 @@ GoGame = (function() {
   };
 
   GoGame.prototype.onMouseMove = function(e) {
-    var cellSize, _ref, _ref1;
-    cellSize = this.canvas.offsetWidth / this.boardSize;
+    var cellHeight, cellWidth, _ref, _ref1;
+    cellWidth = this.canvas.offsetWidth / this.boardSize;
+    cellHeight = this.canvas.offsetHeight / this.boardSize;
     this.lastMousePosition = this.mousePosition;
     this.mousePosition = {
-      col: Math.floor((e.pageX - this.canvas.offsetLeft) / cellSize),
-      row: Math.floor((e.pageY - this.canvas.offsetTop) / cellSize)
+      col: Math.floor((e.pageX - this.canvas.offsetLeft) / cellWidth),
+      row: Math.floor((e.pageY - this.canvas.offsetTop) / cellHeight)
     };
     if (((_ref = this.lastMousePosition) != null ? _ref.col : void 0) !== this.mousePosition.col || ((_ref1 = this.lastMousePosition) != null ? _ref1.row : void 0) !== this.mousePosition.row) {
       return this.draw();
