@@ -63,11 +63,14 @@ GoGame = (function() {
   }
 
   GoGame.prototype.initCanvasAndContext = function(elementId) {
+    var element;
     this.canvas = document.createElement('canvas');
     this.canvas.height = this.canvas.width = this.cellSize * this.boardSize;
     this.drawingContext = this.canvas.getContext('2d');
     if (elementId) {
-      document.getElementById(elementId).appendChild(this.canvas);
+      element = document.getElementById(elementId);
+      element.innerHTML = '';
+      element.appendChild(this.canvas);
     } else {
       document.body.appendChild(this.canvas);
     }

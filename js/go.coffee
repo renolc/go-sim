@@ -50,7 +50,9 @@ class GoGame
 		@drawingContext = @canvas.getContext('2d')
 
 		if elementId
-			document.getElementById(elementId).appendChild(@canvas)
+			element = document.getElementById(elementId)
+			element.innerHTML = ''
+			element.appendChild(@canvas)
 		
 		# if no elementId passed in, append to the body
 		else
