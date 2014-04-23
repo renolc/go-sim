@@ -36,6 +36,11 @@ class GoGame
 		DEBUG_LIBERTY : new Image()
 
 	# init functions ##################################################
+	
+	# create and start the game
+	#
+	# elementId  ID of an element to append the board canvas to
+	# debug      if the game is in debug mode
 	constructor : (elementId, debug = false) ->
 		@DEBUG = debug
 		
@@ -45,19 +50,25 @@ class GoGame
 		@loadImagesAndDraw()
 
 	# create the HTML5 canvas and cache the drawing context
+	#
+	# elementId  ID of an element to append the board canvas to
 	initCanvasAndContext : (elementId) ->
 		@canvas = document.createElement('canvas')
 		@canvas.height = @canvas.width = @cellSize * @boardSize
 		@drawingContext = @canvas.getContext('2d')
+		elementFound = false
 
-		#if an element ID was passed in, append the canvas to it
-		if elementId
+		#if an element ID was passed in
+		# and the element was found, append the canvas to it
+		if elementId 
 			element = document.getElementById(elementId)
-			element.innerHTML = ''
-			element.appendChild(@canvas)
+			if element
+				elementFound = true
+				element.innerHTML = ''
+				element.appendChild(@canvas)
 		
-		# if no elementId passed in, append to the body
-		else
+		# if no element was found, append to the body
+		if not elementFound
 			document.body.appendChild(@canvas)
 
 		# setup handlers
@@ -80,6 +91,9 @@ class GoGame
 				@board[row][col] = @createCell(row, col)
 
 	# create a cell object
+	#
+	# row  a row of the board
+	# col  a column of the board
 	createCell : (row, col) ->
 		piece   : null
 		cluster : null
@@ -95,6 +109,8 @@ class GoGame
 			neighbors
 
 		# get a specific neighbor cell
+		#
+		# position  the relative position to check
 		getNeighbor : (position) =>
 			switch position
 				when Position.UP
@@ -107,6 +123,8 @@ class GoGame
 					@board[row][col+1]
 
 	# create a cluster object
+	#
+	# cell  an initial cell to add to this cluster
 	createCluster : (cell) ->
 		cells     : [cell]
 		liberties : []
@@ -166,6 +184,8 @@ class GoGame
 
 	# draw a specific cell, including its background
 	# and piece (if it has one)
+	#
+	# cell  the cell to draw
 	drawCell : (cell) ->
 		# draw the correct intersection
 		if cell.row == 0 and cell.col == 0
@@ -202,6 +222,11 @@ class GoGame
 						@drawImage(Images.DEBUG_LIBERTY, n?.row, n?.col)
 
 	# handler functions ###############################################
+
+	# when the mouse moves, get the cell under the mouse
+	# and if necessary redraw the board
+	#
+	# e  the mouse event
 	onMouseMove : (e) =>
 		# calculate the cellSize based on the current board width (which could change
 		# if the window is resized)
@@ -242,6 +267,8 @@ class GoGame
 			if @turn == Images.BLACK then Images.WHITE else Images.BLACK
 
 	# attempt to place a piece in a cell
+	#
+	# cell  the cell to place a piece into
 	placePiece : (cell) ->
 		if cell and !cell.piece
 			# tentatively set the piece
@@ -259,6 +286,8 @@ class GoGame
 				cell.piece = null
 
 	# add a cell to a cluster
+	#
+	# cell  the cell to check around and add to a cluster
 	joinCluster : (cell) ->
 
 		# these will be enemy clusters to check if we killed
@@ -298,6 +327,9 @@ class GoGame
 	# check all the clusters passed in and update their liberties list
 	# next check if the current cluster has any liberties remaining
 	# if not, the move was invalid
+	#
+	# clusters        the enemy clusters to check if are still alive
+	# currentCluster  the cluster just placed to check if move was valid
 	updateLiberties : (clusters, currentCluster) ->
 		
 		# loop through all the clusters passed in
@@ -341,17 +373,27 @@ class GoGame
 	# util functions ##################################################
 	
 	# a proxy function that simplifies the draw command
+	#
+	# img  the image to draw
+	# row  the row of the board to draw to
+	# col  the column of the board to draw to
 	drawImage : (img, row, col) ->
 		@drawingContext.drawImage(img, col * @cellSize, row * @cellSize,
 			@cellSize, @cellSize)
 
 	# add a cell to a cluster
+	#
+	# cell     the cell to add to the cluster
+	# cluster  the cluster to add the cell to
 	addCellToCluster : (cell, cluster) ->
 		cell.cluster = cluster
 		cluster.cells.push(cell)
 
 	# migrate all the cells from one cluster to another
 	# then remove the empty cluster from clusters list
+	#
+	# from  the cluster to migrate from
+	# to    the cluster to migrate to
 	migrateCluster : (from, to) ->
 		for cell in from.cells
 			@addCellToCluster(cell, to)
@@ -359,12 +401,17 @@ class GoGame
 		@removeFromArray(from, @clusters)
 
 	# proxy function to remove an element from an array
+	#
+	# toRemove  the item to remove
+	# array     the array to remove from
 	removeFromArray : (toRemove, array) ->
 		array.splice(array.indexOf(toRemove), 1)
 
 	# remove a cluster from the game by first clearing
 	# all of the associated pieces, and then removing the cluster
 	# from the clusters list
+	#
+	# cluster  the cluster to remove from the game
 	removeCluster : (cluster) ->
 		for cell in cluster.cells
 			cell.piece = null
@@ -372,6 +419,10 @@ class GoGame
 
 	# proxy function to add an event regardless of what
 	# browser we are in
+	#
+	# element  the element to add an event to
+	# event    the event to add
+	# handler  the handler function for the event
 	addEvent : (element, event, handler) ->
 		if element.addEventListener
 			element.addEventListener(event, handler, false)

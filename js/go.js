@@ -63,15 +63,20 @@ GoGame = (function() {
   }
 
   GoGame.prototype.initCanvasAndContext = function(elementId) {
-    var element;
+    var element, elementFound;
     this.canvas = document.createElement('canvas');
     this.canvas.height = this.canvas.width = this.cellSize * this.boardSize;
     this.drawingContext = this.canvas.getContext('2d');
+    elementFound = false;
     if (elementId) {
       element = document.getElementById(elementId);
-      element.innerHTML = '';
-      element.appendChild(this.canvas);
-    } else {
+      if (element) {
+        elementFound = true;
+        element.innerHTML = '';
+        element.appendChild(this.canvas);
+      }
+    }
+    if (!elementFound) {
       document.body.appendChild(this.canvas);
     }
     this.addEvent(this.canvas, "mousemove", this.onMouseMove);
