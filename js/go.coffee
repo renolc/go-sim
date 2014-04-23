@@ -10,9 +10,15 @@ class GoGame
 	clusters          : null
 
 	# enums and constants #############################################
-	cellSize     : 20
-	boardSize    : 19
-	currentAlpha : 0.5
+	
+	# the size in pixels of each cell (width and height)
+	CELL_SIZE     : 20
+
+	# the number of cells the board should be (width and height)
+	BOARD_SIZE    : 19
+
+	# the alpha level the hover piece should be
+	CURRENT_ALPHA : 0.5
 
 	Position =
 		UP    : 'up'
@@ -54,7 +60,7 @@ class GoGame
 	# elementId  ID of an element to append the board canvas to
 	initCanvasAndContext : (elementId) ->
 		@canvas = document.createElement('canvas')
-		@canvas.height = @canvas.width = @cellSize * @boardSize
+		@canvas.height = @canvas.width = @CELL_SIZE * @BOARD_SIZE
 		@drawingContext = @canvas.getContext('2d')
 		elementFound = false
 
@@ -84,10 +90,10 @@ class GoGame
 		@clusters = []
 		@board = []
 
-		for row in [0...@boardSize]
+		for row in [0...@BOARD_SIZE]
 			@board[row] = []
 
-			for col in [0...@boardSize]
+			for col in [0...@BOARD_SIZE]
 				@board[row][col] = @createCell(row, col)
 
 	# create a cell object
@@ -158,8 +164,8 @@ class GoGame
 	# draw functions ##################################################
 	draw : ->
 		# draw individual cells
-		for row in [0...@boardSize]
-			for col in [0...@boardSize]
+		for row in [0...@BOARD_SIZE]
+			for col in [0...@BOARD_SIZE]
 				@drawCell(@board[row][col])
 
 		# draw the current piece with half transparency
@@ -177,7 +183,7 @@ class GoGame
 			# do not draw current piece if there is already a piece present
 			if !cell?.piece
 				@drawingContext.save()
-				@drawingContext.globalAlpha = @currentAlpha
+				@drawingContext.globalAlpha = @CURRENT_ALPHA
 				@drawImage(@turn, @mousePosition.row,
 					@mousePosition.col)
 				@drawingContext.restore()
@@ -190,19 +196,19 @@ class GoGame
 		# draw the correct intersection
 		if cell.row == 0 and cell.col == 0
 			img = Images.TOPLEFT
-		else if cell.row == 0 and cell.col == @boardSize - 1
+		else if cell.row == 0 and cell.col == @BOARD_SIZE - 1
 			img = Images.TOPRIGHT
-		else if cell.row == @boardSize - 1 and cell.col == 0
+		else if cell.row == @BOARD_SIZE - 1 and cell.col == 0
 			img = Images.BOTTOMLEFT
-		else if cell.row == @boardSize - 1 and cell.col == @boardSize - 1
+		else if cell.row == @BOARD_SIZE - 1 and cell.col == @BOARD_SIZE - 1
 			img = Images.BOTTOMRIGHT
 		else if cell.row == 0
 			img = Images.TOP
-		else if cell.row == @boardSize - 1
+		else if cell.row == @BOARD_SIZE - 1
 			img = Images.BOTTOM
 		else if cell.col == 0
 			img = Images.LEFT
-		else if cell.col == @boardSize - 1
+		else if cell.col == @BOARD_SIZE - 1
 			img = Images.RIGHT
 		else
 			img = Images.INERSECTION
@@ -228,10 +234,10 @@ class GoGame
 	#
 	# e  the mouse event
 	onMouseMove : (e) =>
-		# calculate the cellSize based on the current board width (which could change
+		# calculate the CELL_SIZE based on the current board width (which could change
 		# if the window is resized)
-		cellWidth = (@canvas.offsetWidth / @boardSize)
-		cellHeight = (@canvas.offsetHeight / @boardSize)
+		cellWidth = (@canvas.offsetWidth / @BOARD_SIZE)
+		cellHeight = (@canvas.offsetHeight / @BOARD_SIZE)
 		
 		@lastMousePosition = @mousePosition
 		# snap the x and y positions to the closest cell
@@ -378,8 +384,8 @@ class GoGame
 	# row  the row of the board to draw to
 	# col  the column of the board to draw to
 	drawImage : (img, row, col) ->
-		@drawingContext.drawImage(img, col * @cellSize, row * @cellSize,
-			@cellSize, @cellSize)
+		@drawingContext.drawImage(img, col * @CELL_SIZE, row * @CELL_SIZE,
+			@CELL_SIZE, @CELL_SIZE)
 
 	# add a cell to a cluster
 	#
