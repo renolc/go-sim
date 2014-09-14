@@ -2,9 +2,66 @@
 var GoGame;
 
 GoGame = (function() {
+
+  /*
+  Properties
+   */
+  GoGame.prototype.BOARD_SIZE = 9;
+
+  GoGame.prototype.BOARD = [];
+
+  GoGame.prototype.PIECE = {
+    EMPTY: null,
+    BLACK: false,
+    WHITE: true
+  };
+
+
+  /*
+  Constructor
+   */
+
   function GoGame() {
-    console.log('new go game');
+    var x, y, _i, _j, _ref, _ref1;
+    for (y = _i = 0, _ref = this.BOARD_SIZE; 0 <= _ref ? _i <= _ref : _i >= _ref; y = 0 <= _ref ? ++_i : --_i) {
+      this.BOARD.push([]);
+      for (x = _j = 0, _ref1 = this.BOARD_SIZE; 0 <= _ref1 ? _j <= _ref1 : _j >= _ref1; x = 0 <= _ref1 ? ++_j : --_j) {
+        this.BOARD[y].push(this.PIECE.EMPTY);
+      }
+    }
+    console.log(this.toString());
   }
+
+
+  /*
+  Public methods
+   */
+
+
+  /*
+  Private methods
+   */
+
+  GoGame.prototype.toString = function() {
+    var string, x, y, _i, _j, _ref, _ref1;
+    string = '';
+    for (y = _i = 0, _ref = this.BOARD_SIZE; 0 <= _ref ? _i <= _ref : _i >= _ref; y = 0 <= _ref ? ++_i : --_i) {
+      for (x = _j = 0, _ref1 = this.BOARD_SIZE; 0 <= _ref1 ? _j <= _ref1 : _j >= _ref1; x = 0 <= _ref1 ? ++_j : --_j) {
+        string += (function() {
+          switch (this.BOARD[x][y]) {
+            case this.PIECE.EMPTY:
+              return '-';
+            case this.PIECE.BLACK:
+              return 'b';
+            case this.PIECE.WHITE:
+              return 'w';
+          }
+        }).call(this);
+      }
+      string += '\n';
+    }
+    return string;
+  };
 
   return GoGame;
 
