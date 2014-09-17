@@ -21,7 +21,7 @@ describe 'A go game', ->
     expect @game.turn
       .toEqual @game.PIECE.BLACK
 
-  describe 'when a piece has been played', ->
+  describe 'when a player places a piece', ->
 
     beforeEach ->
       @game.play(0, 0)
@@ -38,6 +38,26 @@ describe 'A go game', ->
         .toEqual @game.PIECE.WHITE
 
       @game.play(0, 1)
+
+      expect @game.turn
+        .toEqual @game.PIECE.BLACK
+
+  describe 'when a player passes', ->
+    originalBoard = null
+
+    beforeEach ->
+      originalBoard = @game.toString()
+      @game.pass()
+
+    it 'should not change the board', ->
+      expect @game.toString()
+        .toEqual originalBoard
+
+    it 'should alternate turns', ->
+      expect @game.turn
+        .toEqual @game.PIECE.WHITE
+
+      @game.pass()
 
       expect @game.turn
         .toEqual @game.PIECE.BLACK

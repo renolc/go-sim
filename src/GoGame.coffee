@@ -46,6 +46,9 @@ class GoGame
     @board[x][y] = @turn
     @alternateTurn()
 
+  pass: ->
+    @alternateTurn()
+
 
   ###
   Util methods

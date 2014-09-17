@@ -31,7 +31,7 @@ describe('A go game', function() {
   it('should start with black', function() {
     return expect(this.game.turn).toEqual(this.game.PIECE.BLACK);
   });
-  return describe('when a piece has been played', function() {
+  describe('when a player places a piece', function() {
     beforeEach(function() {
       return this.game.play(0, 0);
     });
@@ -45,6 +45,22 @@ describe('A go game', function() {
     return it('should alternate turns', function() {
       expect(this.game.turn).toEqual(this.game.PIECE.WHITE);
       this.game.play(0, 1);
+      return expect(this.game.turn).toEqual(this.game.PIECE.BLACK);
+    });
+  });
+  return describe('when a player passes', function() {
+    var originalBoard;
+    originalBoard = null;
+    beforeEach(function() {
+      originalBoard = this.game.toString();
+      return this.game.pass();
+    });
+    it('should not change the board', function() {
+      return expect(this.game.toString()).toEqual(originalBoard);
+    });
+    return it('should alternate turns', function() {
+      expect(this.game.turn).toEqual(this.game.PIECE.WHITE);
+      this.game.pass();
       return expect(this.game.turn).toEqual(this.game.PIECE.BLACK);
     });
   });

@@ -53,6 +53,10 @@ GoGame = (function() {
     return this.alternateTurn();
   };
 
+  GoGame.prototype.pass = function() {
+    return this.alternateTurn();
+  };
+
 
   /*
   Util methods
