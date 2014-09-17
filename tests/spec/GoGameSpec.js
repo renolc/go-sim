@@ -16,7 +16,10 @@ describe('A go game', function() {
     });
     return this.game = new GoGame();
   });
-  return it('starts empty', function() {
+  it('starts empty', function() {
     return expect(this.game).toBeEmpty();
+  });
+  return it('should start with black', function() {
+    return expect(this.game.turn).toEqual(this.game.PIECE.BLACK);
   });
 });

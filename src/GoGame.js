@@ -4,11 +4,9 @@ var GoGame;
 GoGame = (function() {
 
   /*
-  Properties
+  Constants
    */
   GoGame.prototype.BOARD_SIZE = 9;
-
-  GoGame.prototype.BOARD = [];
 
   GoGame.prototype.PIECE = {
     EMPTY: null,
@@ -18,15 +16,25 @@ GoGame = (function() {
 
 
   /*
+  Properties
+   */
+
+  GoGame.prototype.board = [];
+
+  GoGame.prototype.turn = null;
+
+
+  /*
   Constructor
    */
 
   function GoGame() {
     var x, y, _i, _j, _ref, _ref1;
+    this.turn = this.PIECE.BLACK;
     for (y = _i = 0, _ref = this.BOARD_SIZE; 0 <= _ref ? _i <= _ref : _i >= _ref; y = 0 <= _ref ? ++_i : --_i) {
-      this.BOARD.push([]);
+      this.board.push([]);
       for (x = _j = 0, _ref1 = this.BOARD_SIZE; 0 <= _ref1 ? _j <= _ref1 : _j >= _ref1; x = 0 <= _ref1 ? ++_j : --_j) {
-        this.BOARD[y].push(this.PIECE.EMPTY);
+        this.board[y].push(this.PIECE.EMPTY);
       }
     }
   }
@@ -42,7 +50,7 @@ GoGame = (function() {
     for (y = _i = 0, _ref = this.BOARD_SIZE; 0 <= _ref ? _i <= _ref : _i >= _ref; y = 0 <= _ref ? ++_i : --_i) {
       for (x = _j = 0, _ref1 = this.BOARD_SIZE; 0 <= _ref1 ? _j <= _ref1 : _j >= _ref1; x = 0 <= _ref1 ? ++_j : --_j) {
         string += (function() {
-          switch (this.BOARD[x][y]) {
+          switch (this.board[x][y]) {
             case this.PIECE.EMPTY:
               return '-';
             case this.PIECE.BLACK:

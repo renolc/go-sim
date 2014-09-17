@@ -12,3 +12,7 @@ describe 'A go game', ->
   it 'starts empty', ->
     expect @game
       .toBeEmpty()
+
+  it 'should start with black', ->
+    expect @game.turn
+      .toEqual @game.PIECE.BLACK

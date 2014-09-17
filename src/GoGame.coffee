@@ -1,15 +1,22 @@
 class GoGame
 
   ###
-  Properties
+  Constants
   ###
 
   BOARD_SIZE: 9
-  BOARD: []
   PIECE:
     EMPTY: null
     BLACK: false
     WHITE: true
+
+
+  ###
+  Properties
+  ###
+
+  board: []
+  turn:  null
 
 
   ###
@@ -18,11 +25,14 @@ class GoGame
 
   constructor: ->
 
+    # black starts
+    @turn = @PIECE.BLACK
+
     # set empty board
     for y in [0..@BOARD_SIZE]
-      @BOARD.push([])
+      @board.push([])
       for x in [0..@BOARD_SIZE]
-        @BOARD[y].push(@PIECE.EMPTY)
+        @board[y].push(@PIECE.EMPTY)
 
 
   ###
@@ -34,7 +44,7 @@ class GoGame
     for y in [0..@BOARD_SIZE]
       for x in [0..@BOARD_SIZE]
         string +=
-          switch @BOARD[x][y]
+          switch @board[x][y]
             when @PIECE.EMPTY then '-'
             when @PIECE.BLACK then 'b'
             when @PIECE.WHITE then 'w'
