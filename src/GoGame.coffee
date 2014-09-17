@@ -23,16 +23,10 @@ class GoGame
       @BOARD.push([])
       for x in [0..@BOARD_SIZE]
         @BOARD[y].push(@PIECE.EMPTY)
-    console.log @toString()
 
 
   ###
   Public methods
-  ###
-
-
-  ###
-  Private methods
   ###
 
   toString: ->

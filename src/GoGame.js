@@ -29,17 +29,11 @@ GoGame = (function() {
         this.BOARD[y].push(this.PIECE.EMPTY);
       }
     }
-    console.log(this.toString());
   }
 
 
   /*
   Public methods
-   */
-
-
-  /*
-  Private methods
    */
 
   GoGame.prototype.toString = function() {
