@@ -25,14 +25,14 @@ class GoGame
 
   constructor: ->
 
-    # black starts
-    @turn = @PIECE.BLACK
-
-    # set empty board
+    # create board
     for y in [0..@BOARD_SIZE]
       @board.push([])
       for x in [0..@BOARD_SIZE]
-        @board[y].push(@PIECE.EMPTY)
+        @board[y].push(@createCell(x, y))
+
+    # black starts
+    @turn = @PIECE.BLACK
 
 
   ###
@@ -43,7 +43,7 @@ class GoGame
     @turn = !@turn
 
   play: (x, y) ->
-    @board[x][y] = @turn
+    @board[x][y].value = @turn
     @alternateTurn()
 
   pass: ->
@@ -54,12 +54,17 @@ class GoGame
   Util methods
   ###
 
+  createCell: (x, y) ->
+    x:     x
+    y:     y
+    value: @PIECE.EMPTY
+
   toString: ->
     string = ''
     for y in [0..@BOARD_SIZE]
       for x in [0..@BOARD_SIZE]
         string +=
-          switch @board[x][y]
+          switch @board[x][y].value
             when @PIECE.EMPTY then '-'
             when @PIECE.BLACK then 'b'
             when @PIECE.WHITE then 'w'

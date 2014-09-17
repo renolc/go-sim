@@ -7,10 +7,6 @@ describe 'A go game', ->
           pass: actual.toString().indexOf('b') == -1 and
                 actual.toString().indexOf('w') == -1
 
-      toHaveCellValueOf: ->
-        compare: (actual, expected) ->
-          pass: actual.board[expected.x][expected.y] == expected.value
-
     @game = new GoGame()
 
   it 'starts empty', ->
@@ -21,23 +17,20 @@ describe 'A go game', ->
     expect @game.turn
       .toEqual @game.PIECE.BLACK
 
-  describe 'when a player places a piece', ->
+  describe 'when a player places a piece not on an edge', ->
 
     beforeEach ->
-      @game.play(0, 0)
+      @game.play(2, 3)
 
-    it 'should not have an empty cell value', ->
-      expect @game
-        .not.toHaveCellValueOf
-          x:     0
-          y:     0
-          value: @game.PIECE.EMPTY
+    it 'should have an cell value of black', ->
+      expect @game.board[2][3].value
+        .toEqual @game.PIECE.BLACK
 
     it 'should alternate turns', ->
       expect @game.turn
         .toEqual @game.PIECE.WHITE
 
-      @game.play(0, 1)
+      @game.play(0, 0)
 
       expect @game.turn
         .toEqual @game.PIECE.BLACK

@@ -10,15 +10,6 @@ describe('A go game', function() {
             };
           }
         };
-      },
-      toHaveCellValueOf: function() {
-        return {
-          compare: function(actual, expected) {
-            return {
-              pass: actual.board[expected.x][expected.y] === expected.value
-            };
-          }
-        };
       }
     });
     return this.game = new GoGame();
@@ -29,20 +20,16 @@ describe('A go game', function() {
   it('should start with black', function() {
     return expect(this.game.turn).toEqual(this.game.PIECE.BLACK);
   });
-  describe('when a player places a piece', function() {
+  describe('when a player places a piece not on an edge', function() {
     beforeEach(function() {
-      return this.game.play(0, 0);
+      return this.game.play(2, 3);
     });
-    it('should not have an empty cell value', function() {
-      return expect(this.game).not.toHaveCellValueOf({
-        x: 0,
-        y: 0,
-        value: this.game.PIECE.EMPTY
-      });
+    it('should have an cell value of black', function() {
+      return expect(this.game.board[2][3].value).toEqual(this.game.PIECE.BLACK);
     });
     return it('should alternate turns', function() {
       expect(this.game.turn).toEqual(this.game.PIECE.WHITE);
-      this.game.play(0, 1);
+      this.game.play(0, 0);
       return expect(this.game.turn).toEqual(this.game.PIECE.BLACK);
     });
   });
