@@ -36,7 +36,19 @@ class GoGame
 
 
   ###
-  Public methods
+  Game methods
+  ###
+
+  alternateTurn: ->
+    @turn = !@turn
+
+  play: (x, y) ->
+    @board[x][y] = @turn
+    @alternateTurn()
+
+
+  ###
+  Util methods
   ###
 
   toString: ->

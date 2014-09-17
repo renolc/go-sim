@@ -41,7 +41,21 @@ GoGame = (function() {
 
 
   /*
-  Public methods
+  Game methods
+   */
+
+  GoGame.prototype.alternateTurn = function() {
+    return this.turn = !this.turn;
+  };
+
+  GoGame.prototype.play = function(x, y) {
+    this.board[x][y] = this.turn;
+    return this.alternateTurn();
+  };
+
+
+  /*
+  Util methods
    */
 
   GoGame.prototype.toString = function() {
