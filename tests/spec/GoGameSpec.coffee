@@ -4,8 +4,8 @@ describe 'A go game', ->
     jasmine.addMatchers
       toBeEmpty: ->
         compare: (actual) ->
-          expected = new GoGame()
-          pass: actual.toString() == expected.toString()
+          pass: actual.toString().indexOf('b') == -1 and
+                actual.toString().indexOf('w') == -1
 
       toHaveCellValueOf: ->
         compare: (actual, expected) ->

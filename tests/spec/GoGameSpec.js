@@ -5,10 +5,8 @@ describe('A go game', function() {
       toBeEmpty: function() {
         return {
           compare: function(actual) {
-            var expected;
-            expected = new GoGame();
             return {
-              pass: actual.toString() === expected.toString()
+              pass: actual.toString().indexOf('b') === -1 && actual.toString().indexOf('w') === -1
             };
           }
         };
