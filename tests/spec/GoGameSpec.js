@@ -27,10 +27,16 @@ describe('A go game', function() {
     it('should have an cell value of black', function() {
       return expect(this.game.board[2][3].value).toEqual(this.game.PIECE.BLACK);
     });
-    return it('should alternate turns', function() {
+    it('should alternate turns', function() {
       expect(this.game.turn).toEqual(this.game.PIECE.WHITE);
       this.game.play(0, 0);
       return expect(this.game.turn).toEqual(this.game.PIECE.BLACK);
+    });
+    return it('should reference all the the pieces around it', function() {
+      expect(this.game.board[2][3].up()).toBe(this.game.board[2][2]);
+      expect(this.game.board[2][3].down()).toBe(this.game.board[2][4]);
+      expect(this.game.board[2][3].left()).toBe(this.game.board[1][3]);
+      return expect(this.game.board[2][3].right()).toBe(this.game.board[3][3]);
     });
   });
   return describe('when a player passes', function() {

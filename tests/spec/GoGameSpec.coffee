@@ -35,6 +35,19 @@ describe 'A go game', ->
       expect @game.turn
         .toEqual @game.PIECE.BLACK
 
+    it 'should reference all the the pieces around it', ->
+      expect @game.board[2][3].up()
+        .toBe @game.board[2][2]
+
+      expect @game.board[2][3].down()
+        .toBe @game.board[2][4]
+
+      expect @game.board[2][3].left()
+        .toBe @game.board[1][3]
+
+      expect @game.board[2][3].right()
+        .toBe @game.board[3][3]
+
   describe 'when a player passes', ->
     originalBoard = null
 

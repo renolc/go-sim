@@ -26,10 +26,10 @@ class GoGame
   constructor: ->
 
     # create board
-    for y in [0..@BOARD_SIZE]
+    for x in [0..@BOARD_SIZE]
       @board.push([])
-      for x in [0..@BOARD_SIZE]
-        @board[y].push(@createCell(x, y))
+      for y in [0..@BOARD_SIZE]
+        @board[x].push(@createCell(@, x, y))
 
     # black starts
     @turn = @PIECE.BLACK
@@ -54,10 +54,32 @@ class GoGame
   Util methods
   ###
 
-  createCell: (x, y) ->
-    x:     x
-    y:     y
-    value: @PIECE.EMPTY
+  createCell: (game, x, y) ->
+    game:      game
+    x:         x
+    y:         y
+    value:     @PIECE.EMPTY
+
+    # surrounding cell methods
+    up: ->
+      if @game.board[@x][@y-1]?
+        return @game.board[@x][@y-1]
+      null
+
+    down: ->
+      if @game.board[@x][@y+1]?
+        return @game.board[@x][@y+1]
+      null
+
+    left: ->
+      if @game.board[@x-1][@y]?
+        return @game.board[@x-1][@y]
+      null
+
+    right: ->
+      if @game.board[@x+1][@y]?
+        return @game.board[@x+1][@y]
+      null
 
   toString: ->
     string = ''
