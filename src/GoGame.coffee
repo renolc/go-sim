@@ -86,6 +86,7 @@ class GoGame
 
   _alternateTurn: ->
     @turn = !@turn
+    @
 
   toString: ->
     string = ''

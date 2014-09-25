@@ -17,13 +17,22 @@ describe 'A go game', ->
     expect @game.turn
       .toEqual @game.PIECE.BLACK
 
+  it 'should be able to chain commands', ->
+    @game.play(0, 0)
+      .play(1, 0)
+      .pass()
+
+    expect @game.turn
+      .toEqual @game.PIECE.WHITE
+
   describe 'when a player places a piece not on an edge', ->
 
     beforeEach ->
       @game.play(2, 3)
+      @cell = @game.board[2][3]
 
     it 'should have an cell value of black', ->
-      expect @game.board[2][3].value
+      expect @cell.value
         .toEqual @game.PIECE.BLACK
 
     it 'should alternate turns', ->
@@ -36,16 +45,16 @@ describe 'A go game', ->
         .toEqual @game.PIECE.BLACK
 
     it 'should reference all the the pieces around it', ->
-      expect @game.board[2][3].up()
+      expect @cell.up()
         .toBe @game.board[2][2]
 
-      expect @game.board[2][3].down()
+      expect @cell.down()
         .toBe @game.board[2][4]
 
-      expect @game.board[2][3].left()
+      expect @cell.left()
         .toBe @game.board[1][3]
 
-      expect @game.board[2][3].right()
+      expect @cell.right()
         .toBe @game.board[3][3]
 
   describe 'when a player passes', ->

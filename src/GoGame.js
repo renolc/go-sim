@@ -96,7 +96,8 @@ GoGame = (function() {
   };
 
   GoGame.prototype._alternateTurn = function() {
-    return this.turn = !this.turn;
+    this.turn = !this.turn;
+    return this;
   };
 
   GoGame.prototype.toString = function() {

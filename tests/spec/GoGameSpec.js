@@ -20,12 +20,17 @@ describe('A go game', function() {
   it('should start with black', function() {
     return expect(this.game.turn).toEqual(this.game.PIECE.BLACK);
   });
+  it('should be able to chain commands', function() {
+    this.game.play(0, 0).play(1, 0).pass();
+    return expect(this.game.turn).toEqual(this.game.PIECE.WHITE);
+  });
   describe('when a player places a piece not on an edge', function() {
     beforeEach(function() {
-      return this.game.play(2, 3);
+      this.game.play(2, 3);
+      return this.cell = this.game.board[2][3];
     });
     it('should have an cell value of black', function() {
-      return expect(this.game.board[2][3].value).toEqual(this.game.PIECE.BLACK);
+      return expect(this.cell.value).toEqual(this.game.PIECE.BLACK);
     });
     it('should alternate turns', function() {
       expect(this.game.turn).toEqual(this.game.PIECE.WHITE);
@@ -33,10 +38,10 @@ describe('A go game', function() {
       return expect(this.game.turn).toEqual(this.game.PIECE.BLACK);
     });
     return it('should reference all the the pieces around it', function() {
-      expect(this.game.board[2][3].up()).toBe(this.game.board[2][2]);
-      expect(this.game.board[2][3].down()).toBe(this.game.board[2][4]);
-      expect(this.game.board[2][3].left()).toBe(this.game.board[1][3]);
-      return expect(this.game.board[2][3].right()).toBe(this.game.board[3][3]);
+      expect(this.cell.up()).toBe(this.game.board[2][2]);
+      expect(this.cell.down()).toBe(this.game.board[2][4]);
+      expect(this.cell.left()).toBe(this.game.board[1][3]);
+      return expect(this.cell.right()).toBe(this.game.board[3][3]);
     });
   });
   return describe('when a player passes', function() {
