@@ -33,7 +33,7 @@ GoGame = (function() {
     for (x = _i = 0, _ref = this.BOARD_SIZE; 0 <= _ref ? _i <= _ref : _i >= _ref; x = 0 <= _ref ? ++_i : --_i) {
       this.board.push([]);
       for (y = _j = 0, _ref1 = this.BOARD_SIZE; 0 <= _ref1 ? _j <= _ref1 : _j >= _ref1; y = 0 <= _ref1 ? ++_j : --_j) {
-        this.board[x].push(this.createCell(this, x, y));
+        this.board[x].push(this._createCell(this, x, y));
       }
     }
     this.turn = this.PIECE.BLACK;
@@ -44,17 +44,13 @@ GoGame = (function() {
   Game methods
    */
 
-  GoGame.prototype.alternateTurn = function() {
-    return this.turn = !this.turn;
-  };
-
   GoGame.prototype.play = function(x, y) {
     this.board[x][y].value = this.turn;
-    return this.alternateTurn();
+    return this._alternateTurn();
   };
 
   GoGame.prototype.pass = function() {
-    return this.alternateTurn();
+    return this._alternateTurn();
   };
 
 
@@ -62,37 +58,45 @@ GoGame = (function() {
   Util methods
    */
 
-  GoGame.prototype.createCell = function(game, x, y) {
+  GoGame.prototype._createCell = function(game, x, y) {
     return {
       game: game,
       x: x,
       y: y,
       value: this.PIECE.EMPTY,
+      _up: null,
+      _down: null,
+      _left: null,
+      _right: null,
       up: function() {
-        if (this.game.board[this.x][this.y - 1] != null) {
-          return this.game.board[this.x][this.y - 1];
+        if (this._up === null && (this.game.board[this.x][this.y - 1] != null)) {
+          this._up = this.game.board[this.x][this.y - 1];
         }
-        return null;
+        return this._up;
       },
       down: function() {
-        if (this.game.board[this.x][this.y + 1] != null) {
-          return this.game.board[this.x][this.y + 1];
+        if (this._down === null && (this.game.board[this.x][this.y + 1] != null)) {
+          this._down = this.game.board[this.x][this.y + 1];
         }
-        return null;
+        return this._down;
       },
       left: function() {
-        if (this.game.board[this.x - 1][this.y] != null) {
-          return this.game.board[this.x - 1][this.y];
+        if (this._left === null && (this.game.board[this.x - 1][this.y] != null)) {
+          this._left = this.game.board[this.x - 1][this.y];
         }
-        return null;
+        return this._left;
       },
       right: function() {
-        if (this.game.board[this.x + 1][this.y] != null) {
-          return this.game.board[this.x + 1][this.y];
+        if (this._right === null && (this.game.board[this.x + 1][this.y] != null)) {
+          this._right = this.game.board[this.x + 1][this.y];
         }
-        return null;
+        return this._right;
       }
     };
+  };
+
+  GoGame.prototype._alternateTurn = function() {
+    return this.turn = !this.turn;
   };
 
   GoGame.prototype.toString = function() {

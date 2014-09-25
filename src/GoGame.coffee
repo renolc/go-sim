@@ -29,7 +29,7 @@ class GoGame
     for x in [0..@BOARD_SIZE]
       @board.push([])
       for y in [0..@BOARD_SIZE]
-        @board[x].push(@createCell(@, x, y))
+        @board[x].push(@_createCell(@, x, y))
 
     # black starts
     @turn = @PIECE.BLACK
@@ -39,47 +39,53 @@ class GoGame
   Game methods
   ###
 
-  alternateTurn: ->
-    @turn = !@turn
-
   play: (x, y) ->
     @board[x][y].value = @turn
-    @alternateTurn()
+    @_alternateTurn()
 
   pass: ->
-    @alternateTurn()
+    @_alternateTurn()
 
 
   ###
   Util methods
   ###
 
-  createCell: (game, x, y) ->
+  _createCell: (game, x, y) ->
     game:      game
     x:         x
     y:         y
     value:     @PIECE.EMPTY
 
+    # caching properties
+    _up:       null
+    _down:     null
+    _left:     null
+    _right:    null
+
     # surrounding cell methods
     up: ->
-      if @game.board[@x][@y-1]?
-        return @game.board[@x][@y-1]
-      null
+      if @_up == null and @game.board[@x][@y-1]?
+        @_up = @game.board[@x][@y-1]
+      @_up
 
     down: ->
-      if @game.board[@x][@y+1]?
-        return @game.board[@x][@y+1]
-      null
+      if @_down == null and @game.board[@x][@y+1]?
+        @_down = @game.board[@x][@y+1]
+      @_down
 
     left: ->
-      if @game.board[@x-1][@y]?
-        return @game.board[@x-1][@y]
-      null
+      if @_left == null and @game.board[@x-1][@y]?
+        @_left = @game.board[@x-1][@y]
+      @_left
 
     right: ->
-      if @game.board[@x+1][@y]?
-        return @game.board[@x+1][@y]
-      null
+      if @_right == null and @game.board[@x+1][@y]?
+        @_right = @game.board[@x+1][@y]
+      @_right
+
+  _alternateTurn: ->
+    @turn = !@turn
 
   toString: ->
     string = ''
