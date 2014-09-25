@@ -68,6 +68,25 @@ GoGame = (function() {
       _down: null,
       _left: null,
       _right: null,
+      _surrounding: null,
+      surroundingCells: function() {
+        if (this._surrounding === null) {
+          this._surrounding = [];
+          if (this.up() != null) {
+            this._surrounding.push(this.up());
+          }
+          if (this.down() != null) {
+            this._surrounding.push(this.down());
+          }
+          if (this.left() != null) {
+            this._surrounding.push(this.left());
+          }
+          if (this.right() != null) {
+            this._surrounding.push(this.right());
+          }
+        }
+        return this._surrounding;
+      },
       up: function() {
         if (this._up === null && (this.game.board[this.x][this.y - 1] != null)) {
           this._up = this.game.board[this.x][this.y - 1];

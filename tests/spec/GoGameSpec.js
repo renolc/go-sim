@@ -38,6 +38,7 @@ describe('A go game', function() {
       return expect(this.game.turn).toEqual(this.game.PIECE.BLACK);
     });
     return it('should reference all the the pieces around it', function() {
+      expect(this.cell.surroundingCells().length).toEqual(4);
       expect(this.cell.up()).toBe(this.game.board[2][2]);
       expect(this.cell.down()).toBe(this.game.board[2][4]);
       expect(this.cell.left()).toBe(this.game.board[1][3]);

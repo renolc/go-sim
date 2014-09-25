@@ -45,6 +45,9 @@ describe 'A go game', ->
         .toEqual @game.PIECE.BLACK
 
     it 'should reference all the the pieces around it', ->
+      expect @cell.surroundingCells().length
+        .toEqual 4
+
       expect @cell.up()
         .toBe @game.board[2][2]
 

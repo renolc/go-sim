@@ -58,12 +58,26 @@ class GoGame
     value:     @PIECE.EMPTY
 
     # caching properties
-    _up:       null
-    _down:     null
-    _left:     null
-    _right:    null
+    _up:          null
+    _down:        null
+    _left:        null
+    _right:       null
+    _surrounding: null
 
     # surrounding cell methods
+    surroundingCells: ->
+      if @_surrounding == null
+        @_surrounding = []
+        if @up()?
+          @_surrounding.push(@up())
+        if @down()?
+          @_surrounding.push(@down())
+        if @left()?
+          @_surrounding.push(@left())
+        if @right()?
+          @_surrounding.push(@right())
+      @_surrounding
+
     up: ->
       if @_up == null and @game.board[@x][@y-1]?
         @_up = @game.board[@x][@y-1]
