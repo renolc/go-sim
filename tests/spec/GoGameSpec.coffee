@@ -31,9 +31,9 @@ describe 'A go game', ->
       @game.play(2, 3)
       @cell = @game.board[2][3]
 
-    it 'should have an cell value of black', ->
+    it 'should not be empty', ->
       expect @cell.value
-        .toEqual @game.PIECE.BLACK
+        .not.toEqual @game.PIECE.EMPTY
 
     it 'should alternate turns', ->
       expect @game.turn
@@ -44,7 +44,7 @@ describe 'A go game', ->
       expect @game.turn
         .toEqual @game.PIECE.BLACK
 
-    it 'should reference all the the pieces around it', ->
+    it 'should reference all 4 cells around it', ->
       expect @cell.surroundingCells().length
         .toEqual 4
 
@@ -59,6 +59,58 @@ describe 'A go game', ->
 
       expect @cell.right()
         .toBe @game.board[3][3]
+
+  describe 'when a player places a piece on the top edge', ->
+
+    beforeEach ->
+      @game.play(3, 0)
+      @cell = @game.board[3][0]
+
+    it 'should not be empty', ->
+      expect @cell.value
+        .not.toEqual @game.PIECE.EMPTY
+
+    it 'should reference all 3 cells around it', ->
+      expect @cell.surroundingCells().length
+        .toEqual 3
+
+      expect @cell.up()
+        .toBe null
+
+      expect @cell.down()
+        .toBe @game.board[3][1]
+
+      expect @cell.left()
+        .toBe @game.board[2][0]
+
+      expect @cell.right()
+        .toBe @game.board[4][0]
+
+  describe 'when a player places a piece on the bottom edge', ->
+
+    beforeEach ->
+      @game.play(3, @game.BOARD_SIZE - 1)
+      @cell = @game.board[3][@game.BOARD_SIZE - 1]
+
+    it 'should not be empty', ->
+      expect @cell.value
+        .not.toEqual @game.PIECE.EMPTY
+
+    it 'should reference all 3 cells around it', ->
+      expect @cell.surroundingCells().length
+        .toEqual 3
+
+      expect @cell.up()
+        .toBe @game.board[3][@game.BOARD_SIZE - 2]
+
+      expect @cell.down()
+        .toBe null
+
+      expect @cell.left()
+        .toBe @game.board[2][@game.BOARD_SIZE - 1]
+
+      expect @cell.right()
+        .toBe @game.board[4][@game.BOARD_SIZE - 1]
 
   describe 'when a player passes', ->
     originalBoard = null

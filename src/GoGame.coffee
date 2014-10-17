@@ -26,9 +26,9 @@ class GoGame
   constructor: ->
 
     # create board
-    for x in [0..@BOARD_SIZE]
+    for x in [0...@BOARD_SIZE]
       @board.push([])
-      for y in [0..@BOARD_SIZE]
+      for y in [0...@BOARD_SIZE]
         @board[x].push(@_createCell(@, x, y))
 
     # black starts
@@ -55,7 +55,7 @@ class GoGame
     game:      game
     x:         x
     y:         y
-    value:     @PIECE.EMPTY
+    value:     game.PIECE.EMPTY
 
     # caching properties
     _up:          null
@@ -79,22 +79,22 @@ class GoGame
       @_surrounding
 
     up: ->
-      if @_up == null and @game.board[@x][@y-1]?
+      if @_up == null and @y - 1 >= 0
         @_up = @game.board[@x][@y-1]
       @_up
 
     down: ->
-      if @_down == null and @game.board[@x][@y+1]?
+      if @_down == null and @y + 1 < @game.BOARD_SIZE
         @_down = @game.board[@x][@y+1]
       @_down
 
     left: ->
-      if @_left == null and @game.board[@x-1][@y]?
+      if @_left == null and @x - 1 >= 0
         @_left = @game.board[@x-1][@y]
       @_left
 
     right: ->
-      if @_right == null and @game.board[@x+1][@y]?
+      if @_right == null and @x + 1 < @game.BOARD_SIZE
         @_right = @game.board[@x+1][@y]
       @_right
 
@@ -104,8 +104,8 @@ class GoGame
 
   toString: ->
     string = ''
-    for y in [0..@BOARD_SIZE]
-      for x in [0..@BOARD_SIZE]
+    for y in [0...@BOARD_SIZE]
+      for x in [0...@BOARD_SIZE]
         string +=
           switch @board[x][y].value
             when @PIECE.EMPTY then '-'

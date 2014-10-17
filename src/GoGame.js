@@ -30,9 +30,9 @@ GoGame = (function() {
 
   function GoGame() {
     var x, y, _i, _j, _ref, _ref1;
-    for (x = _i = 0, _ref = this.BOARD_SIZE; 0 <= _ref ? _i <= _ref : _i >= _ref; x = 0 <= _ref ? ++_i : --_i) {
+    for (x = _i = 0, _ref = this.BOARD_SIZE; 0 <= _ref ? _i < _ref : _i > _ref; x = 0 <= _ref ? ++_i : --_i) {
       this.board.push([]);
-      for (y = _j = 0, _ref1 = this.BOARD_SIZE; 0 <= _ref1 ? _j <= _ref1 : _j >= _ref1; y = 0 <= _ref1 ? ++_j : --_j) {
+      for (y = _j = 0, _ref1 = this.BOARD_SIZE; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; y = 0 <= _ref1 ? ++_j : --_j) {
         this.board[x].push(this._createCell(this, x, y));
       }
     }
@@ -63,7 +63,7 @@ GoGame = (function() {
       game: game,
       x: x,
       y: y,
-      value: this.PIECE.EMPTY,
+      value: game.PIECE.EMPTY,
       _up: null,
       _down: null,
       _left: null,
@@ -88,25 +88,25 @@ GoGame = (function() {
         return this._surrounding;
       },
       up: function() {
-        if (this._up === null && (this.game.board[this.x][this.y - 1] != null)) {
+        if (this._up === null && this.y - 1 >= 0) {
           this._up = this.game.board[this.x][this.y - 1];
         }
         return this._up;
       },
       down: function() {
-        if (this._down === null && (this.game.board[this.x][this.y + 1] != null)) {
+        if (this._down === null && this.y + 1 < this.game.BOARD_SIZE) {
           this._down = this.game.board[this.x][this.y + 1];
         }
         return this._down;
       },
       left: function() {
-        if (this._left === null && (this.game.board[this.x - 1][this.y] != null)) {
+        if (this._left === null && this.x - 1 >= 0) {
           this._left = this.game.board[this.x - 1][this.y];
         }
         return this._left;
       },
       right: function() {
-        if (this._right === null && (this.game.board[this.x + 1][this.y] != null)) {
+        if (this._right === null && this.x + 1 < this.game.BOARD_SIZE) {
           this._right = this.game.board[this.x + 1][this.y];
         }
         return this._right;
@@ -122,8 +122,8 @@ GoGame = (function() {
   GoGame.prototype.toString = function() {
     var string, x, y, _i, _j, _ref, _ref1;
     string = '';
-    for (y = _i = 0, _ref = this.BOARD_SIZE; 0 <= _ref ? _i <= _ref : _i >= _ref; y = 0 <= _ref ? ++_i : --_i) {
-      for (x = _j = 0, _ref1 = this.BOARD_SIZE; 0 <= _ref1 ? _j <= _ref1 : _j >= _ref1; x = 0 <= _ref1 ? ++_j : --_j) {
+    for (y = _i = 0, _ref = this.BOARD_SIZE; 0 <= _ref ? _i < _ref : _i > _ref; y = 0 <= _ref ? ++_i : --_i) {
+      for (x = _j = 0, _ref1 = this.BOARD_SIZE; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; x = 0 <= _ref1 ? ++_j : --_j) {
         string += (function() {
           switch (this.board[x][y].value) {
             case this.PIECE.EMPTY:
