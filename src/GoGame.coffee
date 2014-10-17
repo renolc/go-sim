@@ -12,18 +12,14 @@ class GoGame
 
 
   ###
-  Properties
-  ###
-
-  board: []
-  turn:  null
-
-
-  ###
   Constructor
   ###
 
   constructor: ->
+
+    # properties
+    @board = []
+    @turn = null
 
     # create board
     for x in [0...@BOARD_SIZE]

@@ -16,20 +16,13 @@ GoGame = (function() {
 
 
   /*
-  Properties
-   */
-
-  GoGame.prototype.board = [];
-
-  GoGame.prototype.turn = null;
-
-
-  /*
   Constructor
    */
 
   function GoGame() {
     var x, y, _i, _j, _ref, _ref1;
+    this.board = [];
+    this.turn = null;
     for (x = _i = 0, _ref = this.BOARD_SIZE; 0 <= _ref ? _i < _ref : _i > _ref; x = 0 <= _ref ? ++_i : --_i) {
       this.board.push([]);
       for (y = _j = 0, _ref1 = this.BOARD_SIZE; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; y = 0 <= _ref1 ? ++_j : --_j) {
