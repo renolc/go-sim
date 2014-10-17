@@ -6,9 +6,7 @@ GoGame = (function() {
   /*
   Constants
    */
-  GoGame.prototype.BOARD_SIZE = 9;
-
-  GoGame.prototype.PIECE = {
+  GoGame.PIECE = {
     EMPTY: null,
     BLACK: false,
     WHITE: true
@@ -19,17 +17,21 @@ GoGame = (function() {
   Constructor
    */
 
-  function GoGame() {
+  function GoGame(size) {
     var x, y, _i, _j, _ref, _ref1;
+    if (size == null) {
+      size = 9;
+    }
+    this.boardSize = size;
     this.board = [];
     this.turn = null;
-    for (x = _i = 0, _ref = this.BOARD_SIZE; 0 <= _ref ? _i < _ref : _i > _ref; x = 0 <= _ref ? ++_i : --_i) {
+    for (x = _i = 0, _ref = this.boardSize; 0 <= _ref ? _i < _ref : _i > _ref; x = 0 <= _ref ? ++_i : --_i) {
       this.board.push([]);
-      for (y = _j = 0, _ref1 = this.BOARD_SIZE; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; y = 0 <= _ref1 ? ++_j : --_j) {
-        this.board[x].push(this._createCell(this, x, y));
+      for (y = _j = 0, _ref1 = this.boardSize; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; y = 0 <= _ref1 ? ++_j : --_j) {
+        this.board[x].push(this._createCell(x, y));
       }
     }
-    this.turn = this.PIECE.BLACK;
+    this.turn = GoGame.PIECE.BLACK;
   }
 
 
@@ -51,12 +53,12 @@ GoGame = (function() {
   Util methods
    */
 
-  GoGame.prototype._createCell = function(game, x, y) {
+  GoGame.prototype._createCell = function(x, y) {
     return {
-      game: game,
+      self: this,
       x: x,
       y: y,
-      value: game.PIECE.EMPTY,
+      value: GoGame.PIECE.EMPTY,
       _up: null,
       _down: null,
       _left: null,
@@ -82,25 +84,25 @@ GoGame = (function() {
       },
       up: function() {
         if (this._up === null && this.y - 1 >= 0) {
-          this._up = this.game.board[this.x][this.y - 1];
+          this._up = this.self.board[this.x][this.y - 1];
         }
         return this._up;
       },
       down: function() {
-        if (this._down === null && this.y + 1 < this.game.BOARD_SIZE) {
-          this._down = this.game.board[this.x][this.y + 1];
+        if (this._down === null && this.y + 1 < this.self.boardSize) {
+          this._down = this.self.board[this.x][this.y + 1];
         }
         return this._down;
       },
       left: function() {
         if (this._left === null && this.x - 1 >= 0) {
-          this._left = this.game.board[this.x - 1][this.y];
+          this._left = this.self.board[this.x - 1][this.y];
         }
         return this._left;
       },
       right: function() {
-        if (this._right === null && this.x + 1 < this.game.BOARD_SIZE) {
-          this._right = this.game.board[this.x + 1][this.y];
+        if (this._right === null && this.x + 1 < this.self.boardSize) {
+          this._right = this.self.board[this.x + 1][this.y];
         }
         return this._right;
       }
@@ -115,15 +117,15 @@ GoGame = (function() {
   GoGame.prototype.toString = function() {
     var string, x, y, _i, _j, _ref, _ref1;
     string = '';
-    for (y = _i = 0, _ref = this.BOARD_SIZE; 0 <= _ref ? _i < _ref : _i > _ref; y = 0 <= _ref ? ++_i : --_i) {
-      for (x = _j = 0, _ref1 = this.BOARD_SIZE; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; x = 0 <= _ref1 ? ++_j : --_j) {
+    for (y = _i = 0, _ref = this.boardSize; 0 <= _ref ? _i < _ref : _i > _ref; y = 0 <= _ref ? ++_i : --_i) {
+      for (x = _j = 0, _ref1 = this.boardSize; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; x = 0 <= _ref1 ? ++_j : --_j) {
         string += (function() {
           switch (this.board[x][y].value) {
-            case this.PIECE.EMPTY:
+            case GoGame.PIECE.EMPTY:
               return '-';
-            case this.PIECE.BLACK:
+            case GoGame.PIECE.BLACK:
               return 'b';
-            case this.PIECE.WHITE:
+            case GoGame.PIECE.WHITE:
               return 'w';
           }
         }).call(this);

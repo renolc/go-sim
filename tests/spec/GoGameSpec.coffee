@@ -15,7 +15,7 @@ describe 'A go game', ->
 
   it 'should start with black', ->
     expect @game.turn
-      .toEqual @game.PIECE.BLACK
+      .toEqual GoGame.PIECE.BLACK
 
   it 'should be able to chain commands', ->
     @game.play(0, 0)
@@ -23,7 +23,7 @@ describe 'A go game', ->
       .pass()
 
     expect @game.turn
-      .toEqual @game.PIECE.WHITE
+      .toEqual GoGame.PIECE.WHITE
 
   describe 'when a player places a piece not on an edge', ->
 
@@ -33,16 +33,16 @@ describe 'A go game', ->
 
     it 'should not be empty', ->
       expect @cell.value
-        .not.toEqual @game.PIECE.EMPTY
+        .not.toEqual GoGame.PIECE.EMPTY
 
     it 'should alternate turns', ->
       expect @game.turn
-        .toEqual @game.PIECE.WHITE
+        .toEqual GoGame.PIECE.WHITE
 
       @game.play(0, 0)
 
       expect @game.turn
-        .toEqual @game.PIECE.BLACK
+        .toEqual GoGame.PIECE.BLACK
 
     it 'should reference all 4 cells around it', ->
       expect @cell.surroundingCells().length
@@ -68,7 +68,7 @@ describe 'A go game', ->
 
     it 'should not be empty', ->
       expect @cell.value
-        .not.toEqual @game.PIECE.EMPTY
+        .not.toEqual GoGame.PIECE.EMPTY
 
     it 'should reference all 3 cells around it', ->
       expect @cell.surroundingCells().length
@@ -89,28 +89,28 @@ describe 'A go game', ->
   describe 'when a player places a piece on the bottom edge', ->
 
     beforeEach ->
-      @game.play(3, @game.BOARD_SIZE - 1)
-      @cell = @game.board[3][@game.BOARD_SIZE - 1]
+      @game.play(3, @game.boardSize - 1)
+      @cell = @game.board[3][@game.boardSize - 1]
 
     it 'should not be empty', ->
       expect @cell.value
-        .not.toEqual @game.PIECE.EMPTY
+        .not.toEqual GoGame.PIECE.EMPTY
 
     it 'should reference all 3 cells around it', ->
       expect @cell.surroundingCells().length
         .toEqual 3
 
       expect @cell.up()
-        .toBe @game.board[3][@game.BOARD_SIZE - 2]
+        .toBe @game.board[3][@game.boardSize - 2]
 
       expect @cell.down()
         .toBe null
 
       expect @cell.left()
-        .toBe @game.board[2][@game.BOARD_SIZE - 1]
+        .toBe @game.board[2][@game.boardSize - 1]
 
       expect @cell.right()
-        .toBe @game.board[4][@game.BOARD_SIZE - 1]
+        .toBe @game.board[4][@game.boardSize - 1]
 
   describe 'when a player places a piece on the left edge', ->
 
@@ -120,7 +120,7 @@ describe 'A go game', ->
 
     it 'should not be empty', ->
       expect @cell.value
-        .not.toEqual @game.PIECE.EMPTY
+        .not.toEqual GoGame.PIECE.EMPTY
 
     it 'should reference all 3 cells around it', ->
       expect @cell.surroundingCells().length
@@ -141,25 +141,25 @@ describe 'A go game', ->
   describe 'when a player places a piece on the right edge', ->
 
     beforeEach ->
-      @game.play(@game.BOARD_SIZE - 1, 3)
-      @cell = @game.board[@game.BOARD_SIZE - 1][3]
+      @game.play(@game.boardSize - 1, 3)
+      @cell = @game.board[@game.boardSize - 1][3]
 
     it 'should not be empty', ->
       expect @cell.value
-        .not.toEqual @game.PIECE.EMPTY
+        .not.toEqual GoGame.PIECE.EMPTY
 
     it 'should reference all 3 cells around it', ->
       expect @cell.surroundingCells().length
         .toEqual 3
 
       expect @cell.up()
-        .toBe @game.board[@game.BOARD_SIZE - 1][2]
+        .toBe @game.board[@game.boardSize - 1][2]
 
       expect @cell.down()
-        .toBe @game.board[@game.BOARD_SIZE - 1][4]
+        .toBe @game.board[@game.boardSize - 1][4]
 
       expect @cell.left()
-        .toBe @game.board[@game.BOARD_SIZE - 2][3]
+        .toBe @game.board[@game.boardSize - 2][3]
 
       expect @cell.right()
         .toBe null
@@ -172,7 +172,7 @@ describe 'A go game', ->
 
     it 'should not be empty', ->
       expect @cell.value
-        .not.toEqual @game.PIECE.EMPTY
+        .not.toEqual GoGame.PIECE.EMPTY
 
     it 'should reference all 2 cells around it', ->
       expect @cell.surroundingCells().length
@@ -193,12 +193,12 @@ describe 'A go game', ->
   describe 'when a player places a piece in the top right corner', ->
 
     beforeEach ->
-      @game.play(@game.BOARD_SIZE - 1, 0)
-      @cell = @game.board[@game.BOARD_SIZE - 1][0]
+      @game.play(@game.boardSize - 1, 0)
+      @cell = @game.board[@game.boardSize - 1][0]
 
     it 'should not be empty', ->
       expect @cell.value
-        .not.toEqual @game.PIECE.EMPTY
+        .not.toEqual GoGame.PIECE.EMPTY
 
     it 'should reference all 2 cells around it', ->
       expect @cell.surroundingCells().length
@@ -208,10 +208,10 @@ describe 'A go game', ->
         .toBe null
 
       expect @cell.down()
-        .toBe @game.board[@game.BOARD_SIZE - 1][1]
+        .toBe @game.board[@game.boardSize - 1][1]
 
       expect @cell.left()
-        .toBe @game.board[@game.BOARD_SIZE - 2][0]
+        .toBe @game.board[@game.boardSize - 2][0]
 
       expect @cell.right()
         .toBe null
@@ -219,19 +219,19 @@ describe 'A go game', ->
   describe 'when a player places a piece in the bottom left corner', ->
 
     beforeEach ->
-      @game.play(0, @game.BOARD_SIZE - 1)
-      @cell = @game.board[0][@game.BOARD_SIZE - 1]
+      @game.play(0, @game.boardSize - 1)
+      @cell = @game.board[0][@game.boardSize - 1]
 
     it 'should not be empty', ->
       expect @cell.value
-        .not.toEqual @game.PIECE.EMPTY
+        .not.toEqual GoGame.PIECE.EMPTY
 
     it 'should reference all 2 cells around it', ->
       expect @cell.surroundingCells().length
         .toEqual 2
 
       expect @cell.up()
-        .toBe @game.board[0][@game.BOARD_SIZE - 2]
+        .toBe @game.board[0][@game.boardSize - 2]
 
       expect @cell.down()
         .toBe null
@@ -240,30 +240,30 @@ describe 'A go game', ->
         .toBe null
 
       expect @cell.right()
-        .toBe @game.board[1][@game.BOARD_SIZE - 1]
+        .toBe @game.board[1][@game.boardSize - 1]
 
   describe 'when a player places a piece in the bottom right corner', ->
 
     beforeEach ->
-      @game.play(@game.BOARD_SIZE - 1, @game.BOARD_SIZE - 1)
-      @cell = @game.board[@game.BOARD_SIZE - 1][@game.BOARD_SIZE - 1]
+      @game.play(@game.boardSize - 1, @game.boardSize - 1)
+      @cell = @game.board[@game.boardSize - 1][@game.boardSize - 1]
 
     it 'should not be empty', ->
       expect @cell.value
-        .not.toEqual @game.PIECE.EMPTY
+        .not.toEqual GoGame.PIECE.EMPTY
 
     it 'should reference all 2 cells around it', ->
       expect @cell.surroundingCells().length
         .toEqual 2
 
       expect @cell.up()
-        .toBe @game.board[@game.BOARD_SIZE - 1][@game.BOARD_SIZE - 2]
+        .toBe @game.board[@game.boardSize - 1][@game.boardSize - 2]
 
       expect @cell.down()
         .toBe null
 
       expect @cell.left()
-        .toBe @game.board[@game.BOARD_SIZE - 2][@game.BOARD_SIZE - 1]
+        .toBe @game.board[@game.boardSize - 2][@game.boardSize - 1]
 
       expect @cell.right()
         .toBe null
@@ -281,9 +281,9 @@ describe 'A go game', ->
 
     it 'should alternate turns', ->
       expect @game.turn
-        .toEqual @game.PIECE.WHITE
+        .toEqual GoGame.PIECE.WHITE
 
       @game.pass()
 
       expect @game.turn
-        .toEqual @game.PIECE.BLACK
+        .toEqual GoGame.PIECE.BLACK

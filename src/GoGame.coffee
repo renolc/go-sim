@@ -4,8 +4,7 @@ class GoGame
   Constants
   ###
 
-  BOARD_SIZE: 9
-  PIECE:
+  @PIECE:
     EMPTY: null
     BLACK: false
     WHITE: true
@@ -15,20 +14,21 @@ class GoGame
   Constructor
   ###
 
-  constructor: ->
+  constructor: (size = 9) ->
 
     # properties
-    @board = []
-    @turn = null
+    @boardSize = size
+    @board     = []
+    @turn      = null
 
     # create board
-    for x in [0...@BOARD_SIZE]
+    for x in [0...@boardSize]
       @board.push([])
-      for y in [0...@BOARD_SIZE]
-        @board[x].push(@_createCell(@, x, y))
+      for y in [0...@boardSize]
+        @board[x].push(@_createCell(x, y))
 
     # black starts
-    @turn = @PIECE.BLACK
+    @turn = GoGame.PIECE.BLACK
 
 
   ###
@@ -47,11 +47,11 @@ class GoGame
   Util methods
   ###
 
-  _createCell: (game, x, y) ->
-    game:      game
-    x:         x
-    y:         y
-    value:     game.PIECE.EMPTY
+  _createCell: (x, y) ->
+    self:  @
+    x:     x
+    y:     y
+    value: GoGame.PIECE.EMPTY
 
     # caching properties
     _up:          null
@@ -76,22 +76,22 @@ class GoGame
 
     up: ->
       if @_up == null and @y - 1 >= 0
-        @_up = @game.board[@x][@y - 1]
+        @_up = @self.board[@x][@y - 1]
       @_up
 
     down: ->
-      if @_down == null and @y + 1 < @game.BOARD_SIZE
-        @_down = @game.board[@x][@y + 1]
+      if @_down == null and @y + 1 < @self.boardSize
+        @_down = @self.board[@x][@y + 1]
       @_down
 
     left: ->
       if @_left == null and @x - 1 >= 0
-        @_left = @game.board[@x - 1][@y]
+        @_left = @self.board[@x - 1][@y]
       @_left
 
     right: ->
-      if @_right == null and @x + 1 < @game.BOARD_SIZE
-        @_right = @game.board[@x + 1][@y]
+      if @_right == null and @x + 1 < @self.boardSize
+        @_right = @self.board[@x + 1][@y]
       @_right
 
   _alternateTurn: ->
@@ -100,12 +100,12 @@ class GoGame
 
   toString: ->
     string = ''
-    for y in [0...@BOARD_SIZE]
-      for x in [0...@BOARD_SIZE]
+    for y in [0...@boardSize]
+      for x in [0...@boardSize]
         string +=
           switch @board[x][y].value
-            when @PIECE.EMPTY then '-'
-            when @PIECE.BLACK then 'b'
-            when @PIECE.WHITE then 'w'
+            when GoGame.PIECE.EMPTY then '-'
+            when GoGame.PIECE.BLACK then 'b'
+            when GoGame.PIECE.WHITE then 'w'
       string += '\n'
     string
