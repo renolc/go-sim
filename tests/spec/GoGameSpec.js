@@ -77,6 +77,38 @@ describe('A go game', function() {
       return expect(this.cell.right()).toBe(this.game.board[4][this.game.BOARD_SIZE - 1]);
     });
   });
+  describe('when a player places a piece on the left edge', function() {
+    beforeEach(function() {
+      this.game.play(0, 3);
+      return this.cell = this.game.board[0][3];
+    });
+    it('should not be empty', function() {
+      return expect(this.cell.value).not.toEqual(this.game.PIECE.EMPTY);
+    });
+    return it('should reference all 3 cells around it', function() {
+      expect(this.cell.surroundingCells().length).toEqual(3);
+      expect(this.cell.up()).toBe(this.game.board[0][2]);
+      expect(this.cell.down()).toBe(this.game.board[0][4]);
+      expect(this.cell.left()).toBe(null);
+      return expect(this.cell.right()).toBe(this.game.board[1][3]);
+    });
+  });
+  describe('when a player places a piece on the right edge', function() {
+    beforeEach(function() {
+      this.game.play(this.game.BOARD_SIZE - 1, 3);
+      return this.cell = this.game.board[this.game.BOARD_SIZE - 1][3];
+    });
+    it('should not be empty', function() {
+      return expect(this.cell.value).not.toEqual(this.game.PIECE.EMPTY);
+    });
+    return it('should reference all 3 cells around it', function() {
+      expect(this.cell.surroundingCells().length).toEqual(3);
+      expect(this.cell.up()).toBe(this.game.board[this.game.BOARD_SIZE - 1][2]);
+      expect(this.cell.down()).toBe(this.game.board[this.game.BOARD_SIZE - 1][4]);
+      expect(this.cell.left()).toBe(this.game.board[this.game.BOARD_SIZE - 2][3]);
+      return expect(this.cell.right()).toBe(null);
+    });
+  });
   return describe('when a player passes', function() {
     var originalBoard;
     originalBoard = null;

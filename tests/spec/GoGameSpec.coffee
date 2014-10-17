@@ -112,6 +112,58 @@ describe 'A go game', ->
       expect @cell.right()
         .toBe @game.board[4][@game.BOARD_SIZE - 1]
 
+  describe 'when a player places a piece on the left edge', ->
+
+    beforeEach ->
+      @game.play(0, 3)
+      @cell = @game.board[0][3]
+
+    it 'should not be empty', ->
+      expect @cell.value
+        .not.toEqual @game.PIECE.EMPTY
+
+    it 'should reference all 3 cells around it', ->
+      expect @cell.surroundingCells().length
+        .toEqual 3
+
+      expect @cell.up()
+        .toBe @game.board[0][2]
+
+      expect @cell.down()
+        .toBe @game.board[0][4]
+
+      expect @cell.left()
+        .toBe null
+
+      expect @cell.right()
+        .toBe @game.board[1][3]
+
+  describe 'when a player places a piece on the right edge', ->
+
+    beforeEach ->
+      @game.play(@game.BOARD_SIZE - 1, 3)
+      @cell = @game.board[@game.BOARD_SIZE - 1][3]
+
+    it 'should not be empty', ->
+      expect @cell.value
+        .not.toEqual @game.PIECE.EMPTY
+
+    it 'should reference all 3 cells around it', ->
+      expect @cell.surroundingCells().length
+        .toEqual 3
+
+      expect @cell.up()
+        .toBe @game.board[@game.BOARD_SIZE - 1][2]
+
+      expect @cell.down()
+        .toBe @game.board[@game.BOARD_SIZE - 1][4]
+
+      expect @cell.left()
+        .toBe @game.board[@game.BOARD_SIZE - 2][3]
+
+      expect @cell.right()
+        .toBe null
+
   describe 'when a player passes', ->
     originalBoard = null
 
