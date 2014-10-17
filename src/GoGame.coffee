@@ -80,22 +80,22 @@ class GoGame
 
     up: ->
       if @_up == null and @y - 1 >= 0
-        @_up = @game.board[@x][@y-1]
+        @_up = @game.board[@x][@y - 1]
       @_up
 
     down: ->
       if @_down == null and @y + 1 < @game.BOARD_SIZE
-        @_down = @game.board[@x][@y+1]
+        @_down = @game.board[@x][@y + 1]
       @_down
 
     left: ->
       if @_left == null and @x - 1 >= 0
-        @_left = @game.board[@x-1][@y]
+        @_left = @game.board[@x - 1][@y]
       @_left
 
     right: ->
       if @_right == null and @x + 1 < @game.BOARD_SIZE
-        @_right = @game.board[@x+1][@y]
+        @_right = @game.board[@x + 1][@y]
       @_right
 
   _alternateTurn: ->

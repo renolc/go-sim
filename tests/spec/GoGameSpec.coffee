@@ -164,6 +164,110 @@ describe 'A go game', ->
       expect @cell.right()
         .toBe null
 
+  describe 'when a player places a piece in the top left corner', ->
+
+    beforeEach ->
+      @game.play(0, 0)
+      @cell = @game.board[0][0]
+
+    it 'should not be empty', ->
+      expect @cell.value
+        .not.toEqual @game.PIECE.EMPTY
+
+    it 'should reference all 2 cells around it', ->
+      expect @cell.surroundingCells().length
+        .toEqual 2
+
+      expect @cell.up()
+        .toBe null
+
+      expect @cell.down()
+        .toBe @game.board[0][1]
+
+      expect @cell.left()
+        .toBe null
+
+      expect @cell.right()
+        .toBe @game.board[1][0]
+
+  describe 'when a player places a piece in the top right corner', ->
+
+    beforeEach ->
+      @game.play(@game.BOARD_SIZE - 1, 0)
+      @cell = @game.board[@game.BOARD_SIZE - 1][0]
+
+    it 'should not be empty', ->
+      expect @cell.value
+        .not.toEqual @game.PIECE.EMPTY
+
+    it 'should reference all 2 cells around it', ->
+      expect @cell.surroundingCells().length
+        .toEqual 2
+
+      expect @cell.up()
+        .toBe null
+
+      expect @cell.down()
+        .toBe @game.board[@game.BOARD_SIZE - 1][1]
+
+      expect @cell.left()
+        .toBe @game.board[@game.BOARD_SIZE - 2][0]
+
+      expect @cell.right()
+        .toBe null
+
+  describe 'when a player places a piece in the bottom left corner', ->
+
+    beforeEach ->
+      @game.play(0, @game.BOARD_SIZE - 1)
+      @cell = @game.board[0][@game.BOARD_SIZE - 1]
+
+    it 'should not be empty', ->
+      expect @cell.value
+        .not.toEqual @game.PIECE.EMPTY
+
+    it 'should reference all 2 cells around it', ->
+      expect @cell.surroundingCells().length
+        .toEqual 2
+
+      expect @cell.up()
+        .toBe @game.board[0][@game.BOARD_SIZE - 2]
+
+      expect @cell.down()
+        .toBe null
+
+      expect @cell.left()
+        .toBe null
+
+      expect @cell.right()
+        .toBe @game.board[1][@game.BOARD_SIZE - 1]
+
+  describe 'when a player places a piece in the bottom right corner', ->
+
+    beforeEach ->
+      @game.play(@game.BOARD_SIZE - 1, @game.BOARD_SIZE - 1)
+      @cell = @game.board[@game.BOARD_SIZE - 1][@game.BOARD_SIZE - 1]
+
+    it 'should not be empty', ->
+      expect @cell.value
+        .not.toEqual @game.PIECE.EMPTY
+
+    it 'should reference all 2 cells around it', ->
+      expect @cell.surroundingCells().length
+        .toEqual 2
+
+      expect @cell.up()
+        .toBe @game.board[@game.BOARD_SIZE - 1][@game.BOARD_SIZE - 2]
+
+      expect @cell.down()
+        .toBe null
+
+      expect @cell.left()
+        .toBe @game.board[@game.BOARD_SIZE - 2][@game.BOARD_SIZE - 1]
+
+      expect @cell.right()
+        .toBe null
+
   describe 'when a player passes', ->
     originalBoard = null
 

@@ -109,6 +109,70 @@ describe('A go game', function() {
       return expect(this.cell.right()).toBe(null);
     });
   });
+  describe('when a player places a piece in the top left corner', function() {
+    beforeEach(function() {
+      this.game.play(0, 0);
+      return this.cell = this.game.board[0][0];
+    });
+    it('should not be empty', function() {
+      return expect(this.cell.value).not.toEqual(this.game.PIECE.EMPTY);
+    });
+    return it('should reference all 2 cells around it', function() {
+      expect(this.cell.surroundingCells().length).toEqual(2);
+      expect(this.cell.up()).toBe(null);
+      expect(this.cell.down()).toBe(this.game.board[0][1]);
+      expect(this.cell.left()).toBe(null);
+      return expect(this.cell.right()).toBe(this.game.board[1][0]);
+    });
+  });
+  describe('when a player places a piece in the top right corner', function() {
+    beforeEach(function() {
+      this.game.play(this.game.BOARD_SIZE - 1, 0);
+      return this.cell = this.game.board[this.game.BOARD_SIZE - 1][0];
+    });
+    it('should not be empty', function() {
+      return expect(this.cell.value).not.toEqual(this.game.PIECE.EMPTY);
+    });
+    return it('should reference all 2 cells around it', function() {
+      expect(this.cell.surroundingCells().length).toEqual(2);
+      expect(this.cell.up()).toBe(null);
+      expect(this.cell.down()).toBe(this.game.board[this.game.BOARD_SIZE - 1][1]);
+      expect(this.cell.left()).toBe(this.game.board[this.game.BOARD_SIZE - 2][0]);
+      return expect(this.cell.right()).toBe(null);
+    });
+  });
+  describe('when a player places a piece in the bottom left corner', function() {
+    beforeEach(function() {
+      this.game.play(0, this.game.BOARD_SIZE - 1);
+      return this.cell = this.game.board[0][this.game.BOARD_SIZE - 1];
+    });
+    it('should not be empty', function() {
+      return expect(this.cell.value).not.toEqual(this.game.PIECE.EMPTY);
+    });
+    return it('should reference all 2 cells around it', function() {
+      expect(this.cell.surroundingCells().length).toEqual(2);
+      expect(this.cell.up()).toBe(this.game.board[0][this.game.BOARD_SIZE - 2]);
+      expect(this.cell.down()).toBe(null);
+      expect(this.cell.left()).toBe(null);
+      return expect(this.cell.right()).toBe(this.game.board[1][this.game.BOARD_SIZE - 1]);
+    });
+  });
+  describe('when a player places a piece in the bottom right corner', function() {
+    beforeEach(function() {
+      this.game.play(this.game.BOARD_SIZE - 1, this.game.BOARD_SIZE - 1);
+      return this.cell = this.game.board[this.game.BOARD_SIZE - 1][this.game.BOARD_SIZE - 1];
+    });
+    it('should not be empty', function() {
+      return expect(this.cell.value).not.toEqual(this.game.PIECE.EMPTY);
+    });
+    return it('should reference all 2 cells around it', function() {
+      expect(this.cell.surroundingCells().length).toEqual(2);
+      expect(this.cell.up()).toBe(this.game.board[this.game.BOARD_SIZE - 1][this.game.BOARD_SIZE - 2]);
+      expect(this.cell.down()).toBe(null);
+      expect(this.cell.left()).toBe(this.game.board[this.game.BOARD_SIZE - 2][this.game.BOARD_SIZE - 1]);
+      return expect(this.cell.right()).toBe(null);
+    });
+  });
   return describe('when a player passes', function() {
     var originalBoard;
     originalBoard = null;
