@@ -35,8 +35,10 @@ class GoGame
   ###
 
   play: (x, y) ->
-    @board[x][y].value = @turn
+    cell = @board[x][y]
+    cell.value = @turn
     @_alternateTurn()
+    cell
 
   pass: ->
     @_alternateTurn()
@@ -106,7 +108,6 @@ class GoGame
 
   _alternateTurn: ->
     @turn = !@turn
-    @
 
   toString: ->
     string = ''

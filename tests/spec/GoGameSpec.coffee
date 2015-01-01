@@ -17,19 +17,10 @@ describe 'A go game', ->
     expect @game.turn
       .toEqual GoGame.PIECE.BLACK
 
-  it 'should be able to chain commands', ->
-    @game.play(0, 0)
-      .play(1, 0)
-      .pass()
-
-    expect @game.turn
-      .toEqual GoGame.PIECE.WHITE
-
   describe 'when a player places a piece not on an edge', ->
 
     beforeEach ->
-      @game.play(2, 3)
-      @cell = @game.board[2][3]
+      @cell = @game.play(2, 3)
 
     it 'should not be empty', ->
       expect @cell.value
@@ -60,8 +51,7 @@ describe 'A go game', ->
   describe 'when a player places a piece on the top edge', ->
 
     beforeEach ->
-      @game.play(3, 0)
-      @cell = @game.board[3][0]
+      @cell = @game.play(3, 0)
 
     it 'should not be empty', ->
       expect @cell.value
@@ -83,8 +73,7 @@ describe 'A go game', ->
   describe 'when a player places a piece on the bottom edge', ->
 
     beforeEach ->
-      @game.play(3, @game.size - 1)
-      @cell = @game.board[3][@game.size - 1]
+      @cell = @game.play(3, @game.size - 1)
 
     it 'should not be empty', ->
       expect @cell.value
@@ -106,8 +95,7 @@ describe 'A go game', ->
   describe 'when a player places a piece on the left edge', ->
 
     beforeEach ->
-      @game.play(0, 3)
-      @cell = @game.board[0][3]
+      @cell = @game.play(0, 3)
 
     it 'should not be empty', ->
       expect @cell.value
@@ -129,8 +117,7 @@ describe 'A go game', ->
   describe 'when a player places a piece on the right edge', ->
 
     beforeEach ->
-      @game.play(@game.size - 1, 3)
-      @cell = @game.board[@game.size - 1][3]
+      @cell = @game.play(@game.size - 1, 3)
 
     it 'should not be empty', ->
       expect @cell.value
@@ -152,8 +139,7 @@ describe 'A go game', ->
   describe 'when a player places a piece in the top left corner', ->
 
     beforeEach ->
-      @game.play(0, 0)
-      @cell = @game.board[0][0]
+      @cell = @game.play(0, 0)
 
     it 'should not be empty', ->
       expect @cell.value
@@ -175,8 +161,7 @@ describe 'A go game', ->
   describe 'when a player places a piece in the top right corner', ->
 
     beforeEach ->
-      @game.play(@game.size - 1, 0)
-      @cell = @game.board[@game.size - 1][0]
+      @cell = @game.play(@game.size - 1, 0)
 
     it 'should not be empty', ->
       expect @cell.value
@@ -198,8 +183,7 @@ describe 'A go game', ->
   describe 'when a player places a piece in the bottom left corner', ->
 
     beforeEach ->
-      @game.play(0, @game.size - 1)
-      @cell = @game.board[0][@game.size - 1]
+      @cell = @game.play(0, @game.size - 1)
 
     it 'should not be empty', ->
       expect @cell.value
@@ -221,8 +205,7 @@ describe 'A go game', ->
   describe 'when a player places a piece in the bottom right corner', ->
 
     beforeEach ->
-      @game.play(@game.size - 1, @game.size - 1)
-      @cell = @game.board[@game.size - 1][@game.size - 1]
+      @cell = @game.play(@game.size - 1, @game.size - 1)
 
     it 'should not be empty', ->
       expect @cell.value
@@ -242,15 +225,14 @@ describe 'A go game', ->
         .toBe null
 
   describe 'when a player passes', ->
-    originalBoard = null
 
     beforeEach ->
-      originalBoard = @game.toString()
+      @originalBoard = @game.toString()
       @game.pass()
 
     it 'should not change the board', ->
       expect @game.toString()
-        .toEqual originalBoard
+        .toEqual @originalBoard
 
     it 'should alternate turns', ->
       expect @game.turn

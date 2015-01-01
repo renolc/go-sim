@@ -20,14 +20,9 @@ describe('A go game', function() {
   it('should start with black', function() {
     return expect(this.game.turn).toEqual(GoGame.PIECE.BLACK);
   });
-  it('should be able to chain commands', function() {
-    this.game.play(0, 0).play(1, 0).pass();
-    return expect(this.game.turn).toEqual(GoGame.PIECE.WHITE);
-  });
   describe('when a player places a piece not on an edge', function() {
     beforeEach(function() {
-      this.game.play(2, 3);
-      return this.cell = this.game.board[2][3];
+      return this.cell = this.game.play(2, 3);
     });
     it('should not be empty', function() {
       return expect(this.cell.value).not.toEqual(GoGame.PIECE.EMPTY);
@@ -46,8 +41,7 @@ describe('A go game', function() {
   });
   describe('when a player places a piece on the top edge', function() {
     beforeEach(function() {
-      this.game.play(3, 0);
-      return this.cell = this.game.board[3][0];
+      return this.cell = this.game.play(3, 0);
     });
     it('should not be empty', function() {
       return expect(this.cell.value).not.toEqual(GoGame.PIECE.EMPTY);
@@ -61,8 +55,7 @@ describe('A go game', function() {
   });
   describe('when a player places a piece on the bottom edge', function() {
     beforeEach(function() {
-      this.game.play(3, this.game.size - 1);
-      return this.cell = this.game.board[3][this.game.size - 1];
+      return this.cell = this.game.play(3, this.game.size - 1);
     });
     it('should not be empty', function() {
       return expect(this.cell.value).not.toEqual(GoGame.PIECE.EMPTY);
@@ -76,8 +69,7 @@ describe('A go game', function() {
   });
   describe('when a player places a piece on the left edge', function() {
     beforeEach(function() {
-      this.game.play(0, 3);
-      return this.cell = this.game.board[0][3];
+      return this.cell = this.game.play(0, 3);
     });
     it('should not be empty', function() {
       return expect(this.cell.value).not.toEqual(GoGame.PIECE.EMPTY);
@@ -91,8 +83,7 @@ describe('A go game', function() {
   });
   describe('when a player places a piece on the right edge', function() {
     beforeEach(function() {
-      this.game.play(this.game.size - 1, 3);
-      return this.cell = this.game.board[this.game.size - 1][3];
+      return this.cell = this.game.play(this.game.size - 1, 3);
     });
     it('should not be empty', function() {
       return expect(this.cell.value).not.toEqual(GoGame.PIECE.EMPTY);
@@ -106,8 +97,7 @@ describe('A go game', function() {
   });
   describe('when a player places a piece in the top left corner', function() {
     beforeEach(function() {
-      this.game.play(0, 0);
-      return this.cell = this.game.board[0][0];
+      return this.cell = this.game.play(0, 0);
     });
     it('should not be empty', function() {
       return expect(this.cell.value).not.toEqual(GoGame.PIECE.EMPTY);
@@ -121,8 +111,7 @@ describe('A go game', function() {
   });
   describe('when a player places a piece in the top right corner', function() {
     beforeEach(function() {
-      this.game.play(this.game.size - 1, 0);
-      return this.cell = this.game.board[this.game.size - 1][0];
+      return this.cell = this.game.play(this.game.size - 1, 0);
     });
     it('should not be empty', function() {
       return expect(this.cell.value).not.toEqual(GoGame.PIECE.EMPTY);
@@ -136,8 +125,7 @@ describe('A go game', function() {
   });
   describe('when a player places a piece in the bottom left corner', function() {
     beforeEach(function() {
-      this.game.play(0, this.game.size - 1);
-      return this.cell = this.game.board[0][this.game.size - 1];
+      return this.cell = this.game.play(0, this.game.size - 1);
     });
     it('should not be empty', function() {
       return expect(this.cell.value).not.toEqual(GoGame.PIECE.EMPTY);
@@ -151,8 +139,7 @@ describe('A go game', function() {
   });
   describe('when a player places a piece in the bottom right corner', function() {
     beforeEach(function() {
-      this.game.play(this.game.size - 1, this.game.size - 1);
-      return this.cell = this.game.board[this.game.size - 1][this.game.size - 1];
+      return this.cell = this.game.play(this.game.size - 1, this.game.size - 1);
     });
     it('should not be empty', function() {
       return expect(this.cell.value).not.toEqual(GoGame.PIECE.EMPTY);
@@ -165,14 +152,12 @@ describe('A go game', function() {
     });
   });
   return describe('when a player passes', function() {
-    var originalBoard;
-    originalBoard = null;
     beforeEach(function() {
-      originalBoard = this.game.toString();
+      this.originalBoard = this.game.toString();
       return this.game.pass();
     });
     it('should not change the board', function() {
-      return expect(this.game.toString()).toEqual(originalBoard);
+      return expect(this.game.toString()).toEqual(this.originalBoard);
     });
     return it('should alternate turns', function() {
       expect(this.game.turn).toEqual(GoGame.PIECE.WHITE);

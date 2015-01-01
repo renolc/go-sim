@@ -39,8 +39,11 @@ GoGame = (function() {
    */
 
   GoGame.prototype.play = function(x, y) {
-    this.board[x][y].value = this.turn;
-    return this._alternateTurn();
+    var cell;
+    cell = this.board[x][y];
+    cell.value = this.turn;
+    this._alternateTurn();
+    return cell;
   };
 
   GoGame.prototype.pass = function() {
@@ -107,8 +110,7 @@ GoGame = (function() {
   };
 
   GoGame.prototype._alternateTurn = function() {
-    this.turn = !this.turn;
-    return this;
+    return this.turn = !this.turn;
   };
 
   GoGame.prototype.toString = function() {
