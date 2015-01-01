@@ -48,6 +48,13 @@ describe 'A go game', ->
       expect @cell.right
         .toBe @game.board[3][3]
 
+    it 'should reference a cluster of only itself', ->
+      expect @cell.cluster.length
+        .toBe 1
+
+      expect @cell.cluster[0]
+        .toBe @cell
+
   describe 'when a player places a piece on the top edge', ->
 
     beforeEach ->

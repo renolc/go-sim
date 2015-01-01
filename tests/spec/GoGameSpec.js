@@ -32,11 +32,15 @@ describe('A go game', function() {
       this.game.play(0, 0);
       return expect(this.game.turn).toEqual(GoGame.PIECE.BLACK);
     });
-    return it('should reference all 4 cells around it', function() {
+    it('should reference all 4 cells around it', function() {
       expect(this.cell.up).toBe(this.game.board[2][2]);
       expect(this.cell.down).toBe(this.game.board[2][4]);
       expect(this.cell.left).toBe(this.game.board[1][3]);
       return expect(this.cell.right).toBe(this.game.board[3][3]);
+    });
+    return it('should reference a cluster of only itself', function() {
+      expect(this.cell.cluster.length).toBe(1);
+      return expect(this.cell.cluster[0]).toBe(this.cell);
     });
   });
   describe('when a player places a piece on the top edge', function() {

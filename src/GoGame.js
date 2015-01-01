@@ -61,6 +61,7 @@ GoGame = (function() {
       this.board[x] = [];
     }
     cell = this._cellTemplate();
+    cell.cluster.push(cell);
     this.board[x][y] = cell;
     if (y - 1 >= 0) {
       up = this.board[x][y - 1];
@@ -105,7 +106,8 @@ GoGame = (function() {
       up: null,
       down: null,
       left: null,
-      right: null
+      right: null,
+      cluster: []
     };
   };
 

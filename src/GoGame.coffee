@@ -37,7 +37,9 @@ class GoGame
   play: (x, y) ->
     cell = @board[x][y]
     cell.value = @turn
+
     @_alternateTurn()
+
     cell
 
   pass: ->
@@ -56,6 +58,9 @@ class GoGame
 
     # create new cell
     cell = @_cellTemplate()
+
+    # add cell to its own cluster
+    cell.cluster.push(cell)
 
     # place new cell in board
     @board[x][y] = cell
@@ -105,6 +110,9 @@ class GoGame
     down:  null
     left:  null
     right: null
+
+    # cluster of related cells
+    cluster: []
 
   _alternateTurn: ->
     @turn = !@turn
