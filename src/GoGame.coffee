@@ -35,8 +35,11 @@ class GoGame
   ###
 
   play: (x, y) ->
+
     cell = @board[x][y]
     cell.value = @turn
+
+    @_mergeClusters(cell)
 
     @_alternateTurn()
 
@@ -116,6 +119,30 @@ class GoGame
 
   _alternateTurn: ->
     @turn = !@turn
+
+  _getSurrounding: (cell) ->
+    surrounding = []
+
+    if cell.up?.value == cell.value
+      surrounding.push(cell.up)
+
+    if cell.down?.value == cell.value
+      surrounding.push(cell.down)
+
+    if cell.left?.value == cell.value
+      surrounding.push(cell.left)
+
+    if cell.right?.value == cell.value
+      surrounding.push(cell.right)
+
+    surrounding
+
+  _mergeClusters: (cell) ->
+    for c in @_getSurrounding(cell)
+      if c.cluster != cell.cluster
+        c.cluster = cell.cluster
+        c.cluster.push(c)
+        @_mergeClusters(c)
 
   toString: ->
     string = ''

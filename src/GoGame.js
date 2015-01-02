@@ -42,6 +42,7 @@ GoGame = (function() {
     var cell;
     cell = this.board[x][y];
     cell.value = this.turn;
+    this._mergeClusters(cell);
     this._alternateTurn();
     return cell;
   };
@@ -113,6 +114,41 @@ GoGame = (function() {
 
   GoGame.prototype._alternateTurn = function() {
     return this.turn = !this.turn;
+  };
+
+  GoGame.prototype._getSurrounding = function(cell) {
+    var surrounding, _ref, _ref1, _ref2, _ref3;
+    surrounding = [];
+    if (((_ref = cell.up) != null ? _ref.value : void 0) === cell.value) {
+      surrounding.push(cell.up);
+    }
+    if (((_ref1 = cell.down) != null ? _ref1.value : void 0) === cell.value) {
+      surrounding.push(cell.down);
+    }
+    if (((_ref2 = cell.left) != null ? _ref2.value : void 0) === cell.value) {
+      surrounding.push(cell.left);
+    }
+    if (((_ref3 = cell.right) != null ? _ref3.value : void 0) === cell.value) {
+      surrounding.push(cell.right);
+    }
+    return surrounding;
+  };
+
+  GoGame.prototype._mergeClusters = function(cell) {
+    var c, _i, _len, _ref, _results;
+    _ref = this._getSurrounding(cell);
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      c = _ref[_i];
+      if (c.cluster !== cell.cluster) {
+        c.cluster = cell.cluster;
+        c.cluster.push(c);
+        _results.push(this._mergeClusters(c));
+      } else {
+        _results.push(void 0);
+      }
+    }
+    return _results;
   };
 
   GoGame.prototype.toString = function() {

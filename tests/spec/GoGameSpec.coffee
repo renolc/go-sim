@@ -7,6 +7,10 @@ describe 'A go game', ->
           pass: actual.toString().indexOf('b') == -1 and
                 actual.toString().indexOf('w') == -1
 
+      toInclude: ->
+        compare: (actual, expected) ->
+          pass: actual.indexOf(expected) != -1
+
     @game = new GoGame()
 
   it 'starts empty', ->
@@ -52,8 +56,8 @@ describe 'A go game', ->
       expect @cell.cluster.length
         .toBe 1
 
-      expect @cell.cluster[0]
-        .toBe @cell
+      expect @cell.cluster
+        .toInclude(@cell)
 
   describe 'when a player places a piece on the top edge', ->
 
@@ -249,3 +253,26 @@ describe 'A go game', ->
 
       expect @game.turn
         .toEqual GoGame.PIECE.BLACK
+
+  describe 'when a piece is played next to another', ->
+    beforeEach ->
+      @black  = @game.play(0, 0)
+      @white  = @game.play(0, 1)
+      @black2 = @game.play(1, 0)
+
+    it 'should share a cluster with like colors', ->
+      expect @black.cluster
+        .toBe @black2.cluster
+
+      expect @black.cluster.length
+        .toBe 2
+
+      expect @black.cluster
+        .toInclude(@black)
+
+      expect @black.cluster
+        .toInclude(@black2)
+
+    it 'should not share a cluster with opposite colors', ->
+      expect @black.cluster
+        .not.toInclude(@white)

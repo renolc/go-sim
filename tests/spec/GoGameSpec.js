@@ -10,6 +10,15 @@ describe('A go game', function() {
             };
           }
         };
+      },
+      toInclude: function() {
+        return {
+          compare: function(actual, expected) {
+            return {
+              pass: actual.indexOf(expected) !== -1
+            };
+          }
+        };
       }
     });
     return this.game = new GoGame();
@@ -40,7 +49,7 @@ describe('A go game', function() {
     });
     return it('should reference a cluster of only itself', function() {
       expect(this.cell.cluster.length).toBe(1);
-      return expect(this.cell.cluster[0]).toBe(this.cell);
+      return expect(this.cell.cluster).toInclude(this.cell);
     });
   });
   describe('when a player places a piece on the top edge', function() {
@@ -155,7 +164,7 @@ describe('A go game', function() {
       return expect(this.cell.right).toBe(null);
     });
   });
-  return describe('when a player passes', function() {
+  describe('when a player passes', function() {
     beforeEach(function() {
       this.originalBoard = this.game.toString();
       return this.game.pass();
@@ -167,6 +176,22 @@ describe('A go game', function() {
       expect(this.game.turn).toEqual(GoGame.PIECE.WHITE);
       this.game.pass();
       return expect(this.game.turn).toEqual(GoGame.PIECE.BLACK);
+    });
+  });
+  return describe('when a piece is played next to another', function() {
+    beforeEach(function() {
+      this.black = this.game.play(0, 0);
+      this.white = this.game.play(0, 1);
+      return this.black2 = this.game.play(1, 0);
+    });
+    it('should share a cluster with like colors', function() {
+      expect(this.black.cluster).toBe(this.black2.cluster);
+      expect(this.black.cluster.length).toBe(2);
+      expect(this.black.cluster).toInclude(this.black);
+      return expect(this.black.cluster).toInclude(this.black2);
+    });
+    return it('should not share a cluster with opposite colors', function() {
+      return expect(this.black.cluster).not.toInclude(this.white);
     });
   });
 });
