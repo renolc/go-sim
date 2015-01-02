@@ -255,24 +255,58 @@ describe 'A go game', ->
         .toEqual GoGame.PIECE.BLACK
 
   describe 'when a piece is played next to another', ->
-    beforeEach ->
-      @black  = @game.play(0, 0)
-      @white  = @game.play(0, 1)
-      @black2 = @game.play(1, 0)
 
     it 'should share a cluster with like colors', ->
-      expect @black.cluster
-        .toBe @black2.cluster
+      black  = @game.play(0, 0)
+      @game.pass()
+      black2 = @game.play(0, 1)
 
-      expect @black.cluster.length
-        .toBe 2
+      expect black.cluster
+        .toBe black2.cluster
 
-      expect @black.cluster
-        .toInclude(@black)
+      expect black.cluster.length
+        .toEqual 2
 
-      expect @black.cluster
-        .toInclude(@black2)
+      expect black.cluster
+        .toInclude(black)
+
+      expect black.cluster
+        .toInclude(black2)
 
     it 'should not share a cluster with opposite colors', ->
-      expect @black.cluster
-        .not.toInclude(@white)
+      black = @game.play(0, 0)
+      white = @game.play(0, 1)
+
+      expect black.cluster
+        .not.toBe white.cluster
+
+      expect black.cluster
+        .not.toInclude(white)
+
+      expect white.cluster
+        .not.toInclude(black)
+
+    it 'should join surounding clusters of like colors', ->
+      black  = @game.play(0, 0)
+      @game.pass()
+      black2 = @game.play(0, 1)
+      @game.pass()
+      black3 = @game.play(1, 0)
+
+      expect black.cluster
+        .toBe black2.cluster
+
+      expect black.cluster
+        .toBe black3.cluster
+
+      expect black.cluster.length
+        .toEqual 3
+
+      expect black.cluster
+        .toInclude(black)
+
+      expect black.cluster
+        .toInclude(black2)
+
+      expect black.cluster
+        .toInclude(black3)

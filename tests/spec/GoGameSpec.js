@@ -179,19 +179,37 @@ describe('A go game', function() {
     });
   });
   return describe('when a piece is played next to another', function() {
-    beforeEach(function() {
-      this.black = this.game.play(0, 0);
-      this.white = this.game.play(0, 1);
-      return this.black2 = this.game.play(1, 0);
-    });
     it('should share a cluster with like colors', function() {
-      expect(this.black.cluster).toBe(this.black2.cluster);
-      expect(this.black.cluster.length).toBe(2);
-      expect(this.black.cluster).toInclude(this.black);
-      return expect(this.black.cluster).toInclude(this.black2);
+      var black, black2;
+      black = this.game.play(0, 0);
+      this.game.pass();
+      black2 = this.game.play(0, 1);
+      expect(black.cluster).toBe(black2.cluster);
+      expect(black.cluster.length).toEqual(2);
+      expect(black.cluster).toInclude(black);
+      return expect(black.cluster).toInclude(black2);
     });
-    return it('should not share a cluster with opposite colors', function() {
-      return expect(this.black.cluster).not.toInclude(this.white);
+    it('should not share a cluster with opposite colors', function() {
+      var black, white;
+      black = this.game.play(0, 0);
+      white = this.game.play(0, 1);
+      expect(black.cluster).not.toBe(white.cluster);
+      expect(black.cluster).not.toInclude(white);
+      return expect(white.cluster).not.toInclude(black);
+    });
+    return it('should join surounding clusters of like colors', function() {
+      var black, black2, black3;
+      black = this.game.play(0, 0);
+      this.game.pass();
+      black2 = this.game.play(0, 1);
+      this.game.pass();
+      black3 = this.game.play(1, 0);
+      expect(black.cluster).toBe(black2.cluster);
+      expect(black.cluster).toBe(black3.cluster);
+      expect(black.cluster.length).toEqual(3);
+      expect(black.cluster).toInclude(black);
+      expect(black.cluster).toInclude(black2);
+      return expect(black.cluster).toInclude(black3);
     });
   });
 });
