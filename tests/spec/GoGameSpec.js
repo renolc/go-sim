@@ -19,197 +19,96 @@ describe('A go game', function() {
             };
           }
         };
+      },
+      toBeA: function() {
+        return {
+          compare: function(actual, expected) {
+            return {
+              pass: actual instanceof expected
+            };
+          }
+        };
       }
     });
     return this.game = new GoGame();
   });
-  it('starts empty', function() {
-    return expect(this.game).toBeEmpty();
+
+  /*
+  Game tests
+   */
+  it('should have a board', function() {
+    return expect(this.game.board).toBeA(Board);
   });
   it('should start with black', function() {
-    return expect(this.game.turn).toEqual(GoGame.PIECE.BLACK);
+    return expect(this.game.turn).toBe(Cell.PIECE.BLACK);
   });
-  describe('when a player places a piece not on an edge', function() {
-    beforeEach(function() {
-      return this.cell = this.game.play(2, 3);
-    });
-    it('should not be empty', function() {
-      return expect(this.cell.value).not.toEqual(GoGame.PIECE.EMPTY);
-    });
-    it('should alternate turns', function() {
-      expect(this.game.turn).toEqual(GoGame.PIECE.WHITE);
-      this.game.play(0, 0);
-      return expect(this.game.turn).toEqual(GoGame.PIECE.BLACK);
-    });
-    it('should reference all 4 cells around it', function() {
-      expect(this.cell.up).toBe(this.game.board[2][2]);
-      expect(this.cell.down).toBe(this.game.board[2][4]);
-      expect(this.cell.left).toBe(this.game.board[1][3]);
-      return expect(this.cell.right).toBe(this.game.board[3][3]);
-    });
-    return it('should reference a cluster of only itself', function() {
-      expect(this.cell.cluster.length).toBe(1);
-      return expect(this.cell.cluster).toInclude(this.cell);
-    });
+  it('should alternate turns after passing', function() {
+    this.game.pass();
+    expect(this.game.turn).toBe(Cell.PIECE.WHITE);
+    this.game.pass();
+    return expect(this.game.turn).toBe(Cell.PIECE.BLACK);
   });
-  describe('when a player places a piece on the top edge', function() {
+
+  /*
+  Play tests
+   */
+  describe('play', function() {
     beforeEach(function() {
-      return this.cell = this.game.play(3, 0);
-    });
-    it('should not be empty', function() {
-      return expect(this.cell.value).not.toEqual(GoGame.PIECE.EMPTY);
-    });
-    return it('should reference all 3 cells around it', function() {
-      expect(this.cell.up).toBe(null);
-      expect(this.cell.down).toBe(this.game.board[3][1]);
-      expect(this.cell.left).toBe(this.game.board[2][0]);
-      return expect(this.cell.right).toBe(this.game.board[4][0]);
-    });
-  });
-  describe('when a player places a piece on the bottom edge', function() {
-    beforeEach(function() {
-      return this.cell = this.game.play(3, this.game.size - 1);
-    });
-    it('should not be empty', function() {
-      return expect(this.cell.value).not.toEqual(GoGame.PIECE.EMPTY);
-    });
-    return it('should reference all 3 cells around it', function() {
-      expect(this.cell.up).toBe(this.game.board[3][this.game.size - 2]);
-      expect(this.cell.down).toBe(null);
-      expect(this.cell.left).toBe(this.game.board[2][this.game.size - 1]);
-      return expect(this.cell.right).toBe(this.game.board[4][this.game.size - 1]);
-    });
-  });
-  describe('when a player places a piece on the left edge', function() {
-    beforeEach(function() {
-      return this.cell = this.game.play(0, 3);
-    });
-    it('should not be empty', function() {
-      return expect(this.cell.value).not.toEqual(GoGame.PIECE.EMPTY);
-    });
-    return it('should reference all 3 cells around it', function() {
-      expect(this.cell.up).toBe(this.game.board[0][2]);
-      expect(this.cell.down).toBe(this.game.board[0][4]);
-      expect(this.cell.left).toBe(null);
-      return expect(this.cell.right).toBe(this.game.board[1][3]);
-    });
-  });
-  describe('when a player places a piece on the right edge', function() {
-    beforeEach(function() {
-      return this.cell = this.game.play(this.game.size - 1, 3);
-    });
-    it('should not be empty', function() {
-      return expect(this.cell.value).not.toEqual(GoGame.PIECE.EMPTY);
-    });
-    return it('should reference all 3 cells around it', function() {
-      expect(this.cell.up).toBe(this.game.board[this.game.size - 1][2]);
-      expect(this.cell.down).toBe(this.game.board[this.game.size - 1][4]);
-      expect(this.cell.left).toBe(this.game.board[this.game.size - 2][3]);
-      return expect(this.cell.right).toBe(null);
-    });
-  });
-  describe('when a player places a piece in the top left corner', function() {
-    beforeEach(function() {
+      this.originalTurn = this.game.turn;
       return this.cell = this.game.play(0, 0);
     });
-    it('should not be empty', function() {
-      return expect(this.cell.value).not.toEqual(GoGame.PIECE.EMPTY);
+    it('should return the cell played on', function() {
+      return expect(this.cell).toBeA(Cell);
     });
-    return it('should reference all 2 cells around it', function() {
-      expect(this.cell.up).toBe(null);
-      expect(this.cell.down).toBe(this.game.board[0][1]);
-      expect(this.cell.left).toBe(null);
-      return expect(this.cell.right).toBe(this.game.board[1][0]);
-    });
-  });
-  describe('when a player places a piece in the top right corner', function() {
-    beforeEach(function() {
-      return this.cell = this.game.play(this.game.size - 1, 0);
-    });
-    it('should not be empty', function() {
-      return expect(this.cell.value).not.toEqual(GoGame.PIECE.EMPTY);
-    });
-    return it('should reference all 2 cells around it', function() {
-      expect(this.cell.up).toBe(null);
-      expect(this.cell.down).toBe(this.game.board[this.game.size - 1][1]);
-      expect(this.cell.left).toBe(this.game.board[this.game.size - 2][0]);
-      return expect(this.cell.right).toBe(null);
-    });
-  });
-  describe('when a player places a piece in the bottom left corner', function() {
-    beforeEach(function() {
-      return this.cell = this.game.play(0, this.game.size - 1);
-    });
-    it('should not be empty', function() {
-      return expect(this.cell.value).not.toEqual(GoGame.PIECE.EMPTY);
-    });
-    return it('should reference all 2 cells around it', function() {
-      expect(this.cell.up).toBe(this.game.board[0][this.game.size - 2]);
-      expect(this.cell.down).toBe(null);
-      expect(this.cell.left).toBe(null);
-      return expect(this.cell.right).toBe(this.game.board[1][this.game.size - 1]);
-    });
-  });
-  describe('when a player places a piece in the bottom right corner', function() {
-    beforeEach(function() {
-      return this.cell = this.game.play(this.game.size - 1, this.game.size - 1);
-    });
-    it('should not be empty', function() {
-      return expect(this.cell.value).not.toEqual(GoGame.PIECE.EMPTY);
-    });
-    return it('should reference all 2 cells around it', function() {
-      expect(this.cell.up).toBe(this.game.board[this.game.size - 1][this.game.size - 2]);
-      expect(this.cell.down).toBe(null);
-      expect(this.cell.left).toBe(this.game.board[this.game.size - 2][this.game.size - 1]);
-      return expect(this.cell.right).toBe(null);
-    });
-  });
-  describe('when a player passes', function() {
-    beforeEach(function() {
-      this.originalBoard = this.game.toString();
-      return this.game.pass();
-    });
-    it('should not change the board', function() {
-      return expect(this.game.toString()).toEqual(this.originalBoard);
+    it('should set the value of the cell to the current turn', function() {
+      return expect(this.cell.value).toBe(this.originalTurn);
     });
     return it('should alternate turns', function() {
-      expect(this.game.turn).toEqual(GoGame.PIECE.WHITE);
-      this.game.pass();
-      return expect(this.game.turn).toEqual(GoGame.PIECE.BLACK);
+      expect(this.game.turn).toBe(Cell.PIECE.WHITE);
+      this.game.play(0, 1);
+      return expect(this.game.turn).toBe(Cell.PIECE.BLACK);
     });
   });
-  return describe('when a piece is played next to another', function() {
-    it('should share a cluster with like colors', function() {
-      var black, black2;
-      black = this.game.play(0, 0);
-      this.game.pass();
-      black2 = this.game.play(0, 1);
-      expect(black.cluster).toBe(black2.cluster);
-      expect(black.cluster.length).toEqual(2);
-      expect(black.cluster).toInclude(black);
-      return expect(black.cluster).toInclude(black2);
+
+  /*
+  Board tests
+   */
+  return describe('board', function() {
+    beforeEach(function() {
+      return this.board = this.game.board;
     });
-    it('should not share a cluster with opposite colors', function() {
-      var black, white;
-      black = this.game.play(0, 0);
-      white = this.game.play(0, 1);
-      expect(black.cluster).not.toBe(white.cluster);
-      expect(black.cluster).not.toInclude(white);
-      return expect(white.cluster).not.toInclude(black);
+    it('should have a size of 9', function() {
+      return expect(this.board.size).toBe(9);
     });
-    return it('should join surounding clusters of like colors', function() {
-      var black, black2, black3;
-      black = this.game.play(0, 0);
-      this.game.pass();
-      black2 = this.game.play(0, 1);
-      this.game.pass();
-      black3 = this.game.play(1, 0);
-      expect(black.cluster).toBe(black2.cluster);
-      expect(black.cluster).toBe(black3.cluster);
-      expect(black.cluster.length).toEqual(3);
-      expect(black.cluster).toInclude(black);
-      expect(black.cluster).toInclude(black2);
-      return expect(black.cluster).toInclude(black3);
+    it('should be composed of cells', function() {
+      return expect(this.board.at(0, 0)).toBeA(Cell);
+    });
+    it('should have reference to cell clusters', function() {
+      return expect(this.board.clusters).toBeA(Array);
+    });
+
+    /*
+    Cell tesss
+     */
+    return describe('cell', function() {
+      beforeEach(function() {
+        return this.cell = this.board.at(3, 2);
+      });
+      it('should start as empty', function() {
+        return expect(this.cell.value).toBe(Cell.PIECE.EMPTY);
+      });
+      it('should reference the cell above it', function() {
+        return expect(this.cell.up).toBe(this.board.at(3, 1));
+      });
+      it('should reference the cell below it', function() {
+        return expect(this.cell.down).toBe(this.board.at(3, 3));
+      });
+      it('should reference the cell to the left of it', function() {
+        return expect(this.cell.left).toBe(this.board.at(2, 2));
+      });
+      return it('should reference the cell to the right of it', function() {
+        return expect(this.cell.right).toBe(this.board.at(4, 2));
+      });
     });
   });
 });

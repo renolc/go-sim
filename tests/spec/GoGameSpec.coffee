@@ -11,302 +11,111 @@ describe 'A go game', ->
         compare: (actual, expected) ->
           pass: actual.indexOf(expected) != -1
 
+      toBeA: ->
+        compare: (actual, expected) ->
+          pass: actual instanceof expected
+
     @game = new GoGame()
 
-  it 'starts empty', ->
-    expect @game
-      .toBeEmpty()
+  ###
+  Game tests
+  ###
+
+  it 'should have a board', ->
+    expect @game.board
+      .toBeA Board
 
   it 'should start with black', ->
     expect @game.turn
-      .toEqual GoGame.PIECE.BLACK
+      .toBe Cell.PIECE.BLACK
 
-  describe 'when a player places a piece not on an edge', ->
+  it 'should alternate turns after passing', ->
+    @game.pass()
 
-    beforeEach ->
-      @cell = @game.play(2, 3)
+    expect @game.turn
+      .toBe Cell.PIECE.WHITE
 
-    it 'should not be empty', ->
-      expect @cell.value
-        .not.toEqual GoGame.PIECE.EMPTY
+    @game.pass()
 
-    it 'should alternate turns', ->
-      expect @game.turn
-        .toEqual GoGame.PIECE.WHITE
+    expect @game.turn
+      .toBe Cell.PIECE.BLACK
 
-      @game.play(0, 0)
 
-      expect @game.turn
-        .toEqual GoGame.PIECE.BLACK
+  ###
+  Play tests
+  ###
 
-    it 'should reference all 4 cells around it', ->
-      expect @cell.up
-        .toBe @game.board[2][2]
-
-      expect @cell.down
-        .toBe @game.board[2][4]
-
-      expect @cell.left
-        .toBe @game.board[1][3]
-
-      expect @cell.right
-        .toBe @game.board[3][3]
-
-    it 'should reference a cluster of only itself', ->
-      expect @cell.cluster.length
-        .toBe 1
-
-      expect @cell.cluster
-        .toInclude(@cell)
-
-  describe 'when a player places a piece on the top edge', ->
+  describe 'play', ->
 
     beforeEach ->
-      @cell = @game.play(3, 0)
-
-    it 'should not be empty', ->
-      expect @cell.value
-        .not.toEqual GoGame.PIECE.EMPTY
-
-    it 'should reference all 3 cells around it', ->
-      expect @cell.up
-        .toBe null
-
-      expect @cell.down
-        .toBe @game.board[3][1]
-
-      expect @cell.left
-        .toBe @game.board[2][0]
-
-      expect @cell.right
-        .toBe @game.board[4][0]
-
-  describe 'when a player places a piece on the bottom edge', ->
-
-    beforeEach ->
-      @cell = @game.play(3, @game.size - 1)
-
-    it 'should not be empty', ->
-      expect @cell.value
-        .not.toEqual GoGame.PIECE.EMPTY
-
-    it 'should reference all 3 cells around it', ->
-      expect @cell.up
-        .toBe @game.board[3][@game.size - 2]
-
-      expect @cell.down
-        .toBe null
-
-      expect @cell.left
-        .toBe @game.board[2][@game.size - 1]
-
-      expect @cell.right
-        .toBe @game.board[4][@game.size - 1]
-
-  describe 'when a player places a piece on the left edge', ->
-
-    beforeEach ->
-      @cell = @game.play(0, 3)
-
-    it 'should not be empty', ->
-      expect @cell.value
-        .not.toEqual GoGame.PIECE.EMPTY
-
-    it 'should reference all 3 cells around it', ->
-      expect @cell.up
-        .toBe @game.board[0][2]
-
-      expect @cell.down
-        .toBe @game.board[0][4]
-
-      expect @cell.left
-        .toBe null
-
-      expect @cell.right
-        .toBe @game.board[1][3]
-
-  describe 'when a player places a piece on the right edge', ->
-
-    beforeEach ->
-      @cell = @game.play(@game.size - 1, 3)
-
-    it 'should not be empty', ->
-      expect @cell.value
-        .not.toEqual GoGame.PIECE.EMPTY
-
-    it 'should reference all 3 cells around it', ->
-      expect @cell.up
-        .toBe @game.board[@game.size - 1][2]
-
-      expect @cell.down
-        .toBe @game.board[@game.size - 1][4]
-
-      expect @cell.left
-        .toBe @game.board[@game.size - 2][3]
-
-      expect @cell.right
-        .toBe null
-
-  describe 'when a player places a piece in the top left corner', ->
-
-    beforeEach ->
+      @originalTurn = @game.turn
       @cell = @game.play(0, 0)
 
-    it 'should not be empty', ->
+    it 'should return the cell played on', ->
+      expect @cell
+        .toBeA Cell
+
+    it 'should set the value of the cell to the current turn', ->
       expect @cell.value
-        .not.toEqual GoGame.PIECE.EMPTY
-
-    it 'should reference all 2 cells around it', ->
-      expect @cell.up
-        .toBe null
-
-      expect @cell.down
-        .toBe @game.board[0][1]
-
-      expect @cell.left
-        .toBe null
-
-      expect @cell.right
-        .toBe @game.board[1][0]
-
-  describe 'when a player places a piece in the top right corner', ->
-
-    beforeEach ->
-      @cell = @game.play(@game.size - 1, 0)
-
-    it 'should not be empty', ->
-      expect @cell.value
-        .not.toEqual GoGame.PIECE.EMPTY
-
-    it 'should reference all 2 cells around it', ->
-      expect @cell.up
-        .toBe null
-
-      expect @cell.down
-        .toBe @game.board[@game.size - 1][1]
-
-      expect @cell.left
-        .toBe @game.board[@game.size - 2][0]
-
-      expect @cell.right
-        .toBe null
-
-  describe 'when a player places a piece in the bottom left corner', ->
-
-    beforeEach ->
-      @cell = @game.play(0, @game.size - 1)
-
-    it 'should not be empty', ->
-      expect @cell.value
-        .not.toEqual GoGame.PIECE.EMPTY
-
-    it 'should reference all 2 cells around it', ->
-      expect @cell.up
-        .toBe @game.board[0][@game.size - 2]
-
-      expect @cell.down
-        .toBe null
-
-      expect @cell.left
-        .toBe null
-
-      expect @cell.right
-        .toBe @game.board[1][@game.size - 1]
-
-  describe 'when a player places a piece in the bottom right corner', ->
-
-    beforeEach ->
-      @cell = @game.play(@game.size - 1, @game.size - 1)
-
-    it 'should not be empty', ->
-      expect @cell.value
-        .not.toEqual GoGame.PIECE.EMPTY
-
-    it 'should reference all 2 cells around it', ->
-      expect @cell.up
-        .toBe @game.board[@game.size - 1][@game.size - 2]
-
-      expect @cell.down
-        .toBe null
-
-      expect @cell.left
-        .toBe @game.board[@game.size - 2][@game.size - 1]
-
-      expect @cell.right
-        .toBe null
-
-  describe 'when a player passes', ->
-
-    beforeEach ->
-      @originalBoard = @game.toString()
-      @game.pass()
-
-    it 'should not change the board', ->
-      expect @game.toString()
-        .toEqual @originalBoard
+        .toBe @originalTurn
 
     it 'should alternate turns', ->
       expect @game.turn
-        .toEqual GoGame.PIECE.WHITE
+        .toBe Cell.PIECE.WHITE
 
-      @game.pass()
+      @game.play(0, 1)
 
       expect @game.turn
-        .toEqual GoGame.PIECE.BLACK
+        .toBe Cell.PIECE.BLACK
 
-  describe 'when a piece is played next to another', ->
 
-    it 'should share a cluster with like colors', ->
-      black  = @game.play(0, 0)
-      @game.pass()
-      black2 = @game.play(0, 1)
+  ###
+  Board tests
+  ###
 
-      expect black.cluster
-        .toBe black2.cluster
+  describe 'board', ->
 
-      expect black.cluster.length
-        .toEqual 2
+    beforeEach ->
+      @board = @game.board
 
-      expect black.cluster
-        .toInclude(black)
+    it 'should have a size of 9', ->
+      expect @board.size
+        .toBe 9
 
-      expect black.cluster
-        .toInclude(black2)
+    it 'should be composed of cells', ->
+      expect @board.at(0, 0)
+        .toBeA Cell
 
-    it 'should not share a cluster with opposite colors', ->
-      black = @game.play(0, 0)
-      white = @game.play(0, 1)
+    it 'should have reference to cell clusters', ->
+      expect @board.clusters
+        .toBeA Array
 
-      expect black.cluster
-        .not.toBe white.cluster
 
-      expect black.cluster
-        .not.toInclude(white)
+    ###
+    Cell tesss
+    ###
 
-      expect white.cluster
-        .not.toInclude(black)
+    describe 'cell', ->
 
-    it 'should join surounding clusters of like colors', ->
-      black  = @game.play(0, 0)
-      @game.pass()
-      black2 = @game.play(0, 1)
-      @game.pass()
-      black3 = @game.play(1, 0)
+      beforeEach ->
+        @cell = @board.at(3, 2)
 
-      expect black.cluster
-        .toBe black2.cluster
+      it 'should start as empty', ->
+        expect @cell.value
+          .toBe Cell.PIECE.EMPTY
 
-      expect black.cluster
-        .toBe black3.cluster
+      it 'should reference the cell above it', ->
+        expect @cell.up
+          .toBe @board.at(3, 1)
 
-      expect black.cluster.length
-        .toEqual 3
+      it 'should reference the cell below it', ->
+        expect @cell.down
+          .toBe @board.at(3, 3)
 
-      expect black.cluster
-        .toInclude(black)
+      it 'should reference the cell to the left of it', ->
+        expect @cell.left
+          .toBe @board.at(2, 2)
 
-      expect black.cluster
-        .toInclude(black2)
-
-      expect black.cluster
-        .toInclude(black3)
+      it 'should reference the cell to the right of it', ->
+        expect @cell.right
+          .toBe @board.at(4, 2)
