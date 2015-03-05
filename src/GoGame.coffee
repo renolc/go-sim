@@ -21,7 +21,6 @@ class Board
   constructor: (size) ->
     @size     = size
     @cells    = []
-    @clusters = []
 
     for x in [0...@size]
       @cells.push([])
@@ -53,10 +52,9 @@ class Cell
   constructor: ->
     @value = Cell.PIECE.EMPTY
 
-    @up = @down = @left = @right = null
-
   play: (value) ->
-    @value = value
+    @value   = value
+    @cluster = new Cluster(this)
     return this
 
 
@@ -64,6 +62,3 @@ class Cluster
 
   constructor: (cell) ->
     @cells = [cell]
-
-  add: (cell) ->
-    @cells.push(cell)

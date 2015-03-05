@@ -9,13 +9,18 @@ describe 'A go game', ->
 
       toInclude: ->
         compare: (actual, expected) ->
-          pass: actual.indexOf(expected) != -1
+          if actual instanceof Cluster
+            pass: actual.cells.indexOf(expected) != -1
+          else
+            pass: actual.indexOf(expected) != -1
+
 
       toBeA: ->
         compare: (actual, expected) ->
           pass: actual instanceof expected
 
     @game = new GoGame()
+
 
   ###
   Game tests
@@ -68,6 +73,13 @@ describe 'A go game', ->
       expect @game.turn
         .toBe Cell.PIECE.BLACK
 
+    it 'should have reference to a cluster that contains it', ->
+      expect @cell.cluster
+        .toBeA Cluster
+
+      expect @cell.cluster
+        .toInclude @cell
+
 
   ###
   Board tests
@@ -85,10 +97,6 @@ describe 'A go game', ->
     it 'should be composed of cells', ->
       expect @board.at(0, 0)
         .toBeA Cell
-
-    it 'should have reference to cell clusters', ->
-      expect @board.clusters
-        .toBeA Array
 
 
     ###

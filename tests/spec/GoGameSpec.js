@@ -14,9 +14,15 @@ describe('A go game', function() {
       toInclude: function() {
         return {
           compare: function(actual, expected) {
-            return {
-              pass: actual.indexOf(expected) !== -1
-            };
+            if (actual instanceof Cluster) {
+              return {
+                pass: actual.cells.indexOf(expected) !== -1
+              };
+            } else {
+              return {
+                pass: actual.indexOf(expected) !== -1
+              };
+            }
           }
         };
       },
@@ -63,10 +69,14 @@ describe('A go game', function() {
     it('should set the value of the cell to the current turn', function() {
       return expect(this.cell.value).toBe(this.originalTurn);
     });
-    return it('should alternate turns', function() {
+    it('should alternate turns', function() {
       expect(this.game.turn).toBe(Cell.PIECE.WHITE);
       this.game.play(0, 1);
       return expect(this.game.turn).toBe(Cell.PIECE.BLACK);
+    });
+    return it('should have reference to a cluster that contains it', function() {
+      expect(this.cell.cluster).toBeA(Cluster);
+      return expect(this.cell.cluster).toInclude(this.cell);
     });
   });
 
@@ -82,9 +92,6 @@ describe('A go game', function() {
     });
     it('should be composed of cells', function() {
       return expect(this.board.at(0, 0)).toBeA(Cell);
-    });
-    it('should have reference to cell clusters', function() {
-      return expect(this.board.clusters).toBeA(Array);
     });
 
     /*

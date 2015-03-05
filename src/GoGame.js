@@ -34,7 +34,6 @@ Board = (function() {
     var cell, left, up, x, y, _i, _j, _ref, _ref1;
     this.size = size;
     this.cells = [];
-    this.clusters = [];
     for (x = _i = 0, _ref = this.size; 0 <= _ref ? _i < _ref : _i > _ref; x = 0 <= _ref ? ++_i : --_i) {
       this.cells.push([]);
       for (y = _j = 0, _ref1 = this.size; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; y = 0 <= _ref1 ? ++_j : --_j) {
@@ -71,11 +70,11 @@ Cell = (function() {
 
   function Cell() {
     this.value = Cell.PIECE.EMPTY;
-    this.up = this.down = this.left = this.right = null;
   }
 
   Cell.prototype.play = function(value) {
     this.value = value;
+    this.cluster = new Cluster(this);
     return this;
   };
 
@@ -87,10 +86,6 @@ Cluster = (function() {
   function Cluster(cell) {
     this.cells = [cell];
   }
-
-  Cluster.prototype.add = function(cell) {
-    return this.cells.push(cell);
-  };
 
   return Cluster;
 
