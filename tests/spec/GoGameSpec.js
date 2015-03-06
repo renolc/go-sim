@@ -78,11 +78,13 @@ describe('A go game', function() {
         return this.cluster = this.cell.cluster;
       });
       return it('should contain the liberties of the default cells', function() {
-        expect(this.cluster.liberties).toEqual(this.cell.liberties());
-        expect(this.cluster.liberties).toInclude(this.cell.up);
-        expect(this.cluster.liberties).toInclude(this.cell.down);
-        expect(this.cluster.liberties).toInclude(this.cell.left);
-        return expect(this.cluster.liberties).toInclude(this.cell.right);
+        var liberties;
+        liberties = this.cluster.liberties();
+        expect(liberties).toEqual(this.cell.liberties());
+        expect(liberties).toInclude(this.cell.up);
+        expect(liberties).toInclude(this.cell.down);
+        expect(liberties).toInclude(this.cell.left);
+        return expect(liberties).toInclude(this.cell.right);
       });
     });
   });

@@ -116,8 +116,18 @@ Cell = (function() {
 Cluster = (function() {
   function Cluster(cell) {
     this.cells = [cell];
-    this.liberties = cell.liberties();
   }
+
+  Cluster.prototype.liberties = function() {
+    var cell, liberties, _i, _len, _ref;
+    liberties = [];
+    _ref = this.cells;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      cell = _ref[_i];
+      liberties = liberties.concat(cell.liberties());
+    }
+    return liberties;
+  };
 
   return Cluster;
 

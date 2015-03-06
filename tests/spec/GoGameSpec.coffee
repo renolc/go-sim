@@ -85,19 +85,21 @@ describe 'A go game', ->
         @cluster = @cell.cluster
 
       it 'should contain the liberties of the default cells', ->
-        expect @cluster.liberties
+        liberties = @cluster.liberties()
+
+        expect liberties
           .toEqual @cell.liberties()
 
-        expect @cluster.liberties
+        expect liberties
           .toInclude @cell.up
 
-        expect @cluster.liberties
+        expect liberties
           .toInclude @cell.down
 
-        expect @cluster.liberties
+        expect liberties
           .toInclude @cell.left
 
-        expect @cluster.liberties
+        expect liberties
           .toInclude @cell.right
 
 

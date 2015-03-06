@@ -79,4 +79,11 @@ class Cluster
 
   constructor: (cell) ->
     @cells = [cell]
-    @liberties = cell.liberties()
+
+  liberties: ->
+    liberties = []
+
+    for cell in @cells
+      liberties = liberties.concat(cell.liberties())
+
+    return liberties
