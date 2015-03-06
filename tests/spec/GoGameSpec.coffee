@@ -74,6 +74,18 @@ describe 'A go game', ->
       expect @cell.cluster
         .toInclude @cell
 
+    it 'should merge clusters when played next to a similar piece', ->
+      @game.pass()
+      @cell2 = @game.play(4, 4)
+
+      expect @cell.cluster
+        .toBe @cell2.cluster
+
+      expect @cell.cluster
+        .toInclude @cell
+
+      expect @cell.cluster
+        .toInclude @cell2
 
     ###
     Cluster tests

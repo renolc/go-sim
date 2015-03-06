@@ -69,6 +69,13 @@ describe('A go game', function() {
       expect(this.cell.cluster).toBeA(Cluster);
       return expect(this.cell.cluster).toInclude(this.cell);
     });
+    it('should merge clusters when played next to a similar piece', function() {
+      this.game.pass();
+      this.cell2 = this.game.play(4, 4);
+      expect(this.cell.cluster).toBe(this.cell2.cluster);
+      expect(this.cell.cluster).toInclude(this.cell);
+      return expect(this.cell.cluster).toInclude(this.cell2);
+    });
 
     /*
     Cluster tests

@@ -55,6 +55,7 @@ class Cell
   play: (value) ->
     @value   = value
     @cluster = new Cluster(this)
+    @_mergeClusters()
     return this
 
   surrounding: ->
@@ -75,6 +76,10 @@ class Cell
 
     return liberties
 
+  _mergeClusters: ->
+    for cell in @surrounding()
+      @cluster.merge(cell.cluster) if cell.value == @value
+
 class Cluster
 
   constructor: (cell) ->
@@ -87,3 +92,8 @@ class Cluster
       liberties = liberties.concat(cell.liberties())
 
     return liberties
+
+  merge: (cluster) ->
+    for cell in cluster.cells
+      @cells.push(cell)
+      cell.cluster = this

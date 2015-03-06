@@ -75,6 +75,7 @@ Cell = (function() {
   Cell.prototype.play = function(value) {
     this.value = value;
     this.cluster = new Cluster(this);
+    this._mergeClusters();
     return this;
   };
 
@@ -109,6 +110,21 @@ Cell = (function() {
     return liberties;
   };
 
+  Cell.prototype._mergeClusters = function() {
+    var cell, _i, _len, _ref, _results;
+    _ref = this.surrounding();
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      cell = _ref[_i];
+      if (cell.value === this.value) {
+        _results.push(this.cluster.merge(cell.cluster));
+      } else {
+        _results.push(void 0);
+      }
+    }
+    return _results;
+  };
+
   return Cell;
 
 })();
@@ -127,6 +143,18 @@ Cluster = (function() {
       liberties = liberties.concat(cell.liberties());
     }
     return liberties;
+  };
+
+  Cluster.prototype.merge = function(cluster) {
+    var cell, _i, _len, _ref, _results;
+    _ref = cluster.cells;
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      cell = _ref[_i];
+      this.cells.push(cell);
+      _results.push(cell.cluster = this);
+    }
+    return _results;
   };
 
   return Cluster;
