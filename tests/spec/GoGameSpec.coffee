@@ -87,6 +87,12 @@ describe 'A go game', ->
       expect @cell.cluster
         .toInclude @cell2
 
+    it 'should not merge clusters when played next to an opposite piece', ->
+      @cell2 = @game.play(4, 4)
+
+      expect @cell.cluster
+        .not.toBe @cell2.cluster
+
     ###
     Cluster tests
     ###
