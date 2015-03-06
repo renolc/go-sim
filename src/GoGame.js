@@ -78,6 +78,37 @@ Cell = (function() {
     return this;
   };
 
+  Cell.prototype.surrounding = function() {
+    var surrounding;
+    surrounding = [];
+    if (this.up != null) {
+      surrounding.push(this.up);
+    }
+    if (this.down != null) {
+      surrounding.push(this.down);
+    }
+    if (this.left != null) {
+      surrounding.push(this.left);
+    }
+    if (this.right != null) {
+      surrounding.push(this.right);
+    }
+    return surrounding;
+  };
+
+  Cell.prototype.liberties = function() {
+    var cell, liberties, _i, _len, _ref;
+    liberties = [];
+    _ref = this.surrounding();
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      cell = _ref[_i];
+      if (cell.value === Cell.PIECE.EMPTY) {
+        liberties.push(cell);
+      }
+    }
+    return liberties;
+  };
+
   return Cell;
 
 })();
@@ -85,6 +116,7 @@ Cell = (function() {
 Cluster = (function() {
   function Cluster(cell) {
     this.cells = [cell];
+    this.liberties = cell.liberties();
   }
 
   return Cluster;

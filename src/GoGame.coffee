@@ -57,8 +57,26 @@ class Cell
     @cluster = new Cluster(this)
     return this
 
+  surrounding: ->
+    surrounding = []
+
+    surrounding.push(@up)    if @up?
+    surrounding.push(@down)  if @down?
+    surrounding.push(@left)  if @left?
+    surrounding.push(@right) if @right?
+
+    return surrounding
+
+  liberties: ->
+    liberties = []
+
+    for cell in @surrounding()
+      liberties.push(cell) if cell.value == Cell.PIECE.EMPTY
+
+    return liberties
 
 class Cluster
 
   constructor: (cell) ->
     @cells = [cell]
+    @liberties = cell.liberties()

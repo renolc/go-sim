@@ -2,15 +2,6 @@
 describe('A go game', function() {
   beforeEach(function() {
     jasmine.addMatchers({
-      toBeEmpty: function() {
-        return {
-          compare: function(actual) {
-            return {
-              pass: actual.toString().indexOf('b') === -1 && actual.toString().indexOf('w') === -1
-            };
-          }
-        };
-      },
       toInclude: function() {
         return {
           compare: function(actual, expected) {
@@ -61,7 +52,7 @@ describe('A go game', function() {
   describe('play', function() {
     beforeEach(function() {
       this.originalTurn = this.game.turn;
-      return this.cell = this.game.play(0, 0);
+      return this.cell = this.game.play(4, 5);
     });
     it('should return the cell played on', function() {
       return expect(this.cell).toBeA(Cell);
@@ -74,9 +65,25 @@ describe('A go game', function() {
       this.game.play(0, 1);
       return expect(this.game.turn).toBe(Cell.PIECE.BLACK);
     });
-    return it('should have reference to a cluster that contains it', function() {
+    it('should create a cluster related to the cell that contains it', function() {
       expect(this.cell.cluster).toBeA(Cluster);
       return expect(this.cell.cluster).toInclude(this.cell);
+    });
+
+    /*
+    Cluster tests
+     */
+    return describe('cluster', function() {
+      beforeEach(function() {
+        return this.cluster = this.cell.cluster;
+      });
+      return it('should contain the liberties of the default cells', function() {
+        expect(this.cluster.liberties).toEqual(this.cell.liberties());
+        expect(this.cluster.liberties).toInclude(this.cell.up);
+        expect(this.cluster.liberties).toInclude(this.cell.down);
+        expect(this.cluster.liberties).toInclude(this.cell.left);
+        return expect(this.cluster.liberties).toInclude(this.cell.right);
+      });
     });
   });
 
@@ -95,7 +102,7 @@ describe('A go game', function() {
     });
 
     /*
-    Cell tesss
+    Cell tests
      */
     return describe('cell', function() {
       beforeEach(function() {
@@ -113,8 +120,15 @@ describe('A go game', function() {
       it('should reference the cell to the left of it', function() {
         return expect(this.cell.left).toBe(this.board.at(2, 2));
       });
-      return it('should reference the cell to the right of it', function() {
+      it('should reference the cell to the right of it', function() {
         return expect(this.cell.right).toBe(this.board.at(4, 2));
+      });
+      return it('should reference all its surounding cells', function() {
+        expect(this.cell.surrounding()).toBeA(Array);
+        expect(this.cell.surrounding()).toInclude(this.cell.up);
+        expect(this.cell.surrounding()).toInclude(this.cell.down);
+        expect(this.cell.surrounding()).toInclude(this.cell.left);
+        return expect(this.cell.surrounding()).toInclude(this.cell.right);
       });
     });
   });

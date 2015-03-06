@@ -2,18 +2,12 @@ describe 'A go game', ->
 
   beforeEach ->
     jasmine.addMatchers
-      toBeEmpty: ->
-        compare: (actual) ->
-          pass: actual.toString().indexOf('b') == -1 and
-                actual.toString().indexOf('w') == -1
-
       toInclude: ->
         compare: (actual, expected) ->
           if actual instanceof Cluster
             pass: actual.cells.indexOf(expected) != -1
           else
             pass: actual.indexOf(expected) != -1
-
 
       toBeA: ->
         compare: (actual, expected) ->
@@ -54,7 +48,7 @@ describe 'A go game', ->
 
     beforeEach ->
       @originalTurn = @game.turn
-      @cell = @game.play(0, 0)
+      @cell = @game.play(4, 5)
 
     it 'should return the cell played on', ->
       expect @cell
@@ -73,12 +67,38 @@ describe 'A go game', ->
       expect @game.turn
         .toBe Cell.PIECE.BLACK
 
-    it 'should have reference to a cluster that contains it', ->
+    it 'should create a cluster related to the cell that contains it', ->
       expect @cell.cluster
         .toBeA Cluster
 
       expect @cell.cluster
         .toInclude @cell
+
+
+    ###
+    Cluster tests
+    ###
+
+    describe 'cluster', ->
+
+      beforeEach ->
+        @cluster = @cell.cluster
+
+      it 'should contain the liberties of the default cells', ->
+        expect @cluster.liberties
+          .toEqual @cell.liberties()
+
+        expect @cluster.liberties
+          .toInclude @cell.up
+
+        expect @cluster.liberties
+          .toInclude @cell.down
+
+        expect @cluster.liberties
+          .toInclude @cell.left
+
+        expect @cluster.liberties
+          .toInclude @cell.right
 
 
   ###
@@ -100,7 +120,7 @@ describe 'A go game', ->
 
 
     ###
-    Cell tesss
+    Cell tests
     ###
 
     describe 'cell', ->
@@ -127,3 +147,19 @@ describe 'A go game', ->
       it 'should reference the cell to the right of it', ->
         expect @cell.right
           .toBe @board.at(4, 2)
+
+      it 'should reference all its surounding cells', ->
+        expect @cell.surrounding()
+          .toBeA Array
+
+        expect @cell.surrounding()
+          .toInclude @cell.up
+
+        expect @cell.surrounding()
+          .toInclude @cell.down
+
+        expect @cell.surrounding()
+          .toInclude @cell.left
+
+        expect @cell.surrounding()
+          .toInclude @cell.right
