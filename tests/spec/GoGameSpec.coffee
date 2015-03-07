@@ -48,7 +48,7 @@ describe 'A go game', ->
 
     beforeEach ->
       @originalTurn = @game.turn
-      @cell = @game.play(4, 5)
+      @cell = @game.play(4, 3)
 
     it 'should return the cell played on', ->
       expect @cell
@@ -74,52 +74,51 @@ describe 'A go game', ->
       expect @cell.cluster
         .toInclude @cell
 
+  ###
+  Cluster tests
+  ###
+
+  describe 'cluster', ->
+
+    it 'should contain the liberties of the default cells', ->
+      cell = @game.play(4, 3)
+      liberties = cell.cluster.liberties()
+
+      expect liberties
+        .toEqual cell.liberties()
+
+      expect liberties
+        .toInclude cell.up
+
+      expect liberties
+        .toInclude cell.down
+
+      expect liberties
+        .toInclude cell.left
+
+      expect liberties
+        .toInclude cell.right
+
     it 'should merge clusters when played next to a similar piece', ->
+      cell = @game.play(4, 3)
       @game.pass()
-      @cell2 = @game.play(4, 4)
+      cell2 = @game.play(4, 4)
+      cluster = cell.cluster
 
-      expect @cell.cluster
-        .toBe @cell2.cluster
+      expect cluster.cells.length
+        .toBe 2
 
-      expect @cell.cluster
-        .toInclude @cell
+      expect cluster
+        .toBe cell.cluster
 
-      expect @cell.cluster
-        .toInclude @cell2
+      expect cluster
+        .toBe cell2.cluster
 
-    it 'should not merge clusters when played next to an opposite piece', ->
-      @cell2 = @game.play(4, 4)
+      expect cluster
+        .toInclude cell
 
-      expect @cell.cluster
-        .not.toBe @cell2.cluster
-
-    ###
-    Cluster tests
-    ###
-
-    describe 'cluster', ->
-
-      beforeEach ->
-        @cluster = @cell.cluster
-
-      it 'should contain the liberties of the default cells', ->
-        liberties = @cluster.liberties()
-
-        expect liberties
-          .toEqual @cell.liberties()
-
-        expect liberties
-          .toInclude @cell.up
-
-        expect liberties
-          .toInclude @cell.down
-
-        expect liberties
-          .toInclude @cell.left
-
-        expect liberties
-          .toInclude @cell.right
-
+      expect cluster
+        .toInclude cell2
 
   ###
   Board tests
@@ -139,47 +138,47 @@ describe 'A go game', ->
         .toBeA Cell
 
 
-    ###
-    Cell tests
-    ###
+  ###
+  Cell tests
+  ###
 
-    describe 'cell', ->
+  describe 'cell', ->
 
-      beforeEach ->
-        @cell = @board.at(3, 2)
+    beforeEach ->
+      @cell = @game.board.at(3, 2)
 
-      it 'should start as empty', ->
-        expect @cell.value
-          .toBe Cell.PIECE.EMPTY
+    it 'should start as empty', ->
+      expect @cell.value
+        .toBe Cell.PIECE.EMPTY
 
-      it 'should reference the cell above it', ->
-        expect @cell.up
-          .toBe @board.at(3, 1)
+    it 'should reference the cell above it', ->
+      expect @cell.up
+        .toBe @game.board.at(3, 1)
 
-      it 'should reference the cell below it', ->
-        expect @cell.down
-          .toBe @board.at(3, 3)
+    it 'should reference the cell below it', ->
+      expect @cell.down
+        .toBe @game.board.at(3, 3)
 
-      it 'should reference the cell to the left of it', ->
-        expect @cell.left
-          .toBe @board.at(2, 2)
+    it 'should reference the cell to the left of it', ->
+      expect @cell.left
+        .toBe @game.board.at(2, 2)
 
-      it 'should reference the cell to the right of it', ->
-        expect @cell.right
-          .toBe @board.at(4, 2)
+    it 'should reference the cell to the right of it', ->
+      expect @cell.right
+        .toBe @game.board.at(4, 2)
 
-      it 'should reference all its surounding cells', ->
-        expect @cell.surrounding()
-          .toBeA Array
+    it 'should reference all its surounding cells', ->
+      expect @cell.surrounding()
+        .toBeA Array
 
-        expect @cell.surrounding()
-          .toInclude @cell.up
+      expect @cell.surrounding()
+        .toInclude @cell.up
 
-        expect @cell.surrounding()
-          .toInclude @cell.down
+      expect @cell.surrounding()
+        .toInclude @cell.down
 
-        expect @cell.surrounding()
-          .toInclude @cell.left
+      expect @cell.surrounding()
+        .toInclude @cell.left
 
-        expect @cell.surrounding()
-          .toInclude @cell.right
+      expect @cell.surrounding()
+        .toInclude @cell.right
