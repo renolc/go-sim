@@ -5,14 +5,28 @@ describe('A go game', function() {
       toInclude: function() {
         return {
           compare: function(actual, expected) {
+            var e, value, _i, _len;
             if (actual instanceof Cluster) {
               return {
                 pass: actual.cells.indexOf(expected) !== -1
               };
             } else {
-              return {
-                pass: actual.indexOf(expected) !== -1
-              };
+              if (expected instanceof Array) {
+                value = true;
+                for (_i = 0, _len = expected.length; _i < _len; _i++) {
+                  e = expected[_i];
+                  if (actual.indexOf(e) === -1) {
+                    value = false;
+                  }
+                }
+                return {
+                  pass: value
+                };
+              } else {
+                return {
+                  pass: actual.indexOf(expected) !== -1
+                };
+              }
             }
           }
         };
@@ -85,7 +99,7 @@ describe('A go game', function() {
       expect(liberties).toInclude(cell.left);
       return expect(liberties).toInclude(cell.right);
     });
-    return it('should merge clusters when played next to a similar piece', function() {
+    it('should merge clusters when played next to a similar piece', function() {
       var cell, cell2, cluster;
       cell = this.game.play(4, 3);
       this.game.pass();
@@ -96,6 +110,15 @@ describe('A go game', function() {
       expect(cluster).toBe(cell2.cluster);
       expect(cluster).toInclude(cell);
       return expect(cluster).toInclude(cell2);
+    });
+    return it('should contain the liberties of all its cells', function() {
+      var cell, cell2, liberties;
+      cell = this.game.play(4, 3);
+      this.game.pass();
+      cell2 = this.game.play(4, 4);
+      liberties = cell.cluster.liberties();
+      expect(liberties).toInclude(cell.liberties());
+      return expect(liberties).toInclude(cell2.liberties());
     });
   });
 

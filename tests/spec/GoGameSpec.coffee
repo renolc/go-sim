@@ -5,13 +5,18 @@ describe 'A go game', ->
       toInclude: ->
         compare: (actual, expected) ->
           if actual instanceof Cluster
-            pass: actual.cells.indexOf(expected) != -1
+            return pass: actual.cells.indexOf(expected) != -1
           else
-            pass: actual.indexOf(expected) != -1
+            if expected instanceof Array
+              value = true
+              value = false for e in expected when actual.indexOf(e) == -1
+              return pass: value
+            else
+              return pass: actual.indexOf(expected) != -1
 
       toBeA: ->
         compare: (actual, expected) ->
-          pass: actual instanceof expected
+          return pass: actual instanceof expected
 
     @game = new GoGame()
 
@@ -119,6 +124,20 @@ describe 'A go game', ->
 
       expect cluster
         .toInclude cell2
+
+    it 'should contain the liberties of all its cells', ->
+      cell = @game.play(4, 3)
+      @game.pass()
+      cell2 = @game.play(4, 4)
+      liberties = cell.cluster.liberties()
+
+
+      expect liberties
+        .toInclude cell.liberties()
+
+      expect liberties
+        .toInclude cell2.liberties()
+
 
   ###
   Board tests
