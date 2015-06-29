@@ -55,9 +55,27 @@ describe 'A go game', ->
       @originalTurn = @game.turn
       @cell = @game.play(4, 3)
 
-    it 'should return the cell played on', ->
+    it 'should return the cell played on when successful', ->
       expect @cell
         .toBeA Cell
+
+    it 'should return false and reset the cell when invalid', ->
+      @game.pass()
+      @game.play(4, 1)
+      @game.pass()
+      @game.play(5, 2)
+      @game.pass()
+      @game.play(3, 2)
+
+      originalTurn = @game.turn
+      expect @game.play(4, 2)
+        .toBe false
+
+      expect @game.board.at(4, 2).value
+        .toBe Cell.PIECE.EMPTY
+
+      expect @game.turn
+        .toBe originalTurn
 
     it 'should set the value of the cell to the current turn', ->
       expect @cell.value
@@ -137,6 +155,20 @@ describe 'A go game', ->
 
       expect liberties
         .toInclude cell2.liberties()
+
+    it 'should be removed if all liberties are gone', ->
+      @game.play(4, 3)
+
+      @game.play(4, 2)
+      @game.pass()
+      @game.play(4, 4)
+      @game.pass()
+      @game.play(3, 3)
+      @game.pass()
+      @game.play(5, 3)
+
+      expect @game.board.at(4, 3).value
+        .toBe Cell.PIECE.EMPTY
 
 
   ###

@@ -5,22 +5,22 @@ class GoGame
     @turn  = Cell.PIECE.BLACK
 
   pass: ->
-    @_alternateTurn()
+    @alternateTurn()
 
   play: (x, y) ->
     cell = @board.at(x, y).play(@turn)
-    @_alternateTurn()
+    @alternateTurn() if cell
     return cell
 
-  _alternateTurn: ->
+  alternateTurn: ->
     @turn = !@turn
 
 
 class Board
 
   constructor: (size) ->
-    @size     = size
-    @cells    = []
+    @size  = size
+    @cells = []
 
     for x in [0...@size]
       @cells.push([])
@@ -53,10 +53,37 @@ class Cell
     @value = Cell.PIECE.EMPTY
 
   play: (value) ->
-    @value   = value
+    @value = value
+
+    # if any surrounding enemy clusters have no remaining liberties, remove them
+    for cell in @surrounding()
+      if cell.value == !@value and cell.cluster.liberties().length == 0
+        cell.cluster.remove()
+
+    # if any surrounding friendly clusters now have no liberties, this move is invalid
+    thisCellLibertiesCount = @liberties().length
+    surroundingFriendlyClusters = 0
+    for cell in @surrounding()
+      if cell.value == @value
+        surroundingFriendlyClusters++
+        if cell.cluster.liberties() + thisCellLibertiesCount == 0
+          @value = Cell.PIECE.EMPTY
+          return false
+
+    # if no surrounding friendly clusters to join, and this cell has no liberties, invalid
+    if surroundingFriendlyClusters == 0 and thisCellLibertiesCount == 0
+      @value = Cell.PIECE.EMPTY
+      return false
+
+    # merge with any neighboring friendly clusters
     @cluster = new Cluster(this)
-    @_mergeClusters()
+    @mergeClusters()
+
     return this
+
+  remove: ->
+    @value = Cell.PIECE.EMPTY
+    @cluster = null
 
   surrounding: ->
     surrounding = []
@@ -72,11 +99,11 @@ class Cell
     liberties = []
 
     for cell in @surrounding()
-      liberties.push(cell) if cell.value == Cell.PIECE.EMPTY
+      liberties.push(cell) if cell.value == Cell.PIECE.EMPTY and cell not in liberties
 
     return liberties
 
-  _mergeClusters: ->
+  mergeClusters: ->
     for cell in @surrounding()
       @cluster.merge(cell.cluster) if cell.value == @value
 
@@ -95,5 +122,11 @@ class Cluster
 
   merge: (cluster) ->
     for cell in cluster.cells
-      @cells.push(cell)
+      @cells.push(cell) if cell not in @cells
       cell.cluster = this
+
+  remove: ->
+    for cell in @cells
+      cell.remove()
+
+    @cells = []

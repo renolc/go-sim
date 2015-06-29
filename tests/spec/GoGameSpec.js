@@ -68,8 +68,21 @@ describe('A go game', function() {
       this.originalTurn = this.game.turn;
       return this.cell = this.game.play(4, 3);
     });
-    it('should return the cell played on', function() {
+    it('should return the cell played on when successful', function() {
       return expect(this.cell).toBeA(Cell);
+    });
+    it('should return false and reset the cell when invalid', function() {
+      var originalTurn;
+      this.game.pass();
+      this.game.play(4, 1);
+      this.game.pass();
+      this.game.play(5, 2);
+      this.game.pass();
+      this.game.play(3, 2);
+      originalTurn = this.game.turn;
+      expect(this.game.play(4, 2)).toBe(false);
+      expect(this.game.board.at(4, 2).value).toBe(Cell.PIECE.EMPTY);
+      return expect(this.game.turn).toBe(originalTurn);
     });
     it('should set the value of the cell to the current turn', function() {
       return expect(this.cell.value).toBe(this.originalTurn);
@@ -111,7 +124,7 @@ describe('A go game', function() {
       expect(cluster).toInclude(cell);
       return expect(cluster).toInclude(cell2);
     });
-    return it('should contain the liberties of all its cells', function() {
+    it('should contain the liberties of all its cells', function() {
       var cell, cell2, liberties;
       cell = this.game.play(4, 3);
       this.game.pass();
@@ -119,6 +132,17 @@ describe('A go game', function() {
       liberties = cell.cluster.liberties();
       expect(liberties).toInclude(cell.liberties());
       return expect(liberties).toInclude(cell2.liberties());
+    });
+    return it('should be removed if all liberties are gone', function() {
+      this.game.play(4, 3);
+      this.game.play(4, 2);
+      this.game.pass();
+      this.game.play(4, 4);
+      this.game.pass();
+      this.game.play(3, 3);
+      this.game.pass();
+      this.game.play(5, 3);
+      return expect(this.game.board.at(4, 3).value).toBe(Cell.PIECE.EMPTY);
     });
   });
 
