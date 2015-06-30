@@ -26,6 +26,7 @@ window.onload = function() {
     addEvent(canvas, 'mousemove', onMouseMove);
     addEvent(canvas, 'click', onMouseClick);
     addEvent(canvas, 'mouseout', onMouseOut);
+    addEvent(document.getElementById('pass'), 'click', onPassClick);
   }
 
   function loadImagesAndDraw() {
@@ -153,6 +154,10 @@ window.onload = function() {
   function onMouseClick(e) {
     Game.play(mousePosition.row, mousePosition.col);
     draw();
+  }
+
+  function onPassClick(e) {
+    Game.pass();
   }
 
   function getGamePieceImage(from) {
