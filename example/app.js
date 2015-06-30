@@ -1,6 +1,7 @@
+var Game;
 window.onload = function() {
 
-  var Game = new GoGame();
+  Game = new GoGame();
 
   var Images;
   var canvas, drawingContext;
@@ -77,9 +78,9 @@ window.onload = function() {
   function draw() {
 
     // draw the board itself
-    for (row = 0; row < Game.board.size; row++) {
-      for (col = 0; col < Game.board.size; col++) {
-        drawCell(row, col);
+    for (col = 0; col < Game.board.size; col++) {
+      for (row = 0; row < Game.board.size; row++) {
+        drawCell(col, row);
       }
     }
 
@@ -89,16 +90,16 @@ window.onload = function() {
 
   function drawHover() {
     if (mousePosition){
-      if (Game.board.at(mousePosition.row, mousePosition.col).value === Cell.PIECE.EMPTY) {
+      if (Game.board.at(mousePosition.col, mousePosition.row).value === Cell.PIECE.EMPTY) {
         drawingContext.save();
         drawingContext.globalAlpha = HOVER_ALPHA;
-        drawImage(getGamePieceImage(Game.turn), mousePosition.row, mousePosition.col);
+        drawImage(getGamePieceImage(Game.turn), mousePosition.col, mousePosition.row);
         drawingContext.restore();
       }
     }
   }
 
-  function drawCell(row, col) {
+  function drawCell(col, row) {
     var img;
 
     if (row === 0 && col === 0)
@@ -121,15 +122,15 @@ window.onload = function() {
       img = Images.INTERSECTION
 
     // draw the board
-    drawImage(img, row, col);
+    drawImage(img, col, row);
 
     // if there is a piece in this cell, draw it too
-    img = getGamePieceImage(Game.board.at(row, col).value);
+    img = getGamePieceImage(Game.board.at(col, row).value);
     if (img)
-      drawImage(img, row, col);
+      drawImage(img, col, row);
   }
 
-  function drawImage(img, row, col) {
+  function drawImage(img, col, row) {
     drawingContext.drawImage(img, col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE);
   }
 
@@ -157,7 +158,7 @@ window.onload = function() {
   }
 
   function onMouseClick(e) {
-    Game.play(mousePosition.row, mousePosition.col);
+    Game.play(mousePosition.col, mousePosition.row);
     draw();
   }
 
