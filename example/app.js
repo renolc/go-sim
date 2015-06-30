@@ -90,7 +90,7 @@ window.onload = function() {
 
   function drawHover() {
     if (mousePosition){
-      if (Game.board.at(mousePosition.col, mousePosition.row).value === Cell.PIECE.EMPTY) {
+      if (Game.board.at(mousePosition.col, mousePosition.row).is(Cell.PIECE.EMPTY)) {
         drawingContext.save();
         drawingContext.globalAlpha = HOVER_ALPHA;
         drawImage(getGamePieceImage(Game.turn), mousePosition.col, mousePosition.row);

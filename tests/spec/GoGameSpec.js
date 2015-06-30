@@ -81,11 +81,11 @@ describe('A go game', function() {
       this.game.play(3, 2);
       originalTurn = this.game.turn;
       expect(this.game.play(4, 2)).toBe(false);
-      expect(this.game.board.at(4, 2).value).toBe(Cell.PIECE.EMPTY);
+      expect(this.game.board.at(4, 2).is(Cell.PIECE.EMPTY)).toBe(true);
       return expect(this.game.turn).toBe(originalTurn);
     });
     it('should set the value of the cell to the current turn', function() {
-      return expect(this.cell.value).toBe(this.originalTurn);
+      return expect(this.cell.is(this.originalTurn)).toBe(true);
     });
     it('should alternate turns', function() {
       expect(this.game.turn).toBe(Cell.PIECE.WHITE);
@@ -146,7 +146,7 @@ describe('A go game', function() {
       this.game.play(3, 3);
       this.game.pass();
       this.game.play(5, 3);
-      return expect(this.game.board.at(4, 3).value).toBe(Cell.PIECE.EMPTY);
+      return expect(this.game.board.at(4, 3).is(Cell.PIECE.EMPTY)).toBe(true);
     });
   });
 
@@ -173,7 +173,7 @@ describe('A go game', function() {
       return this.cell = this.game.board.at(3, 2);
     });
     it('should start as empty', function() {
-      return expect(this.cell.value).toBe(Cell.PIECE.EMPTY);
+      return expect(this.cell.is(Cell.PIECE.EMPTY)).toBe(true);
     });
     it('should reference the cell above it', function() {
       return expect(this.cell.up).toBe(this.game.board.at(3, 1));

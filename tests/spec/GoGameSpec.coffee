@@ -71,15 +71,15 @@ describe 'A go game', ->
       expect @game.play(4, 2)
         .toBe false
 
-      expect @game.board.at(4, 2).value
-        .toBe Cell.PIECE.EMPTY
+      expect @game.board.at(4, 2).is(Cell.PIECE.EMPTY)
+        .toBe true
 
       expect @game.turn
         .toBe originalTurn
 
     it 'should set the value of the cell to the current turn', ->
-      expect @cell.value
-        .toBe @originalTurn
+      expect @cell.is(@originalTurn)
+        .toBe true
 
     it 'should alternate turns', ->
       expect @game.turn
@@ -173,8 +173,8 @@ describe 'A go game', ->
       @game.pass()
       @game.play(5, 3)
 
-      expect @game.board.at(4, 3).value
-        .toBe Cell.PIECE.EMPTY
+      expect @game.board.at(4, 3).is(Cell.PIECE.EMPTY)
+        .toBe true
 
 
   ###
@@ -205,8 +205,8 @@ describe 'A go game', ->
       @cell = @game.board.at(3, 2)
 
     it 'should start as empty', ->
-      expect @cell.value
-        .toBe Cell.PIECE.EMPTY
+      expect @cell.is(Cell.PIECE.EMPTY)
+        .toBe true
 
     it 'should reference the cell above it', ->
       expect @cell.up
