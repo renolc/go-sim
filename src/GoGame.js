@@ -95,7 +95,7 @@ Cell = (function() {
       cell = _ref1[_j];
       if (cell.value === this.value) {
         surroundingFriendlyClusters++;
-        if (cell.cluster.liberties() + thisCellLibertiesCount === 0) {
+        if (cell.cluster.liberties().length + thisCellLibertiesCount === 0) {
           this.value = Cell.PIECE.EMPTY;
           return false;
         }

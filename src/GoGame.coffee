@@ -68,7 +68,7 @@ class Cell
     for cell in @surrounding()
       if cell.value == @value
         surroundingFriendlyClusters++
-        if cell.cluster.liberties() + thisCellLibertiesCount == 0
+        if cell.cluster.liberties().length + thisCellLibertiesCount == 0
           @value = Cell.PIECE.EMPTY
           return false
 
