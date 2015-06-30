@@ -8,7 +8,7 @@ class GoGame
     @alternateTurn()
 
   play: (x, y) ->
-    cell = @board.at(x, y).play(@turn)
+    cell = @board.at(x, y)?.play(@turn)
     @alternateTurn() if cell
     return cell
 
@@ -39,7 +39,7 @@ class Board
           left.right = cell
 
   at: (x, y) ->
-    return @cells[x][y]
+    return @cells[x]?[y]
 
 
 class Cell

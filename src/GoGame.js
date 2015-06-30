@@ -16,8 +16,8 @@ GoGame = (function() {
   };
 
   GoGame.prototype.play = function(x, y) {
-    var cell;
-    cell = this.board.at(x, y).play(this.turn);
+    var cell, _ref;
+    cell = (_ref = this.board.at(x, y)) != null ? _ref.play(this.turn) : void 0;
     if (cell) {
       this.alternateTurn();
     }
@@ -57,7 +57,8 @@ Board = (function() {
   }
 
   Board.prototype.at = function(x, y) {
-    return this.cells[x][y];
+    var _ref;
+    return (_ref = this.cells[x]) != null ? _ref[y] : void 0;
   };
 
   return Board;
