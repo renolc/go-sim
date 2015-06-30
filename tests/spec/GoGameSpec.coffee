@@ -186,9 +186,9 @@ describe 'A go game', ->
     beforeEach ->
       @board = @game.board
 
-    it 'should have a size of 9', ->
+    it 'should have a size of 19', ->
       expect @board.size
-        .toBe 9
+        .toBe 19
 
     it 'should be composed of cells', ->
       expect @board.at(0, 0)

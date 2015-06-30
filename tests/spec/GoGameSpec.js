@@ -157,8 +157,8 @@ describe('A go game', function() {
     beforeEach(function() {
       return this.board = this.game.board;
     });
-    it('should have a size of 9', function() {
-      return expect(this.board.size).toBe(9);
+    it('should have a size of 19', function() {
+      return expect(this.board.size).toBe(19);
     });
     return it('should be composed of cells', function() {
       return expect(this.board.at(0, 0)).toBeA(Cell);

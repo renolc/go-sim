@@ -55,13 +55,13 @@ class Cell
   play: (value) ->
 
     # if cell not empty, reject move
-    return false if @value != Cell.PIECE.EMPTY
+    return false if not this.is(Cell.PIECE.EMPTY)
 
     @value = value
 
     # if any surrounding enemy clusters have no remaining liberties, remove them
     for cell in @surrounding()
-      if cell.value == !@value and cell.cluster.liberties().length == 0
+      if cell.is(!@value) and cell.cluster.liberties().length == 0
         cell.cluster.remove()
 
     # check for surrounding friendly clusters
@@ -69,7 +69,7 @@ class Cell
     surroundingFriendlyClusters = 0
     surroundingFriendlyClustersWithNoLiberties = 0
     for cell in @surrounding()
-      if cell.value == @value
+      if cell.is(@value)
         surroundingFriendlyClusters++
         if cell.cluster.liberties().length + thisCellLibertiesCount == 0
           surroundingFriendlyClustersWithNoLiberties++
@@ -94,6 +94,9 @@ class Cell
     @value = Cell.PIECE.EMPTY
     @cluster = null
 
+  is: (value) ->
+    @value == value
+
   surrounding: ->
     surrounding = []
 
@@ -108,13 +111,13 @@ class Cell
     liberties = []
 
     for cell in @surrounding()
-      liberties.push(cell) if cell.value == Cell.PIECE.EMPTY and cell not in liberties
+      liberties.push(cell) if cell.is(Cell.PIECE.EMPTY) and cell not in liberties
 
     return liberties
 
   mergeClusters: ->
     for cell in @surrounding()
-      @cluster.merge(cell.cluster) if cell.value == @value
+      @cluster.merge(cell.cluster) if cell.is(@value)
 
 class Cluster
 

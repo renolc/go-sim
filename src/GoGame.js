@@ -78,14 +78,14 @@ Cell = (function() {
 
   Cell.prototype.play = function(value) {
     var cell, surroundingFriendlyClusters, surroundingFriendlyClustersWithNoLiberties, thisCellLibertiesCount, _i, _j, _len, _len1, _ref, _ref1;
-    if (this.value !== Cell.PIECE.EMPTY) {
+    if (!this.is(Cell.PIECE.EMPTY)) {
       return false;
     }
     this.value = value;
     _ref = this.surrounding();
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       cell = _ref[_i];
-      if (cell.value === !this.value && cell.cluster.liberties().length === 0) {
+      if (cell.is(!this.value) && cell.cluster.liberties().length === 0) {
         cell.cluster.remove();
       }
     }
@@ -95,7 +95,7 @@ Cell = (function() {
     _ref1 = this.surrounding();
     for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
       cell = _ref1[_j];
-      if (cell.value === this.value) {
+      if (cell.is(this.value)) {
         surroundingFriendlyClusters++;
         if (cell.cluster.liberties().length + thisCellLibertiesCount === 0) {
           surroundingFriendlyClustersWithNoLiberties++;
@@ -118,6 +118,10 @@ Cell = (function() {
   Cell.prototype.remove = function() {
     this.value = Cell.PIECE.EMPTY;
     return this.cluster = null;
+  };
+
+  Cell.prototype.is = function(value) {
+    return this.value === value;
   };
 
   Cell.prototype.surrounding = function() {
@@ -144,7 +148,7 @@ Cell = (function() {
     _ref = this.surrounding();
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       cell = _ref[_i];
-      if (cell.value === Cell.PIECE.EMPTY && __indexOf.call(liberties, cell) < 0) {
+      if (cell.is(Cell.PIECE.EMPTY) && __indexOf.call(liberties, cell) < 0) {
         liberties.push(cell);
       }
     }
@@ -157,7 +161,7 @@ Cell = (function() {
     _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       cell = _ref[_i];
-      if (cell.value === this.value) {
+      if (cell.is(this.value)) {
         _results.push(this.cluster.merge(cell.cluster));
       } else {
         _results.push(void 0);
