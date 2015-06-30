@@ -156,7 +156,6 @@ describe 'A go game', ->
       cell2 = @game.play(4, 4)
       liberties = cell.cluster.liberties()
 
-
       expect liberties
         .toInclude cell.liberties()
 

@@ -76,7 +76,7 @@ Cell = (function() {
   }
 
   Cell.prototype.play = function(value) {
-    var cell, surroundingFriendlyClusters, thisCellLibertiesCount, _i, _j, _len, _len1, _ref, _ref1;
+    var cell, surroundingFriendlyClusters, surroundingFriendlyClustersWithNoLiberties, thisCellLibertiesCount, _i, _j, _len, _len1, _ref, _ref1;
     if (this.value !== Cell.PIECE.EMPTY) {
       return false;
     }
@@ -90,16 +90,20 @@ Cell = (function() {
     }
     thisCellLibertiesCount = this.liberties().length;
     surroundingFriendlyClusters = 0;
+    surroundingFriendlyClustersWithNoLiberties = 0;
     _ref1 = this.surrounding();
     for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
       cell = _ref1[_j];
       if (cell.value === this.value) {
         surroundingFriendlyClusters++;
         if (cell.cluster.liberties().length + thisCellLibertiesCount === 0) {
-          this.value = Cell.PIECE.EMPTY;
-          return false;
+          surroundingFriendlyClustersWithNoLiberties++;
         }
       }
+    }
+    if (surroundingFriendlyClusters > 0 && surroundingFriendlyClusters === surroundingFriendlyClustersWithNoLiberties) {
+      this.value = Cell.PIECE.EMPTY;
+      return false;
     }
     if (surroundingFriendlyClusters === 0 && thisCellLibertiesCount === 0) {
       this.value = Cell.PIECE.EMPTY;

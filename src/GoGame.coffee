@@ -53,6 +53,8 @@ class Cell
     @value = Cell.PIECE.EMPTY
 
   play: (value) ->
+
+    # if cell not empty, reject move
     return false if @value != Cell.PIECE.EMPTY
 
     @value = value
@@ -62,15 +64,20 @@ class Cell
       if cell.value == !@value and cell.cluster.liberties().length == 0
         cell.cluster.remove()
 
-    # if any surrounding friendly clusters now have no liberties, this move is invalid
+    # check for surrounding friendly clusters
     thisCellLibertiesCount = @liberties().length
     surroundingFriendlyClusters = 0
+    surroundingFriendlyClustersWithNoLiberties = 0
     for cell in @surrounding()
       if cell.value == @value
         surroundingFriendlyClusters++
         if cell.cluster.liberties().length + thisCellLibertiesCount == 0
-          @value = Cell.PIECE.EMPTY
-          return false
+          surroundingFriendlyClustersWithNoLiberties++
+
+    # if all of the surrounding friendly clusters no have no liberties, invalid
+    if surroundingFriendlyClusters > 0 and surroundingFriendlyClusters == surroundingFriendlyClustersWithNoLiberties
+      @value = Cell.PIECE.EMPTY
+      return false
 
     # if no surrounding friendly clusters to join, and this cell has no liberties, invalid
     if surroundingFriendlyClusters == 0 and thisCellLibertiesCount == 0
