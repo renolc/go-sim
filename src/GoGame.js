@@ -78,7 +78,7 @@ Cell = (function() {
   Cell.prototype.play = function(value) {
     var cell, surroundingFriendlyClusters, thisCellLibertiesCount, _i, _j, _len, _len1, _ref, _ref1;
     if (this.value !== Cell.PIECE.EMPTY) {
-      return;
+      return false;
     }
     this.value = value;
     _ref = this.surrounding();

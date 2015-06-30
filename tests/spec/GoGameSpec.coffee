@@ -97,6 +97,13 @@ describe 'A go game', ->
       expect @cell.cluster
         .toInclude @cell
 
+    it 'should return false if played on top of another piece', ->
+      expect @game.play(4, 3)
+        .toBe false
+
+      expect @game.turn
+        .toBe !@originalTurn
+
   ###
   Cluster tests
   ###

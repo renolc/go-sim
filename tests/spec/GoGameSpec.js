@@ -92,9 +92,13 @@ describe('A go game', function() {
       this.game.play(0, 1);
       return expect(this.game.turn).toBe(Cell.PIECE.BLACK);
     });
-    return it('should create a cluster related to the cell that contains it', function() {
+    it('should create a cluster related to the cell that contains it', function() {
       expect(this.cell.cluster).toBeA(Cluster);
       return expect(this.cell.cluster).toInclude(this.cell);
+    });
+    return it('should return false if played on top of another piece', function() {
+      expect(this.game.play(4, 3)).toBe(false);
+      return expect(this.game.turn).toBe(!this.originalTurn);
     });
   });
 

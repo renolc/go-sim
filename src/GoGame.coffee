@@ -53,7 +53,7 @@ class Cell
     @value = Cell.PIECE.EMPTY
 
   play: (value) ->
-    return if @value != Cell.PIECE.EMPTY
+    return false if @value != Cell.PIECE.EMPTY
 
     @value = value
 
