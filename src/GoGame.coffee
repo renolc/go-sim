@@ -1,6 +1,6 @@
 class GoGame
 
-  constructor: (size = 9) ->
+  constructor: (size = 19) ->
     @board = new Board(size)
     @turn  = Cell.PIECE.BLACK
 

@@ -5,7 +5,7 @@ var Board, Cell, Cluster, GoGame,
 GoGame = (function() {
   function GoGame(size) {
     if (size == null) {
-      size = 9;
+      size = 19;
     }
     this.board = new Board(size);
     this.turn = Cell.PIECE.BLACK;

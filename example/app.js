@@ -1,10 +1,13 @@
 window.onload = function() {
 
-  var Game = new GoGame(19);
+  var Game = new GoGame();
 
   var Images;
   var canvas, drawingContext;
-  var mousePosition, lastMousePosition;
+  var mousePosition;
+
+  var CELL_SIZE = 20;
+  var HOVER_ALPHA = 0.25;
 
   function init() {
     initCanvasAndContext();
@@ -16,8 +19,8 @@ window.onload = function() {
     canvas = document.createElement('canvas');
     drawingContext = canvas.getContext('2d');
 
-    canvas.width  = Game.board.size * 20;
-    canvas.height = Game.board.size * 20;
+    canvas.width  = Game.board.size * CELL_SIZE;
+    canvas.height = Game.board.size * CELL_SIZE;
 
     // add canvas to the body
     document.body.appendChild(canvas);
@@ -72,12 +75,15 @@ window.onload = function() {
   }
 
   function draw() {
+
+    // draw the board itself
     for (row = 0; row < Game.board.size; row++) {
       for (col = 0; col < Game.board.size; col++) {
         drawCell(row, col);
       }
     }
 
+    // draw the hover piece
     drawHover();
   }
 
@@ -85,7 +91,7 @@ window.onload = function() {
     if (mousePosition){
       if (Game.board.at(mousePosition.row, mousePosition.col).value === Cell.PIECE.EMPTY) {
         drawingContext.save();
-        drawingContext.globalAlpha = 0.5;
+        drawingContext.globalAlpha = HOVER_ALPHA;
         drawImage(getGamePieceImage(Game.turn), mousePosition.row, mousePosition.col);
         drawingContext.restore();
       }
@@ -114,16 +120,16 @@ window.onload = function() {
     else
       img = Images.INTERSECTION
 
+    // draw the board
     drawImage(img, row, col);
 
+    // if there is a piece in this cell, draw it too
     img = getGamePieceImage(Game.board.at(row, col).value);
     if (img)
       drawImage(img, row, col);
   }
 
   function drawImage(img, row, col) {
-    var CELL_SIZE = 20;
-
     drawingContext.drawImage(img, col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE);
   }
 
@@ -137,10 +143,9 @@ window.onload = function() {
   }
 
   function onMouseMove(e) {
-    lastMousePosition = mousePosition;
     mousePosition = {
-      col: Math.floor((e.pageX - canvas.offsetLeft) / 20),
-      row: Math.floor((e.pageY - canvas.offsetTop) / 20)
+      col: Math.floor((e.pageX - canvas.offsetLeft) / CELL_SIZE),
+      row: Math.floor((e.pageY - canvas.offsetTop) / CELL_SIZE)
     };
 
     draw();
