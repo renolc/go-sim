@@ -53,6 +53,8 @@ class Cell
     @value = Cell.PIECE.EMPTY
 
   play: (value) ->
+    return if @value != Cell.PIECE.EMPTY
+
     @value = value
 
     # if any surrounding enemy clusters have no remaining liberties, remove them
