@@ -45,7 +45,7 @@ var bool = cell.is(Cell.PIECE.EMPTY);
 var value = cell.value;
 ```
 
-##### ToDo
+### ToDo
 
 - [ ] enforce [ko rule](https://en.wikipedia.org/wiki/Go_(game)#The_ko_rule)
 - [ ] end game when 2 consecutive passes
