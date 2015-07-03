@@ -5,10 +5,10 @@ Simulate the game [Go](https://en.wikipedia.org/wiki/Go_(game)) in CoffeeScript/
 
 ##### Create a new game
 ```javascript
-var game = new Game();
+var game = new GoGame();
 
 // can pass in an arbitrary board size (defaults to 19)
-var bigGame = new Game(50); 
+var bigGame = new GoGame(50); 
 ```
 
 ##### Game functions
