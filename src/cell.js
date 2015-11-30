@@ -16,6 +16,10 @@ export default (row, col) => {
 
     is(value) {
       return state.value === value
+    },
+
+    set(value) {
+      state.value = value
     }
   }
 }
