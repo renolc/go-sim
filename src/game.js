@@ -12,6 +12,12 @@ export default (size = 9) => {
 
     toString() {
       return JSON.stringify(state)
+    },
+
+    pass() {
+      state.turn = (state.turn === piece.BLACK)
+        ? piece.WHITE
+        : piece.BLACK
     }
   }
 }
