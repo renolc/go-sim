@@ -2,22 +2,23 @@ import _ from 'underscore'
 
 import cell from './cell'
 
-export default (s = 9) => {
-  const size = s
-
-  const state = _.flatten(_.times(size, (row) => {
-    return _.times(size, (col) => {
-      return cell(row, col)
-    })
-  }))
+export default (size = 9) => {
+  const state = {
+    size,
+    cells: _.flatten(_.times(size, (row) => {
+      return _.times(size, (col) => {
+        return cell(row, col)
+      })
+    }))
+  }
 
   return {
     state,
 
     at(row, col) {
-      return (row < 0 || row >= size || col < 0 || col >= size)
+      return (row < 0 || row >= state.size || col < 0 || col >= state.size)
         ? undefined
-        : state[size * row + col]
+        : state.cells[state.size * row + col]
     }
   }
 }

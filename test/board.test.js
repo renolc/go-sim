@@ -7,13 +7,13 @@ describe('board', () => {
 
   beforeEach(() => b = board())
 
-  it('should exist', () => {
-    should.exist(b)
-  })
+  it('should exist', () => should.exist(b))
 
-  it('should have an array of cells', () => b.should.property('state').Array())
+  it('should have a size', () => b.state.should.property('size', 9))
 
-  it('should have cell array of length size*size', () => b.state.length.should.equal(9*9))
+  it('should have an array of cells', () => b.state.should.property('cells').Array())
+
+  it('should have cell array of length size*size', () => b.state.cells.length.should.equal(9*9))
 
   describe('at', () => {
     it('should get the cell at position', () => {
