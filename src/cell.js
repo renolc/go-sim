@@ -12,7 +12,13 @@ export default (row, col) => {
   }
 
   return {
-    state,
+    serialize() {
+      return state
+    },
+
+    get(key) {
+      return state[key]
+    },
 
     is(value) {
       return state.value === value

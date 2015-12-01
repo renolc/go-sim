@@ -8,10 +8,15 @@ export default (size = 9) => {
   }
 
   return {
-    state,
+    serialize() {
+      return JSON.stringify({
+        turn: state.turn,
+        board: state.board.serialize()
+      })
+    },
 
-    toString() {
-      return JSON.stringify(state)
+    get(key) {
+      return state[key]
     },
 
     pass() {
