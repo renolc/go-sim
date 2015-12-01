@@ -16,10 +16,7 @@ export default (size = 9) => {
     serialize() {
       return {
         size: state.size,
-        cells: _.reduce(state.cells, (list, cell) => {
-          list.push(cell.serialize())
-          return list
-        }, [])
+        cells: _.map(state.cells, (cell) => cell.serialize())
       }
     },
 
