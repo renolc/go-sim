@@ -28,6 +28,36 @@ export default (size = 9) => {
       return (row < 0 || row >= state.size || col < 0 || col >= state.size)
         ? undefined
         : state.cells[state.size * row + col]
+    },
+
+    clusterAt(row, col, clust) {
+      const cell = this.at(row, col)
+      if (!cell) {
+        return undefined
+      }
+
+      let cluster = clust || []
+      cluster.push(cell)
+
+      _.each(_.range(-1, 2), (offset) => {
+        const dr = row + offset
+        const dc = col + offset
+
+        const vertical = this.at(dr, col)
+        const horizontal = this.at(row, dc)
+
+        const value = cell.get('value')
+
+        if (vertical && vertical.is(value) && !_.contains(cluster, vertical)) {
+          cluster = this.clusterAt(dr, col, cluster)
+        }
+
+        if (horizontal && horizontal.is(value) && !_.contains(cluster, horizontal)) {
+          cluster = this.clusterAt(row, dc, cluster)
+        }
+      })
+
+      return cluster
     }
   }
 }
