@@ -27,13 +27,12 @@ export default (size = 9) => {
       : state.cells[state.size * row + col]
   }
 
-  obj.clusterAt = (row, col, clust) => {
+  obj.clusterAt = (row, col, cluster = []) => {
     const cell = obj.at(row, col)
     if (!cell) {
       return undefined
     }
 
-    let cluster = clust || []
     cluster.push(cell)
 
     _.each(_.range(-1, 2), (offset) => {
