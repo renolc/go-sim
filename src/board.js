@@ -1,6 +1,7 @@
 import _ from 'underscore'
 
 import cell from './cell'
+
 import stateProps from './helpers/state-props'
 
 export default (size = 9) => {

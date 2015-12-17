@@ -1,5 +1,6 @@
 import { piece } from './cell'
 import board from './board'
+
 import stateProps from './helpers/state-props'
 
 export default (size = 9) => {
