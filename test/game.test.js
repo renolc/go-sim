@@ -10,17 +10,17 @@ describe('game', () => {
 
   it('should exist', () => should.exist(g))
 
-  it('should have a board', () => g.get('board').should.Object())
+  it('should have a board', () => g.board.should.Object())
 
-  it('should have a turn which defaults to black', () => g.get('turn').should.equal(piece.BLACK))
+  it('should have a turn which defaults to black', () => g.turn.should.equal(piece.BLACK))
 
   describe('pass', () => {
     beforeEach(() => g.pass())
 
     it('should alternate turns', () => {
-      g.get('turn').should.equal(piece.WHITE)
+      g.turn.should.equal(piece.WHITE)
       g.pass()
-      g.get('turn').should.equal(piece.BLACK)
+      g.turn.should.equal(piece.BLACK)
     })
   })
 
@@ -28,17 +28,17 @@ describe('game', () => {
     let turn
 
     beforeEach(() => {
-      turn = g.get('turn')
+      turn = g.turn
       g.play(2, 3)
     })
 
     it('should alternate turns', () => {
-      g.get('turn').should.equal(piece.WHITE)
+      g.turn.should.equal(piece.WHITE)
       g.play(3, 4)
-      g.get('turn').should.equal(piece.BLACK)
+      g.turn.should.equal(piece.BLACK)
     })
 
-    it('should set the value of cell at pos to current turn', () => g.get('board').at(2, 3).is(turn).should.ok())
+    it('should set the value of cell at pos to current turn', () => g.board.at(2, 3).is(turn).should.ok())
 
     it('should not change anything on invalid pos', () => {
       const orig = g.serialize()

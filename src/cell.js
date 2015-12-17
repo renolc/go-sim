@@ -1,3 +1,5 @@
+import stateProps from './helpers/state-props'
+
 export const piece = Object.freeze({
   EMPTY: 'empty',
   BLACK: 'black',
@@ -5,27 +7,17 @@ export const piece = Object.freeze({
 })
 
 export default (row, col) => {
-  const state = {
+  const { state, obj } = stateProps({
     row,
     col,
     value: piece.EMPTY
-  }
+  })
 
-  return {
-    serialize() {
-      return state
-    },
+  obj.serialize = () => state
 
-    get(key) {
-      return state[key]
-    },
+  obj.is = (value) => state.value === value
 
-    is(value) {
-      return state.value === value
-    },
+  obj.set = (value) => state.value = value
 
-    set(value) {
-      state.value = value
-    }
-  }
+  return obj
 }

@@ -11,17 +11,17 @@ describe('board', () => {
 
   it('should exist', () => should.exist(b))
 
-  it('should have a size', () => b.get('size').should.equal(9))
+  it('should have a size', () => b.size.should.equal(9))
 
-  it('should have an array of cells', () => b.get('cells').should.Array())
+  it('should have an array of cells', () => b.cells.should.Array())
 
-  it('should have cell array of length size*size', () => b.get('cells').length.should.equal(9*9))
+  it('should have cell array of length size*size', () => b.cells.length.should.equal(9*9))
 
   describe('at', () => {
     it('should get the cell at position', () => {
       const cell = b.at(3, 4)
-      cell.get('row').should.equal(3)
-      cell.get('col').should.equal(4)
+      cell.row.should.equal(3)
+      cell.col.should.equal(4)
     })
 
     it('should return undefined when invalid position', () => {
