@@ -1,6 +1,6 @@
 import _ from 'underscore'
 
-import cell from './cell'
+import cell, { piece } from './cell'
 
 import stateProps from './helpers/state-props'
 
@@ -27,7 +27,7 @@ export default (size = 9) => {
       : state.cells[state.size * row + col]
   }
 
-  obj.clusterAt = (row, col, cluster = []) => {
+  obj.clusterAt = (row, col, { cluster = [], liberties = [] } = {}) => {
     const cell = obj.at(row, col)
     if (!cell) {
       return undefined
@@ -44,16 +44,25 @@ export default (size = 9) => {
 
       const value = cell.value
 
-      if (vertical && vertical.is(value) && !_.contains(cluster, vertical)) {
-        cluster = obj.clusterAt(dr, col, cluster)
+      // add neighbor cells of same value or liberties
+      if (vertical) {
+        if (vertical.is(value) && !_.contains(cluster, vertical)) {
+          ({ cluster, liberties } = obj.clusterAt(dr, col, { cluster, liberties }))
+        } else if (vertical.is(piece.EMPTY) && !_.contains(liberties, vertical)) {
+          liberties.push(vertical)
+        }
       }
 
-      if (horizontal && horizontal.is(value) && !_.contains(cluster, horizontal)) {
-        cluster = obj.clusterAt(row, dc, cluster)
+      if (horizontal) {
+        if (horizontal.is(value) && !_.contains(cluster, horizontal)) {
+          ({ cluster, liberties } = obj.clusterAt(row, dc, { cluster, liberties }))
+        } else if (horizontal.is(piece.EMPTY) && !_.contains(liberties, horizontal)) {
+          liberties.push(horizontal)
+        }
       }
     })
 
-    return cluster
+    return { cluster, liberties }
   }
 
   return obj

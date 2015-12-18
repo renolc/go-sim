@@ -33,7 +33,7 @@ describe('board', () => {
   })
 
   describe('clusterAt', () => {
-    let cluster
+    let cluster, liberties
 
     beforeEach(() => {
       b.at(0, 0).set(piece.BLACK)
@@ -42,7 +42,9 @@ describe('board', () => {
       b.at(1, 1).set(piece.BLACK)
       b.at(1, 2).set(piece.BLACK)
       b.at(2, 3).set(piece.BLACK)
-      cluster = _.map(b.clusterAt(0, 0), (cell) => cell.serialize())
+      const { cluster: c, liberties: l } = b.clusterAt(0, 0)
+      cluster = _.map(c, (cell) => cell.serialize())
+      liberties = _.map(l, (cell) => cell.serialize())
     })
 
     it('should contain all connected cells of like value', () => {
@@ -56,5 +58,15 @@ describe('board', () => {
     it('should not contain unconnected diagonal cells', () => cluster.should.not.containEql(b.at(2, 3).serialize()))
 
     it('should not contain connected cells of diff value', () => cluster.should.not.containEql(b.at(1, 0).serialize()))
+
+    it('should have open cells around as liberties', () => {
+      liberties.length.should.equal(4)
+      liberties.should.containEql(b.at(0, 2).serialize())
+      liberties.should.containEql(b.at(1, 3).serialize())
+      liberties.should.containEql(b.at(2, 1).serialize())
+      liberties.should.containEql(b.at(2, 2).serialize())
+    })
+
+    it('should not have adjacent enemies as liberties', () => liberties.should.not.containEql(b.at(1, 0).serialize()))
   })
 })
