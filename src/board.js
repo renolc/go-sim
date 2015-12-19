@@ -27,13 +27,13 @@ export default (size = 9) => {
       : state.cells[state.size * row + col]
   }
 
-  obj.clusterAt = (row, col, { cluster = [], liberties = [] } = {}) => {
+  obj.neighborCells = (row, col) => {
     const cell = obj.at(row, col)
     if (!cell) {
       return undefined
     }
 
-    cluster.push(cell)
+    let neighbors = []
 
     _.each(_.range(-1, 2), (offset) => {
       const dr = row + offset
@@ -42,23 +42,27 @@ export default (size = 9) => {
       const vertical = obj.at(dr, col)
       const horizontal = obj.at(row, dc)
 
-      const value = cell.value
+      if (vertical) neighbors.push(vertical)
+      if (horizontal) neighbors.push(horizontal)
+    })
 
-      // add neighbor cells of same value or liberties
-      if (vertical) {
-        if (vertical.is(value) && !_.contains(cluster, vertical)) {
-          ({ cluster, liberties } = obj.clusterAt(dr, col, { cluster, liberties }))
-        } else if (vertical.is(piece.EMPTY) && !_.contains(liberties, vertical)) {
-          liberties.push(vertical)
-        }
-      }
+    return neighbors
+  }
 
-      if (horizontal) {
-        if (horizontal.is(value) && !_.contains(cluster, horizontal)) {
-          ({ cluster, liberties } = obj.clusterAt(row, dc, { cluster, liberties }))
-        } else if (horizontal.is(piece.EMPTY) && !_.contains(liberties, horizontal)) {
-          liberties.push(horizontal)
-        }
+  obj.clusterAt = (row, col, { cluster = [], liberties = [] } = {}) => {
+    const cell = obj.at(row, col)
+    if (!cell) {
+      return undefined
+    }
+
+    cluster.push(cell)
+
+    const value = cell.value
+    _.each(obj.neighborCells(row, col), (neighbor) => {
+      if (neighbor.is(value) && !_.contains(cluster, neighbor)) {
+        ({ cluster, liberties } = obj.clusterAt(neighbor.row, neighbor.col, { cluster, liberties }))
+      } else if (neighbor.is(piece.EMPTY) && !_.contains(liberties, neighbor)) {
+        liberties.push(neighbor)
       }
     })
 
