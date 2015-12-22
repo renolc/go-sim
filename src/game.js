@@ -1,3 +1,5 @@
+import _ from 'underscore'
+
 import { piece } from './cell'
 import board from './board'
 
@@ -27,6 +29,27 @@ export default (size = 9) => {
     if (!cell || !cell.is(piece.EMPTY)) return
 
     cell.set(state.turn)
+
+    // remove captured clusters
+    _.each(_.where(state.board.neighborCells(row, col), {
+      value: (state.turn === piece.BLACK)
+        ? piece.WHITE
+        : piece.BLACK
+    }), (cell) => {
+      const { cluster, liberties } = state.board.clusterAt(cell.row, cell.col)
+      if (liberties.length === 0) {
+        _.each(cluster, (cell) => {
+          cell.set(piece.EMPTY)
+        })
+      }
+    })
+
+    // if no liberties where we played, invalid move
+    const { liberties } = state.board.clusterAt(cell.row, cell.col)
+    if (liberties.length === 0) {
+      cell.set(piece.EMPTY)
+      return
+    }
 
     obj.pass()
   }

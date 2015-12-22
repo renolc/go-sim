@@ -57,5 +57,55 @@ describe('game', () => {
       g.play(2, 3)
       g.serialize().should.equal(orig)
     })
+
+    it('should remove surrounded cell', () => {
+      g.board.at(1, 3).set(piece.WHITE)
+      g.board.at(3, 3).set(piece.WHITE)
+      g.board.at(2, 2).set(piece.WHITE)
+      g.play(2, 4)
+
+      g.board.at(2, 3).value.should.equal(piece.EMPTY)
+    })
+
+    it('should remove surrounded cluster', () => {
+      g.board.at(1, 3).set(piece.BLACK)
+      g.board.at(2, 4).set(piece.BLACK)
+
+      g.board.at(1, 2).set(piece.WHITE)
+      g.board.at(2, 2).set(piece.WHITE)
+      g.board.at(3, 3).set(piece.WHITE)
+      g.board.at(3, 4).set(piece.WHITE)
+      g.board.at(2, 5).set(piece.WHITE)
+      g.board.at(1, 4).set(piece.WHITE)
+      g.play(0, 3)
+
+      g.board.at(1, 3).value.should.equal(piece.EMPTY)
+      g.board.at(2, 3).value.should.equal(piece.EMPTY)
+      g.board.at(2, 4).value.should.equal(piece.EMPTY)
+    })
+
+    it('should not change anything when playing where no liberties', () => {
+      g.board.at(2, 5).set(piece.BLACK)
+      g.board.at(1, 4).set(piece.BLACK)
+      g.board.at(3, 4).set(piece.BLACK)
+      const orig = g.serialize()
+      g.play(2, 4)
+      g.serialize().should.equal(orig)
+    })
+
+    it('should play where no liberties, if it also captures', () => {
+      g.board.at(2, 5).set(piece.BLACK)
+      g.board.at(1, 4).set(piece.BLACK)
+      g.board.at(3, 4).set(piece.BLACK)
+
+      g.board.at(1, 3).set(piece.WHITE)
+      g.board.at(2, 2).set(piece.WHITE)
+      g.board.at(3, 3).set(piece.WHITE)
+      g.play(2, 4)
+
+      g.board.at(2, 3).value.should.equal(piece.EMPTY)
+      g.board.at(2, 4).value.should.equal(piece.WHITE)
+      g.turn.should.equal(piece.BLACK)
+    })
   })
 })
