@@ -5,10 +5,16 @@ import board from './board'
 
 import stateProps from './helpers/state-props'
 
-export default (size = 9) => {
+export default ({ size = 9, load = {} } = {}) => {
+  const loadState = _.isEmpty(load)
+    ? {}
+    : JSON.parse(load)
+
   const { state, obj } = stateProps({
-    board: board(size),
-    turn: piece.BLACK
+    board: (loadState.board)
+      ? board({ load: loadState.board })
+      : board({ size: size }),
+    turn: loadState.turn || piece.BLACK
   })
 
   obj.serialize = () => {

@@ -4,14 +4,16 @@ import cell, { piece } from './cell'
 
 import stateProps from './helpers/state-props'
 
-export default (size = 9) => {
+export default ({ size = 9, load = {} } = {}) => {
   const { state, obj } = stateProps({
-    size,
-    cells: _.flatten(_.times(size, (row) => {
-      return _.times(size, (col) => {
-        return cell(row, col)
-      })
-    }))
+    size: load.size || size,
+    cells: (load.cells)
+      ? _.map(load.cells, (c) => cell(c.row, c.col, c.value))
+      : _.flatten(_.times(size, (row) => {
+        return _.times(size, (col) => {
+          return cell(row, col)
+        })
+      }))
   })
 
   obj.serialize = () => {

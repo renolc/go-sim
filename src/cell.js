@@ -6,11 +6,11 @@ export const piece = Object.freeze({
   WHITE: 'white'
 })
 
-export default (row, col) => {
+export default (row, col, value = piece.EMPTY) => {
   const { state, obj } = stateProps({
     row,
     col,
-    value: piece.EMPTY
+    value
   })
 
   obj.serialize = () => state

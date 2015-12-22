@@ -14,6 +14,19 @@ describe('game', () => {
 
   it('should have a turn which defaults to black', () => g.turn.should.equal(piece.BLACK))
 
+  describe('load', () => {
+    let g2
+
+    beforeEach(() => {
+      g.play(2, 3)
+      g.play(4, 5)
+      g.pass()
+      g2 = game({ load: g.serialize() })
+    })
+
+    it('should load the game state', () => g2.serialize().should.equal(g.serialize()))
+  })
+
   describe('pass', () => {
     beforeEach(() => g.pass())
 
