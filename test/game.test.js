@@ -25,6 +25,11 @@ describe('game', () => {
     })
 
     it('should load the game state', () => g2.serialize().should.equal(g.serialize()))
+
+    it('should load a separate game instance', () => {
+      g2.play(0, 0)
+      g2.serialize().should.not.equal(g.serialize())
+    })
   })
 
   describe('pass', () => {
