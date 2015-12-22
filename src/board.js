@@ -42,42 +42,50 @@ export default (size = 9) => {
       const vertical = obj.at(dr, col)
       const horizontal = obj.at(row, dc)
 
-      if (vertical) neighbors.push(vertical)
-      if (horizontal) neighbors.push(horizontal)
-      })
+      if (vertical) {
+        neighbors.push(vertical)
+      }
+      if (horizontal) {
+        neighbors.push(horizontal)
+      }
+    })
 
-      return neighbors
+    return neighbors
+  }
+
+  obj.clusterAt = (row, col, { cluster = [], liberties = [] } = {}) => {
+    const cell = obj.at(row, col)
+    if (!cell) {
+      return undefined
     }
 
-    obj.clusterAt = (row, col, { cluster = [], liberties = [] } = {}) => {
-      const cell = obj.at(row, col)
-      if (!cell) {
-        return undefined
+    cluster.push(cell)
+
+    const value = cell.value
+    _.each(obj.neighborCells(row, col), (neighbor) => {
+      if (neighbor.is(value) && !_.contains(cluster, neighbor)) {
+        ({ cluster, liberties } = obj.clusterAt(neighbor.row, neighbor.col, { cluster, liberties}))
+      } else if (neighbor.is(piece.EMPTY) && !_.contains(liberties, neighbor)) {
+        liberties.push(neighbor)
       }
+    })
 
-      cluster.push(cell)
+    return { cluster, liberties}
+  }
 
-      const value = cell.value
-      _.each(obj.neighborCells(row, col), (neighbor) => {
-        if (neighbor.is(value) && !_.contains(cluster, neighbor)) {
-          ({ cluster, liberties } = obj.clusterAt(neighbor.row, neighbor.col, { cluster, liberties}))
-        } else if (neighbor.is(piece.EMPTY) && !_.contains(liberties, neighbor)) {
-          liberties.push(neighbor)
+  obj.DEBUG = () => {
+    return _.times(state.size, (row) => {
+      return _.times(state.size, (col) => {
+        if (obj.at(row, col).is(piece.EMPTY)) {
+          return '-'
+        } else if (obj.at(row, col).is(piece.BLACK)) {
+          return 'b'
+        } else {
+          return 'w'
         }
       })
+    })
+  }
 
-      return { cluster, liberties}
-    }
-
-    obj.DEBUG = () => {
-      return _.times(state.size, (row) => {
-        return _.times(state.size, (col) => {
-          if (obj.at(row, col).is(piece.EMPTY)) return '-'
-          if (obj.at(row, col).is(piece.BLACK)) return 'b'
-          if (obj.at(row, col).is(piece.WHITE)) return 'w'
-          })
-        })
-      }
-
-      return obj
-    }
+  return obj
+}
