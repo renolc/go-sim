@@ -19,9 +19,7 @@ export default (size = 9) => {
   }
 
   obj.pass = () => {
-    state.turn = (state.turn === piece.BLACK)
-      ? piece.WHITE
-      : piece.BLACK
+    alternateTurns(state)
   }
 
   obj.play = (row, col) => {
@@ -51,8 +49,14 @@ export default (size = 9) => {
       return
     }
 
-    obj.pass()
+    alternateTurns(state)
   }
 
   return obj
+}
+
+function alternateTurns (state) {
+  state.turn = (state.turn === piece.BLACK)
+    ? piece.WHITE
+    : piece.BLACK
 }
