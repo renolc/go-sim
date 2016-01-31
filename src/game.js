@@ -3,23 +3,29 @@ import board from './board'
 
 import stateProps from './helpers/state-props'
 
-export default ({ size = 9, load = {} } = {}) => {
-  const loadState = (Object.keys(load).length === 0)
-    ? {}
-    : JSON.parse(load)
+export default ({ size = 9, load } = {}) => {
+  if (load) {
+    size = 0
+  }
 
   const { state, obj } = stateProps({
-    board: (loadState.board)
-      ? board({ load: loadState.board })
-      : board({ size: size }),
-    turn: loadState.turn || piece.BLACK
+    board: board({ size: size }),
+    turn: piece.BLACK
   })
+
+  if (load) {
+    loadState(state, load)
+  }
 
   obj.serialize = () => {
     return JSON.stringify({
       turn: state.turn,
       board: state.board.serialize()
     })
+  }
+
+  obj.load = (load) => {
+    loadState(state, load)
   }
 
   obj.pass = () => {
@@ -67,4 +73,10 @@ function alternateTurns (state) {
   state.turn = (state.turn === piece.BLACK)
     ? piece.WHITE
     : piece.BLACK
+}
+
+function loadState (state, load) {
+  const newState = JSON.parse(load)
+  state.board = board({ load: newState.board })
+  state.turn = newState.turn
 }
