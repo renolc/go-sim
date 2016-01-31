@@ -33,6 +33,8 @@ export default ({ size = 9, load } = {}) => {
   }
 
   obj.play = (row, col) => {
+    const initialState = obj.serialize()
+
     const cell = state.board.at(row, col)
     if (!cell || !cell.is(piece.EMPTY)) return
 
@@ -59,8 +61,7 @@ export default ({ size = 9, load } = {}) => {
     // if no liberties where we played, invalid move
     const { liberties } = state.board.clusterAt(cell.row, cell.col)
     if (liberties.length === 0) {
-      cell.set(piece.EMPTY)
-      return
+      return obj.load(initialState)
     }
 
     alternateTurns(state)
