@@ -17,18 +17,34 @@ describe('game', () => {
   describe('load', () => {
     let g2
 
-    beforeEach(() => {
-      g.play(2, 3)
-      g.play(4, 5)
-      g.pass()
-      g2 = game({ load: g.serialize() })
+    describe('parameter', () => {
+      beforeEach(() => {
+        g.play(2, 3)
+        g.play(4, 5)
+        g.pass()
+        g2 = game({ load: g.serialize() })
+      })
+
+      it('should load the game state', () => g2.serialize().should.equal(g.serialize()))
+
+      it('should load a separate game instance', () => {
+        g2.play(0, 0)
+        g2.serialize().should.not.equal(g.serialize())
+      })
     })
 
-    it('should load the game state', () => g2.serialize().should.equal(g.serialize()))
+    describe('function', () => {
+      let orig
 
-    it('should load a separate game instance', () => {
-      g2.play(0, 0)
-      g2.serialize().should.not.equal(g.serialize())
+      beforeEach(() => {
+        g.play(2, 3)
+        orig = g.serialize()
+        g.play(4, 5)
+        g.pass()
+        g.load(orig)
+      })
+
+      it('should restore state', () => g.serialize().should.equal(orig))
     })
   })
 
