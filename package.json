@@ -44,5 +44,12 @@
     "rimraf": "^2.4.4",
     "should": "^7.1.1",
     "watch": "^0.16.0"
+  },
+  "standard": {
+    "globals": [
+      "describe",
+      "beforeEach",
+      "it"
+    ]
   }
 }
