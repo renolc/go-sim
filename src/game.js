@@ -10,7 +10,8 @@ export default ({ size = 9, load } = {}) => {
 
   const { state, obj } = stateProps({
     board: board({ size: size }),
-    turn: piece.BLACK
+    turn: piece.BLACK,
+    previousBoard: null
   })
 
   if (load) {
@@ -34,6 +35,7 @@ export default ({ size = 9, load } = {}) => {
 
   obj.play = (row, col) => {
     const initialState = obj.serialize()
+    const initialBoard = JSON.stringify(obj.board.serialize())
 
     const cell = state.board.at(row, col)
     if (!cell || !cell.is(piece.EMPTY)) return
@@ -60,10 +62,11 @@ export default ({ size = 9, load } = {}) => {
 
     // if no liberties where we played, invalid move
     const { liberties } = state.board.clusterAt(cell.row, cell.col)
-    if (liberties.length === 0) {
+    if (liberties.length === 0 || JSON.stringify(obj.board.serialize()) === obj.previousBoard) {
       return obj.load(initialState)
     }
 
+    obj.previousBoard = initialBoard
     alternateTurns(state)
   }
 

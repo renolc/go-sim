@@ -141,5 +141,20 @@ describe('game', () => {
       g.board.at(2, 4).value.should.equal(piece.WHITE)
       g.turn.should.equal(piece.BLACK)
     })
+
+    it('should enforce the ko rule', () => {
+      g.board.at(2, 5).set(piece.BLACK)
+      g.board.at(1, 4).set(piece.BLACK)
+      g.board.at(3, 4).set(piece.BLACK)
+
+      g.board.at(1, 3).set(piece.WHITE)
+      g.board.at(2, 2).set(piece.WHITE)
+      g.board.at(3, 3).set(piece.WHITE)
+
+      g.play(2, 4)
+      const orig = g.serialize()
+      g.play(2, 3)
+      g.serialize().should.equal(orig)
+    })
   })
 })
