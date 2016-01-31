@@ -2,7 +2,6 @@ import should from 'should'
 
 import board from '../src/board'
 import { piece } from '../src/cell'
-import _ from 'underscore'
 
 describe('board', () => {
   let b
@@ -15,7 +14,7 @@ describe('board', () => {
 
   it('should have an array of cells', () => b.cells.should.Array())
 
-  it('should have cell array of length size*size', () => b.cells.length.should.equal(9*9))
+  it('should have cell array of length size*size', () => b.cells.length.should.equal(9 * 9))
 
   describe('at', () => {
     it('should get the cell at position', () => {
@@ -43,8 +42,8 @@ describe('board', () => {
       b.at(1, 2).set(piece.BLACK)
       b.at(2, 3).set(piece.BLACK)
       const { cluster: c, liberties: l } = b.clusterAt(0, 0)
-      cluster = _.map(c, (cell) => cell.serialize())
-      liberties = _.map(l, (cell) => cell.serialize())
+      cluster = c.map((cell) => cell.serialize())
+      liberties = l.map((cell) => cell.serialize())
     })
 
     it('should contain all connected cells of like value', () => {

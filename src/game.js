@@ -1,12 +1,10 @@
-import _ from 'underscore'
-
 import { piece } from './cell'
 import board from './board'
 
 import stateProps from './helpers/state-props'
 
 export default ({ size = 9, load = {} } = {}) => {
-  const loadState = _.isEmpty(load)
+  const loadState = (Object.keys(load).length === 0)
     ? {}
     : JSON.parse(load)
 
@@ -35,18 +33,22 @@ export default ({ size = 9, load = {} } = {}) => {
     cell.set(state.turn)
 
     // remove captured clusters
-    _.each(_.where(state.board.neighborCells(row, col), {
-      value: (state.turn === piece.BLACK)
-        ? piece.WHITE
-        : piece.BLACK
-    }), (cell) => {
-      const { cluster, liberties } = state.board.clusterAt(cell.row, cell.col)
-      if (liberties.length === 0) {
-        _.each(cluster, (cell) => {
-          cell.set(piece.EMPTY)
-        })
-      }
-    })
+    state.board.neighborCells(row, col)
+      .filter((c) => {
+        return c.is(
+            (state.turn === piece.BLACK)
+              ? piece.WHITE
+              : piece.BLACK
+          )
+      })
+      .forEach((cell) => {
+        const { cluster, liberties } = state.board.clusterAt(cell.row, cell.col)
+        if (liberties.length === 0) {
+          cluster.forEach((cell) => {
+            cell.set(piece.EMPTY)
+          })
+        }
+      })
 
     // if no liberties where we played, invalid move
     const { liberties } = state.board.clusterAt(cell.row, cell.col)

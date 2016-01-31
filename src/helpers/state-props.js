@@ -1,11 +1,9 @@
-import _ from 'underscore'
-
 export default (props) => {
   const state = {}
   const obj = {}
 
-  _.each(props, (value, key) => {
-    state[key] = value
+  Object.keys(props).forEach((key) => {
+    state[key] = props[key]
 
     Object.defineProperty(obj, key, {
       get: () => state[key],
