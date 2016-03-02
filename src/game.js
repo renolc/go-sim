@@ -1,7 +1,7 @@
 import { piece } from './cell'
 import board from './board'
 
-import stateProps from './helpers/state-props'
+import { stateProps } from './helpers'
 
 export const phase = Object.freeze({
   PLAY: 'play',

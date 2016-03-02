@@ -1,4 +1,4 @@
-export default (props) => {
+export const stateProps = (props) => {
   const state = {}
   const obj = {}
 
@@ -13,3 +13,5 @@ export default (props) => {
 
   return { state, obj }
 }
+
+export const range = (size) => Array.from(Array(size), (v, k) => k)

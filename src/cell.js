@@ -1,4 +1,4 @@
-import stateProps from './helpers/state-props'
+import { stateProps } from './helpers'
 
 export const piece = Object.freeze({
   EMPTY: 'empty',

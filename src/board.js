@@ -1,13 +1,13 @@
 import cell, { piece } from './cell'
 
-import stateProps from './helpers/state-props'
+import { stateProps, range } from './helpers'
 
 export default ({ size = 9, load = {} } = {}) => {
   const { state, obj } = stateProps({
     size: load.size || size,
     cells: (load.cells)
       ? load.cells.map((c) => cell(c.row, c.col, c.value))
-      : Array.from(Array(size * size), (v, k) => k).map((i) => cell(Math.floor(i / size), i % size))
+      : range(size * size).map((i) => cell(Math.floor(i / size), i % size))
   })
 
   obj.serialize = () => {
@@ -69,17 +69,17 @@ export default ({ size = 9, load = {} } = {}) => {
   }
 
   obj.DEBUG = () => {
-    const range = Array.from(Array(state.size), (v, k) => k)
+    const range = range(state.size)
 
     let string = ''
     range.forEach((row) => {
       range.forEach((col) => {
-        if (obj.at(row, col).is(piece.EMPTY)) {
-          string += '-'
+        if (obj.at(row, col).is(piece.WHITE)) {
+          string += 'w'
         } else if (obj.at(row, col).is(piece.BLACK)) {
           string += 'b'
         } else {
-          string += 'w'
+          string += '-'
         }
       })
       string += '\n'
