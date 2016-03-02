@@ -18,7 +18,7 @@ export default ({ size = 9, load } = {}) => {
     board: board({ size: size }),
     turn: piece.BLACK,
     previousBoard: null,
-    state: phase.PLAY
+    phase: phase.PLAY
   })
 
   if (load) {
@@ -28,7 +28,9 @@ export default ({ size = 9, load } = {}) => {
   obj.serialize = () => {
     return JSON.stringify({
       turn: state.turn,
-      board: state.board.serialize()
+      board: state.board.serialize(),
+      previousBoard: state.previousBoard,
+      phase: state.phase
     })
   }
 
@@ -90,4 +92,6 @@ function loadState (state, load) {
   const newState = JSON.parse(load)
   state.board = board({ load: newState.board })
   state.turn = newState.turn
+  state.previousBoard = newState.previousBoard
+  state.phase = newState.phase
 }
