@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Simulate the game Go in JavaScript.",
   "main": "lib/game.js",
+  "engines": {
+    "node": "5.4.0"
+  },
   "scripts": {
     "clean": "rimraf lib",
     "prebuild": "npm run clean -s",
@@ -30,11 +33,11 @@
     "url": "https://github.com/renolc/go-sim/issues"
   },
   "homepage": "https://github.com/renolc/go-sim#readme",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "babel-cli": "^6.2.0",
     "babel-core": "^6.3.21",
+    "babel-eslint": "^5.0.0",
     "babel-plugin-array-includes": "^2.0.3",
     "babel-preset-es2015": "^6.1.18",
     "babel-preset-stage-0": "^6.1.18",
@@ -50,6 +53,7 @@
       "describe",
       "beforeEach",
       "it"
-    ]
+    ],
+    "parser": "babel-eslint"
   }
 }
