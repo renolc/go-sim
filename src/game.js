@@ -39,10 +39,14 @@ export default ({ size = 9, load } = {}) => {
   }
 
   obj.pass = () => {
+    if (state.phase !== phase.PLAY) return
+
     alternateTurns(state)
   }
 
   obj.play = (row, col) => {
+    if (state.phase !== phase.PLAY) return
+
     const initialState = obj.serialize()
     const initialBoard = JSON.stringify(obj.board.serialize())
 

@@ -1,6 +1,6 @@
 import should from 'should'
 
-import game from '../src/game'
+import game, { phase } from '../src/game'
 import { piece } from '../src/cell'
 
 describe('game', () => {
@@ -51,6 +51,28 @@ describe('game', () => {
   describe('pass', () => {
     beforeEach(() => g.pass())
 
+    it('should only pass when in PLAY phase', () => {
+      const orig = g.turn
+
+      g.phase = phase.MARK
+      g.pass()
+      g.turn.should.equal(orig)
+
+      g.phase = phase.END
+      g.pass()
+      g.turn.should.equal(orig)
+
+      g.phase = phase.PLAY
+      g.pass()
+      g.turn.should.not.equal(orig)
+    })
+
+    it('should alternate turns', () => {
+      g.turn.should.equal(piece.WHITE)
+      g.play(3, 4)
+      g.turn.should.equal(piece.BLACK)
+    })
+
     it('should alternate turns', () => {
       g.turn.should.equal(piece.WHITE)
       g.pass()
@@ -64,6 +86,22 @@ describe('game', () => {
     beforeEach(() => {
       turn = g.turn
       g.play(2, 3)
+    })
+
+    it('should only play when in PLAY phase', () => {
+      const orig = JSON.stringify(g.board.serialize())
+
+      g.phase = phase.MARK
+      g.play(0, 0)
+      JSON.stringify(g.board.serialize()).should.equal(orig)
+
+      g.phase = phase.END
+      g.play(0, 0)
+      JSON.stringify(g.board.serialize()).should.equal(orig)
+
+      g.phase = phase.PLAY
+      g.play(0, 0)
+      JSON.stringify(g.board.serialize()).should.not.equal(orig)
     })
 
     it('should alternate turns', () => {
