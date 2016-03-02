@@ -3,6 +3,12 @@ import board from './board'
 
 import stateProps from './helpers/state-props'
 
+export const phase = Object.freeze({
+  PLAY: 'play',
+  MARK: 'mark',
+  END: 'end'
+})
+
 export default ({ size = 9, load } = {}) => {
   if (load) {
     size = 0
@@ -11,7 +17,8 @@ export default ({ size = 9, load } = {}) => {
   const { state, obj } = stateProps({
     board: board({ size: size }),
     turn: piece.BLACK,
-    previousBoard: null
+    previousBoard: null,
+    state: phase.PLAY
   })
 
   if (load) {
@@ -60,7 +67,7 @@ export default ({ size = 9, load } = {}) => {
         }
       })
 
-    // if no liberties where we played, invalid move
+    // if no liberties where we played or new board looks like previous board, invalid move
     const { liberties } = state.board.clusterAt(cell.row, cell.col)
     if (liberties.length === 0 || JSON.stringify(obj.board.serialize()) === obj.previousBoard) {
       return obj.load(initialState)
