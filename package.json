@@ -13,7 +13,9 @@
     "test": "mocha --require babel-core/register -G",
     "watch": "parallelshell 'npm run watch:build' 'npm run watch:test'",
     "watch:build": "watch 'npm run build -s' src/",
-    "watch:test": "npm run test -s -- -w"
+    "watch:test": "npm run test -s -- -w",
+    "prepublish": "npm run build",
+    "publish": "npm publish"
   },
   "repository": {
     "type": "git",
