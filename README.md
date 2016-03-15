@@ -10,7 +10,7 @@ npm i go-sim -S
 ### Usage
 
 ```javascript
-const goSim = require('go-sim')
+const goSim = require('go-sim').default
 
 // make a new game
 const game = goSim() // defaults board size to 9x9
