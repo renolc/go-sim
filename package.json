@@ -1,6 +1,6 @@
 {
   "name": "go-sim",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Simulate the game Go in JavaScript.",
   "main": "lib/game.js",
   "engines": {
