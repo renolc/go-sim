@@ -7,7 +7,8 @@ export const stateProps = (props) => {
 
     Object.defineProperty(obj, key, {
       get: () => state[key],
-      set: (val) => state[key] = val
+      set: (val) => state[key] = val,
+      enumerable: true
     })
   })
 

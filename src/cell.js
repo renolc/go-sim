@@ -13,7 +13,7 @@ export default (row, col, value = piece.EMPTY) => {
     value
   })
 
-  obj.serialize = () => state
+  obj.serialize = () => JSON.parse(JSON.stringify(state))
 
   obj.is = (value) => state.value === value
 

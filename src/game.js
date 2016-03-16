@@ -25,14 +25,7 @@ export default ({ size = 9, load } = {}) => {
     loadState(state, load)
   }
 
-  obj.serialize = () => {
-    return JSON.stringify({
-      turn: state.turn,
-      board: state.board.serialize(),
-      previousBoard: state.previousBoard,
-      phase: state.phase
-    })
-  }
+  obj.serialize = () => JSON.parse(JSON.stringify(state))
 
   obj.load = (load) => {
     loadState(state, load)
@@ -93,9 +86,8 @@ function alternateTurns (state) {
 }
 
 function loadState (state, load) {
-  const newState = JSON.parse(load)
-  state.board = board({ load: newState.board })
-  state.turn = newState.turn
-  state.previousBoard = newState.previousBoard
-  state.phase = newState.phase
+  state.board = board({ load: load.board })
+  state.turn = load.turn
+  state.previousBoard = load.previousBoard
+  state.phase = load.phase
 }

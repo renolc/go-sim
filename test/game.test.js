@@ -25,11 +25,11 @@ describe('game', () => {
         g2 = game({ load: g.serialize() })
       })
 
-      it('should load the game state', () => g2.serialize().should.equal(g.serialize()))
+      it('should load the game state', () => g2.serialize().should.eql(g.serialize()))
 
       it('should load a separate game instance', () => {
         g2.play(0, 0)
-        g2.serialize().should.not.equal(g.serialize())
+        g2.serialize().should.not.eql(g.serialize())
       })
     })
 
@@ -44,7 +44,7 @@ describe('game', () => {
         g.load(orig)
       })
 
-      it('should restore state', () => g.serialize().should.equal(orig))
+      it('should restore state', () => g.serialize().should.eql(orig))
     })
   })
 
@@ -115,19 +115,19 @@ describe('game', () => {
     it('should not change anything on invalid pos', () => {
       const orig = g.serialize()
       g.play(-1, 2)
-      g.serialize().should.equal(orig)
+      g.serialize().should.eql(orig)
       g.play(2, -1)
-      g.serialize().should.equal(orig)
+      g.serialize().should.eql(orig)
       g.play(10, 2)
-      g.serialize().should.equal(orig)
+      g.serialize().should.eql(orig)
       g.play(2, 10)
-      g.serialize().should.equal(orig)
+      g.serialize().should.eql(orig)
     })
 
     it('should not change anything when playing on non empty cell', () => {
       const orig = g.serialize()
       g.play(2, 3)
-      g.serialize().should.equal(orig)
+      g.serialize().should.eql(orig)
     })
 
     it('should remove surrounded cell', () => {
@@ -162,7 +162,7 @@ describe('game', () => {
       g.board.at(3, 4).set(piece.BLACK)
       const orig = g.serialize()
       g.play(2, 4)
-      g.serialize().should.equal(orig)
+      g.serialize().should.eql(orig)
     })
 
     it('should play where no liberties, if it also captures', () => {
@@ -192,7 +192,7 @@ describe('game', () => {
       g.play(2, 4)
       const orig = g.serialize()
       g.play(2, 3)
-      g.serialize().should.equal(orig)
+      g.serialize().should.eql(orig)
     })
   })
 })

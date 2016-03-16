@@ -10,12 +10,7 @@ export default ({ size = 9, load = {} } = {}) => {
       : range(size * size).map((i) => cell(Math.floor(i / size), i % size))
   })
 
-  obj.serialize = () => {
-    return {
-      size: state.size,
-      cells: state.cells.map((cell) => cell.serialize())
-    }
-  }
+  obj.serialize = () => JSON.parse(JSON.stringify(state))
 
   obj.at = (row, col) => {
     if (row >= 0 && row < state.size && col >= 0 && col < state.size) {
