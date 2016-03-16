@@ -10,7 +10,7 @@ npm i go-sim -S
 ### Usage
 
 ```javascript
-const goSim = require('go-sim').default
+const goSim = require('go-sim')
 
 // make a new game
 const game = goSim() // defaults board size to 9x9
@@ -26,6 +26,9 @@ game.play(3, 4)
 
 // get current turn
 game.turn // returns 'black' or 'white'
+
+// get current board
+game.board // returns board object
 
 // serialize game into JSON object
 const state = game.serialize()
