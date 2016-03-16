@@ -30,7 +30,7 @@ game.turn // returns 'black' or 'white'
 // get current board
 game.board // returns board object
 
-// serialize game into JSON object
+// serialize game into vanilla JavaScript object
 const state = game.serialize()
 
 // load game from serialized state
