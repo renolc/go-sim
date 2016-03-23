@@ -1,4 +1,4 @@
-import { piece } from '../cell'
+import piece from '../game/piece'
 
 export default (state) => {
   state.turn = (state.turn === piece.BLACK)
