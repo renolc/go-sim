@@ -86,8 +86,11 @@ function alternateTurns (state) {
 }
 
 function loadState (state, load) {
-  state.board = board({ load: load.board })
-  state.turn = load.turn
-  state.previousBoard = load.previousBoard
-  state.phase = load.phase
+  Object.keys(load).forEach((key) => {
+    if (key === 'board') {
+      state.board = board({ load: load[key] })
+    } else {
+      state[key] = load[key]
+    }
+  })
 }
