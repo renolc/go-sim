@@ -14,7 +14,7 @@
     "watch": "parallelshell 'npm run watch:build' 'npm run watch:test'",
     "watch:build": "watch 'npm run build -s' src/",
     "watch:test": "npm run test -s -- -w",
-    "prepublish": "npm run build"
+    "prepublish": "npm run test && npm run build"
   },
   "repository": {
     "type": "git",
