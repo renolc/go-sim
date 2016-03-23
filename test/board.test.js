@@ -1,71 +1,68 @@
 import should from 'should'
 
-import board from '../src/board'
-import { piece } from '../src/cell'
+import piece from '../src/game/piece'
+import board from '../src/game/board'
 
 describe('board', () => {
-  let b
+  var b
 
   beforeEach(() => b = board())
 
   it('should exist', () => should.exist(b))
 
-  it('should have a size', () => b.size.should.equal(9))
+  it('should default size to 9', () => b.size.should.equal(9))
 
-  it('should have an array of cells', () => b.cells.should.Array())
-
-  it('should have cell array of length size*size', () => b.cells.length.should.equal(9 * 9))
+  it('should set size to passed in number', () => board(2).size.should.equal(2))
 
   describe('at', () => {
-    it('should get the cell at position', () => {
-      const cell = b.at(3, 4)
-      cell.row.should.equal(3)
-      cell.col.should.equal(4)
-    })
+    it('should return cell at position', () => b.at(2, 3).should.equal(b.cells[21]))
 
-    it('should return undefined when invalid position', () => {
-      should.not.exist(b.at(-1, 2))
-      should.not.exist(b.at(2, -1))
-      should.not.exist(b.at(2, 10))
-      should.not.exist(b.at(10, 2))
+    it('should return undefined for invalid position', () => {
+      should.not.exist(b.at(-1, 0))
+      should.not.exist(b.at(0, -1))
+      should.not.exist(b.at(b.size, 0))
+      should.not.exist(b.at(0, b.size))
+    })
+  })
+
+  describe('neighborCells', () => {
+    it('should return all cells around position', () => {
+      const neighbors = b.neighborCells(1, 1)
+
+      neighbors.length.should.equal(4)
+      neighbors.should.containEql(b.at(1, 0))
+      neighbors.should.containEql(b.at(1, 2))
+      neighbors.should.containEql(b.at(0, 1))
+      neighbors.should.containEql(b.at(2, 1))
     })
   })
 
   describe('clusterAt', () => {
-    let cluster, liberties
+    var cluster, liberties
 
     beforeEach(() => {
       b.at(0, 0).set(piece.BLACK)
-      b.at(1, 0).set(piece.WHITE)
       b.at(0, 1).set(piece.BLACK)
       b.at(1, 1).set(piece.BLACK)
-      b.at(1, 2).set(piece.BLACK)
-      b.at(2, 3).set(piece.BLACK)
-      const { cluster: c, liberties: l } = b.clusterAt(0, 0)
-      cluster = c.map((cell) => cell.serialize())
-      liberties = l.map((cell) => cell.serialize())
+      b.at(1, 0).set(piece.WHITE)
+      b.at(2, 2).set(piece.WHITE)
+      b.at(2, 0).set(piece.BLACK)
+
+      ;({ cluster, liberties } = b.clusterAt(0, 0))
     })
 
-    it('should contain all connected cells of like value', () => {
-      cluster.length.should.equal(4)
-      cluster.should.containEql(b.at(0, 0).serialize())
-      cluster.should.containEql(b.at(0, 1).serialize())
-      cluster.should.containEql(b.at(1, 1).serialize())
-      cluster.should.containEql(b.at(1, 2).serialize())
+    it('should return all pieces in cluster', () => {
+      cluster.length.should.equal(3)
+      cluster.should.containEql(b.at(0, 0))
+      cluster.should.containEql(b.at(0, 1))
+      cluster.should.containEql(b.at(1, 1))
     })
 
-    it('should not contain unconnected diagonal cells', () => cluster.should.not.containEql(b.at(2, 3).serialize()))
-
-    it('should not contain connected cells of diff value', () => cluster.should.not.containEql(b.at(1, 0).serialize()))
-
-    it('should have open cells around as liberties', () => {
-      liberties.length.should.equal(4)
-      liberties.should.containEql(b.at(0, 2).serialize())
-      liberties.should.containEql(b.at(1, 3).serialize())
-      liberties.should.containEql(b.at(2, 1).serialize())
-      liberties.should.containEql(b.at(2, 2).serialize())
+    it('should return liberties for cluster', () => {
+      liberties.length.should.equal(3)
+      liberties.should.containEql(b.at(0, 2))
+      liberties.should.containEql(b.at(1, 2))
+      liberties.should.containEql(b.at(2, 1))
     })
-
-    it('should not have adjacent enemies as liberties', () => liberties.should.not.containEql(b.at(1, 0).serialize()))
   })
 })

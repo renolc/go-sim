@@ -1,43 +1,11 @@
-import { piece } from './cell'
-import board from './board'
-
-import { stateProps } from './helpers'
-
-export const phase = Object.freeze({
-  PLAY: 'play',
-  MARK: 'mark',
-  END: 'end'
-})
-
-export default ({ size = 9, load } = {}) => {
-  if (load) {
-    size = 0
-  }
-
-  const { state, obj } = stateProps({
-    board: board({ size: size }),
-    turn: piece.BLACK,
-    previousBoard: null,
-    phase: phase.PLAY
-  })
-
-  if (load) {
-    loadState(state, load)
-  }
-
-  obj.serialize = () => JSON.parse(JSON.stringify(state))
-
-  obj.load = (load) => {
-    loadState(state, load)
-  }
-
-  obj.pass = () => {
+export default {
+  pass: () => {
     if (state.phase !== phase.PLAY) return
 
     alternateTurns(state)
-  }
+  },
 
-  obj.play = (row, col) => {
+  play: (row, col) => {
     if (state.phase !== phase.PLAY) return
 
     const initialState = obj.serialize()
@@ -72,25 +40,13 @@ export default ({ size = 9, load } = {}) => {
       return obj.load(initialState)
     }
 
+    // if we made it here, move was valid
     obj.previousBoard = initialBoard
+    obj.previousPlay = {
+      turn: state.turn,
+      type: 'play',
+      position: [row, col]
+    }
     alternateTurns(state)
   }
-
-  return obj
-}
-
-function alternateTurns (state) {
-  state.turn = (state.turn === piece.BLACK)
-    ? piece.WHITE
-    : piece.BLACK
-}
-
-function loadState (state, load) {
-  Object.keys(load).forEach((key) => {
-    if (key === 'board') {
-      state.board = board({ load: load[key] })
-    } else {
-      state[key] = load[key]
-    }
-  })
 }
