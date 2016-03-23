@@ -28,7 +28,7 @@
     "paduk",
     "baduk"
   ],
-  "author": "Phillip 'renolc' Gibson <gibson.phillip.j@gmail.com",
+  "author": "Phillip 'renolc' Gibson <gibson.phillip.j@gmail.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/renolc/go-sim/issues"
