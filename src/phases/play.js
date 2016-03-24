@@ -36,11 +36,11 @@ export default (state) => {
                 : piece.BLACK
             )
         })
-        .forEach((cell) => {
-          const { cluster, liberties } = state.board.clusterAt(cell.row, cell.col)
-          if (liberties.length === 0) {
-            cluster.forEach((cell) => {
-              cell.set(piece.EMPTY)
+        .forEach((c) => {
+          const cluster = state.board.clusterAt(c.row, c.col)
+          if (cluster.liberties.length === 0) {
+            cluster.cells.forEach((d) => {
+              d.set(piece.EMPTY)
             })
           }
         })

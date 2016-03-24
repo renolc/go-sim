@@ -38,7 +38,7 @@ describe('board', () => {
   })
 
   describe('clusterAt', () => {
-    var cluster, liberties
+    var cluster
 
     beforeEach(() => {
       b.at(0, 0).set(piece.BLACK)
@@ -48,21 +48,21 @@ describe('board', () => {
       b.at(2, 2).set(piece.WHITE)
       b.at(2, 0).set(piece.BLACK)
 
-      ;({ cluster, liberties } = b.clusterAt(0, 0))
+      cluster = b.clusterAt(0, 0)
     })
 
     it('should return all pieces in cluster', () => {
-      cluster.length.should.equal(3)
-      cluster.should.containEql(b.at(0, 0))
-      cluster.should.containEql(b.at(0, 1))
-      cluster.should.containEql(b.at(1, 1))
+      cluster.cells.length.should.equal(3)
+      cluster.cells.should.containEql(b.at(0, 0))
+      cluster.cells.should.containEql(b.at(0, 1))
+      cluster.cells.should.containEql(b.at(1, 1))
     })
 
     it('should return liberties for cluster', () => {
-      liberties.length.should.equal(3)
-      liberties.should.containEql(b.at(0, 2))
-      liberties.should.containEql(b.at(1, 2))
-      liberties.should.containEql(b.at(2, 1))
+      cluster.liberties.length.should.equal(3)
+      cluster.liberties.should.containEql(b.at(0, 2))
+      cluster.liberties.should.containEql(b.at(1, 2))
+      cluster.liberties.should.containEql(b.at(2, 1))
     })
   })
 })

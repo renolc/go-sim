@@ -63,24 +63,24 @@ export default (...args) => {
     return neighbors
   }
 
-  state.clusterAt = (row, col, { cluster = [], liberties = [] } = {}) => {
+  state.clusterAt = (row, col, { cells = [], liberties = [] } = {}) => {
     const cell = state.at(row, col)
     if (!cell) {
-      return
+      return { cells, liberties }
     }
 
-    cluster.push(cell)
+    cells.push(cell)
 
     const value = cell.value
     state.neighborCells(row, col).forEach((neighbor) => {
-      if (neighbor.is(value) && !cluster.includes(neighbor)) {
-        ({ cluster, liberties } = state.clusterAt(neighbor.row, neighbor.col, { cluster, liberties }))
+      if (neighbor.is(value) && !cells.includes(neighbor)) {
+        ({ cells, liberties } = state.clusterAt(neighbor.row, neighbor.col, { cells, liberties }))
       } else if (neighbor.is(piece.EMPTY) && !liberties.includes(neighbor)) {
         liberties.push(neighbor)
       }
     })
 
-    return { cluster, liberties }
+    return { cells, liberties }
   }
 
   state.DEBUG = () => {

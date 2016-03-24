@@ -1,7 +1,9 @@
 export default (state) => {
   return {
-    mark: () => {},
-    accept: () => {},
-    reject: () => {}
+    mark: (row, col) => {
+      const { cells } = state.board.clusterAt(row, col)
+
+      cells.forEach((cell) => cell.toggleMark())
+    }
   }
 }
