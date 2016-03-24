@@ -2,6 +2,8 @@ import phase from './phase'
 import piece from './piece'
 import board from './board'
 
+import addPhase from '../helpers/addPhase'
+
 export default (...args) => {
   var size = 9
   var state
@@ -33,6 +35,8 @@ export default (...args) => {
 
   // serialize state into vanilla js object (functions pruned)
   state.serialize = () => JSON.parse(JSON.stringify(state))
+
+  addPhase(state)
 
   return state
 }
