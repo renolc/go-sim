@@ -1,6 +1,7 @@
 import should from 'should'
 
 import phase from '../src/game/phase'
+import piece from '../src/game/piece'
 import sim from '../src/game/sim'
 
 describe('mark', () => {
@@ -22,8 +23,6 @@ describe('mark', () => {
 
     s.pass()
     s.pass()
-
-    s.board.DEBUG()
   })
 
   describe('mark', () => {
@@ -60,6 +59,16 @@ describe('mark', () => {
       cells.forEach((cell) => cell.marked.should.be.true())
       s.mark(0, 2)
       cells.forEach((cell) => cell.marked.should.be.false())
+    })
+  })
+
+  describe('propose', () => {
+    it('should alternate turns', () => {
+      s.turn.should.equal(piece.BLACK)
+      s.propose()
+      s.turn.should.equal(piece.WHITE)
+      s.propose()
+      s.turn.should.equal(piece.BLACK)
     })
   })
 })
