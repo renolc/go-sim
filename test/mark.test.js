@@ -71,4 +71,12 @@ describe('mark', () => {
       s.turn.should.equal(piece.BLACK)
     })
   })
+
+  describe('accept', () => {
+    it('should change to end phase', () => {
+      s.phase.should.equal(phase.MARK)
+      s.accept()
+      s.phase.should.equal(phase.END)
+    })
+  })
 })

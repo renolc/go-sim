@@ -1,4 +1,7 @@
 import alternateTurns from '../helpers/alternateTurns'
+import changePhase from '../helpers/changePhase'
+
+import phase from '../game/phase'
 
 export default (state) => {
   return {
@@ -8,6 +11,8 @@ export default (state) => {
       cells.forEach((cell) => cell.toggleMark())
     },
 
-    propose: () => alternateTurns(state)
+    propose: () => alternateTurns(state),
+
+    accept: () => changePhase(state, phase.END)
   }
 }
