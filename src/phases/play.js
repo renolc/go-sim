@@ -1,3 +1,5 @@
+import piece from '../game/piece'
+
 import alternateTurns from '../helpers/alternateTurns'
 
 export default (state) => {
@@ -7,8 +9,8 @@ export default (state) => {
     },
 
     play: (row, col) => {
-      const initialState = obj.serialize()
-      const initialBoard = JSON.stringify(obj.board.serialize())
+      const initialState = state.serialize()
+      const initialBoard = JSON.stringify(initialState.board)
 
       const cell = state.board.at(row, col)
       if (!cell || !cell.is(piece.EMPTY)) return
@@ -35,17 +37,12 @@ export default (state) => {
 
       // if no liberties where we played or new board looks like previous board, invalid move
       const { liberties } = state.board.clusterAt(cell.row, cell.col)
-      if (liberties.length === 0 || JSON.stringify(obj.board.serialize()) === obj.previousBoard) {
-        return obj.load(initialState)
+      if (liberties.length === 0 || JSON.stringify(state.serialize().board) === state.previousBoard) {
+        return state.load(initialState)
       }
 
       // if we made it here, move was valid
-      obj.previousBoard = initialBoard
-      obj.previousPlay = {
-        turn: state.turn,
-        type: 'play',
-        position: [row, col]
-      }
+      state.previousBoard = initialBoard
       alternateTurns(state)
     }
   }
