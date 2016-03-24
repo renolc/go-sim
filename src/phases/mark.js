@@ -21,6 +21,11 @@ export default (state) => {
       changePhase(state, phase.END)
     },
 
-    reject: () => changePhase(state, phase.PLAY)
+    reject: () => {
+      state.board.cells
+        .filter((cell) => cell.marked)
+        .forEach((cell) => cell.toggleMark())
+      changePhase(state, phase.PLAY)
+    }
   }
 }

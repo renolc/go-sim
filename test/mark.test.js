@@ -98,5 +98,16 @@ describe('mark', () => {
       s.reject()
       s.phase.should.equal(phase.PLAY)
     })
+
+    it('should set all marks to false', () => {
+      const cluster = s.board.clusterAt(0, 2)
+
+      s.mark(0, 2)
+      s.reject()
+
+      cluster.cells.forEach((cell) => {
+        cell.marked.should.be.false()
+      })
+    })
   })
 })
