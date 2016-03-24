@@ -1,13 +1,19 @@
 import piece from '../game/piece'
+import phase from '../game/phase'
 
 import alternateTurns from '../helpers/alternateTurns'
+import changePhase from '../helpers/changePhase'
 
 export default (state) => {
   return {
     pass: () => {
-      state.previousPlay = {
-        turn: state.turn,
-        type: 'pass'
+      if (state.previousPlay.type === 'pass') {
+        changePhase(state, phase.MARK)
+      } else {
+        state.previousPlay = {
+          turn: state.turn,
+          type: 'pass'
+        }
       }
       alternateTurns(state)
     },

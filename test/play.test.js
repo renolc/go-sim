@@ -1,6 +1,7 @@
 import should from 'should'
 
 import piece from '../src/game/piece'
+import phase from '../src/game/phase'
 import sim from '../src/game/sim'
 
 describe('play', () => {
@@ -18,12 +19,20 @@ describe('play', () => {
     })
 
     it('should set the previous play', () => {
-      should.not.exist(s.previousPlay)
+      s.previousPlay.should.be.empty()
       s.pass()
       s.previousPlay.should.eql({
         turn: piece.BLACK,
         type: 'pass'
       })
+    })
+
+    it('should transition to mark phase after consecutive passes', () => {
+      s.phase.should.equal(phase.PLAY)
+      s.pass()
+      s.phase.should.equal(phase.PLAY)
+      s.pass()
+      s.phase.should.equal(phase.MARK)
     })
   })
 
@@ -47,7 +56,7 @@ describe('play', () => {
     })
 
     it('should set the previous play', () => {
-      should.not.exist(s.previousPlay)
+      s.previousPlay.should.be.empty()
       s.play(1, 2)
       s.previousPlay.should.eql({
         turn: piece.BLACK,

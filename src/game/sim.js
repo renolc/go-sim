@@ -29,7 +29,7 @@ export default (...args) => {
         turn: piece.BLACK,
         previousBoard: null,
         phase: phase.PLAY,
-        previousPlay: null
+        previousPlay: {}
       }
   }
 
