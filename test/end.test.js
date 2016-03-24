@@ -31,7 +31,6 @@ describe('end', () => {
     s.mark(0, 2)
     s.propose()
     s.accept()
-    s.board.DEBUG()
   })
 
   it.only('it should calculate final score', () => {
