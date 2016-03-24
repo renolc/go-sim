@@ -33,7 +33,7 @@ describe('end', () => {
     s.accept()
   })
 
-  it.only('it should calculate final score', () => {
+  it('it should calculate final score', () => {
     should.exist(s.score)
     s.score.black.should.equal(8)
     s.score.white.should.equal(12.5)
