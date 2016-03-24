@@ -13,32 +13,92 @@ npm i go-sim -S
 const goSim = require('go-sim')
 
 // make a new game
-const game = goSim() // defaults board size to 9x9
+// defaults board size to 9x9
+const game = goSim()
 
 // make a custom sized game
-const largeGame = goSim({size: 19})
+const largeGame = goSim(50)
 
-// pass turn
-game.pass()
+// get current turn ('black' or 'white')
+game.turn
 
-// play at position (row, col)
-game.play(3, 4)
+// get current board state
+game.board
 
-// get current turn
-game.turn // returns 'black' or 'white'
+// get board size
+game.board.size
 
-// get current board
-game.board // returns board object
+// 1D array of board cells
+game.board.cells
+
+// get cell at (row, col)
+const cell = game.board.at(2, 3)
+
+// current cell value ('empty', 'black', or 'white')
+cell.value
+
+// check if cell has certain value (true or false)
+cell.is('empty')
 
 // serialize game into vanilla JavaScript object
 const state = game.serialize()
 
-// load game from serialized state
-game.load(state) // alternatively, load on initial game creation with goSim({load: state})
+// load the state into the current instance
+game.load(state)
+
+// or load a new game from serialized state
+const newGame = goSim(state)
+
+// see what the previous play was
+// will have type of 'play' or 'pass'
+// if 'play', will also have position last played as [row, col]
+game.previousPlay
+```
+
+There are many more undocumented functions, but they will probably be less useful for creating a UI around the simulation.
+
+### Phases
+
+Go is played in a series of phases. A new game starts in the **Play** phase. While in each phase, certain functions will be available.
+
+#### Play
+
+```javascript
+// play at the designated (row, col)
+// the turn automatically advances to the next player
+// any invalid move is ignored
+game.play(2, 3)
+
+// pass the current turn to the next player
+// game advances to the Mark phase on consecutive passes
+game.pass()
+```
+
+#### Mark
+
+```javascript
+// mark the cluster of pieces attached to (row, col) as dead
+game.mark(2, 3)
+
+// propose the marked clusters to the next player
+// next player may mark/unmark clusters and counter propose
+game.propose()
+
+// reject the proposal and return to the Play phase to resolve disputes
+game.reject()
+
+// accept the proposal and advance to the End phase
+game.accept()
+```
+
+#### End
+
+```javascript
+// retrieve the final calculated score
+// komi is included at 6.5
+game.score
 ```
 
 ### ToDo
 
-- [ ] end game when 2 consecutive passes
-- [ ] implement mark phase
-- [ ] calculate end game score (including [komi](https://en.wikipedia.org/wiki/Go_(game)#Komi))
+- [ ] implement ability to resign
