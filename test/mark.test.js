@@ -79,4 +79,12 @@ describe('mark', () => {
       s.phase.should.equal(phase.END)
     })
   })
+
+  describe('reject', () => {
+    it('should change to play phase', () => {
+      s.phase.should.equal(phase.MARK)
+      s.reject()
+      s.phase.should.equal(phase.PLAY)
+    })
+  })
 })

@@ -13,6 +13,8 @@ export default (state) => {
 
     propose: () => alternateTurns(state),
 
-    accept: () => changePhase(state, phase.END)
+    accept: () => changePhase(state, phase.END),
+
+    reject: () => changePhase(state, phase.PLAY)
   }
 }
