@@ -5,6 +5,10 @@ import alternateTurns from '../helpers/alternateTurns'
 export default (state) => {
   return {
     pass: () => {
+      state.previousPlay = {
+        turn: state.turn,
+        type: 'pass'
+      }
       alternateTurns(state)
     },
 
@@ -43,6 +47,11 @@ export default (state) => {
 
       // if we made it here, move was valid
       state.previousBoard = initialBoard
+      state.previousPlay = {
+        turn: state.turn,
+        type: 'play',
+        position: [row, col]
+      }
       alternateTurns(state)
     }
   }

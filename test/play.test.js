@@ -16,6 +16,15 @@ describe('play', () => {
       s.pass()
       s.turn.should.equal(piece.BLACK)
     })
+
+    it('should set the previous play', () => {
+      should.not.exist(s.previousPlay)
+      s.pass()
+      s.previousPlay.should.eql({
+        turn: piece.BLACK,
+        type: 'pass'
+      })
+    })
   })
 
   describe('play', () => {
@@ -35,6 +44,16 @@ describe('play', () => {
       s.board.at(0, 1).is(piece.EMPTY).should.be.true()
       s.play(0, 1)
       s.board.at(0, 1).is(piece.WHITE).should.be.true()
+    })
+
+    it('should set the previous play', () => {
+      should.not.exist(s.previousPlay)
+      s.play(1, 2)
+      s.previousPlay.should.eql({
+        turn: piece.BLACK,
+        type: 'play',
+        position: [1, 2]
+      })
     })
 
     describe('invalid', () => {
