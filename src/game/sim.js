@@ -36,6 +36,14 @@ export default (...args) => {
   // serialize state into vanilla js object (functions pruned)
   state.serialize = () => JSON.parse(JSON.stringify(state))
 
+  // load a different state into the current instance
+  state.load = (load) => {
+    Object.keys(load).forEach((key) => {
+      state[key] = load[key]
+      state.board = board(state.board)
+    })
+  }
+
   addPhase(state)
 
   return state
