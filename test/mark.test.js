@@ -78,6 +78,18 @@ describe('mark', () => {
       s.accept()
       s.phase.should.equal(phase.END)
     })
+
+    it('should remove all marked cells', () => {
+      const cluster = s.board.clusterAt(0, 2)
+
+      s.mark(0, 2)
+      s.accept()
+
+      cluster.cells.forEach((cell) => {
+        cell.marked.should.be.false()
+        cell.is(piece.EMPTY).should.be.true()
+      })
+    })
   })
 
   describe('reject', () => {

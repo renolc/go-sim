@@ -6,7 +6,10 @@ export default (state) => {
 
   state.is = (value) => state.value === value
 
-  state.set = (value) => state.value = value
+  state.set = (value) => {
+    state.marked = (value !== piece.EMPTY && state.marked)
+    state.value = value
+  }
 
   state.toggleMark = () => state.marked = !state.is(piece.EMPTY) && !state.marked
 
