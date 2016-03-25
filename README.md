@@ -1,4 +1,4 @@
-# GoSim
+# go-sim [![npm version](https://badge.fury.io/js/go-sim.svg)](https://badge.fury.io/js/go-sim)
 Simulate the game [Go](https://en.wikipedia.org/wiki/Go_(game)) in JavaScript.
 
 ### Installation
@@ -101,7 +101,3 @@ game.accept()
 // komi is included at 6.5
 game.score
 ```
-
-### ToDo
-
-- [ ] implement ability to resign
