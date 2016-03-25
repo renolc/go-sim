@@ -16,7 +16,7 @@
     "watch:test": "npm run test -s -- -w",
     "preversion": "npm run test",
     "version": "npm run build && npm run changelog",
-    "postversion": "git push && git push --tags",
+    "postversion": "git push && git push --tags && npm publish",
     "changelog": "echo \"$(changelog)\n\n$(cat CHANGELOG.md)\" > CHANGELOG.md",
     "postchangelog": "git add CHANGELOG.md"
   },
