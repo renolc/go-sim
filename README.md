@@ -19,6 +19,9 @@ const game = goSim()
 // make a custom sized game
 const largeGame = goSim(50)
 
+// get current game phase ('play', 'mark', or 'end')
+game.phase
+
 // get current turn ('black' or 'white')
 game.turn
 
