@@ -44,6 +44,7 @@ export default (...args) => {
     })
   }
 
+  // initialize current phase
   addPhase(state)
 
   return state
