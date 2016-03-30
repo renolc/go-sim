@@ -1,3 +1,5 @@
 src/
 test/
 *.sublime-*
+README.md
+CHANGELOG.md
