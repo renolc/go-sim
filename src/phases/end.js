@@ -1,4 +1,5 @@
 import piece from '../game/piece'
+import range from '../helpers/range'
 
 export default (state) => {
   const komi = 6.5
@@ -9,9 +10,9 @@ export default (state) => {
   }
 
   var visited = []
-  for(var row = 0; row < state.board.size; row++) {
-    for(var col = 0; col < state.board.size; col++) {
-      if (visited.includes(state.board.at(row, col))) continue
+  range(state.board.size).forEach((row) => {
+    range(state.board.size).forEach((col) => {
+      if (visited.includes(state.board.at(row, col))) return
 
       const cluster = state.board.clusterAt(row, col)
       cluster.cells.forEach((cell) => {
@@ -22,9 +23,8 @@ export default (state) => {
         }
         visited.push(cell)
       })
-
-    }
-  }
+    })
+  })
 
   return {
     score

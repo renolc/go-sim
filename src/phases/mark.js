@@ -16,15 +16,17 @@ export default (state) => {
 
     accept: () => {
       state.board.cells
-        .filter((cell) => cell.marked)
-        .forEach((cell) => cell.set(piece.EMPTY))
+        .forEach((cell) => {
+          if (cell.marked) cell.set(piece.EMPTY)
+        })
       changePhase(state, phase.END)
     },
 
     reject: () => {
       state.board.cells
-        .filter((cell) => cell.marked)
-        .forEach((cell) => cell.toggleMark())
+        .forEach((cell) => {
+          if (cell.marked) cell.toggleMark()
+        })
       changePhase(state, phase.PLAY)
     }
   }

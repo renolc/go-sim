@@ -41,7 +41,7 @@ export default (...args) => {
   state.neighborCells = (row, col) => {
     const cell = state.at(row, col)
     if (!cell) {
-      return
+      return []
     }
 
     let neighbors = []
@@ -66,7 +66,7 @@ export default (...args) => {
   state.clusterAt = (row, col, { cells = [], liberties = [], touched = [] } = {}) => {
     const cell = state.at(row, col)
     if (!cell) {
-      return { cells, liberties }
+      return { cells, liberties, touched }
     }
 
     cells.push(cell)

@@ -40,8 +40,8 @@ export default (...args) => {
   state.load = (load) => {
     Object.keys(load).forEach((key) => {
       state[key] = load[key]
-      state.board = board(state.board)
     })
+    state.board = board(state.board)
   }
 
   // initialize current phase
