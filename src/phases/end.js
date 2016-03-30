@@ -26,7 +26,5 @@ export default (state) => {
     })
   })
 
-  return {
-    score
-  }
+  return {score}
 }

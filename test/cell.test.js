@@ -6,10 +6,12 @@ import cell from '../src/game/cell'
 describe('cell', () => {
   var c
 
-  beforeEach(() => c = cell({
-    row: 2,
-    col: 3
-  }))
+  beforeEach(() => {
+    c = cell({
+      row: 2,
+      col: 3
+    })
+  })
 
   it('should exists', () => should.exist(c))
 

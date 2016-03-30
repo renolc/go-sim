@@ -1,7 +1,5 @@
 import should from 'should'
 
-import phase from '../src/game/phase'
-import piece from '../src/game/piece'
 import sim from '../src/game/sim'
 
 describe('end', () => {

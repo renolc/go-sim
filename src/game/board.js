@@ -9,7 +9,7 @@ export default (...args) => {
 
   const arg = args[0]
 
-  switch(typeof arg) {
+  switch (typeof arg) {
 
     // load board state
     case 'object':
@@ -22,12 +22,12 @@ export default (...args) => {
       size = arg
 
     // everything else
-    default:
+    default: // eslint-disable-line
       state = {
         size,
         cells: range(size * size).map((i) => cell({
-            row: Math.floor(i / size),
-            col: i % size
+          row: Math.floor(i / size),
+          col: i % size
         }))
       }
   }

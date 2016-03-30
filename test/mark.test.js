@@ -1,4 +1,4 @@
-import should from 'should'
+import should from 'should' // eslint-disable-line
 
 import phase from '../src/game/phase'
 import piece from '../src/game/piece'

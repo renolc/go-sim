@@ -10,7 +10,7 @@ export default (...args) => {
 
   const arg = args[0]
 
-  switch(typeof arg) {
+  switch (typeof arg) {
 
     // load game state
     case 'object':
@@ -23,7 +23,7 @@ export default (...args) => {
       size = arg
 
     // everything else
-    default:
+    default: // eslint-disable-line
       state = {
         board: board(size),
         turn: piece.BLACK,

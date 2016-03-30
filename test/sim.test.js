@@ -7,7 +7,9 @@ import sim from '../src/game/sim'
 describe('sim', () => {
   var s
 
-  beforeEach(() => s = sim())
+  beforeEach(() => {
+    s = sim()
+  })
 
   it('should exist', () => should.exist(s))
 
