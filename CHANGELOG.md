@@ -1,3 +1,11 @@
+1.1.1 / 2016-03-31
+==================
+
+  * Add eslint dev dependency. Remove standard globals from package.json. Add eslint mocha env to test files.
+  * Force static analyser to load all phases so package will work in browserify.
+  * Make code js standard compliant.
+  * Remove README and CHANGELOG from .npmignore
+
 
 
 1.0.4 / 2016-03-25
