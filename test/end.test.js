@@ -1,3 +1,4 @@
+/* eslint-env mocha */
 import should from 'should'
 
 import sim from '../src/game/sim'

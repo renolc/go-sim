@@ -1,3 +1,4 @@
+/* eslint-env mocha */
 import should from 'should'
 
 import piece from '../src/game/piece'

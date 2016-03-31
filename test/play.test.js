@@ -1,3 +1,4 @@
+/* eslint-env mocha */
 import should from 'should' // eslint-disable-line
 
 import piece from '../src/game/piece'
