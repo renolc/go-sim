@@ -15,10 +15,8 @@
     "watch:build": "watch 'npm run build -s' src/",
     "watch:test": "npm run test -s -- -w",
     "preversion": "npm run test",
-    "version": "npm run build && npm run changelog",
-    "postversion": "git push && git push --tags && npm publish",
-    "changelog": "echo \"$(changelog)\n\n$(cat CHANGELOG.md)\" > CHANGELOG.md",
-    "postchangelog": "git add CHANGELOG.md"
+    "version": "npm run build",
+    "postversion": "git push && git push --tags && npm publish"
   },
   "repository": {
     "type": "git",
@@ -47,7 +45,6 @@
     "babel-plugin-array-includes": "^2.0.3",
     "babel-preset-es2015": "^6.1.18",
     "babel-preset-stage-0": "^6.1.18",
-    "changelog-gn": "^1.0.3",
     "eslint": "~2.2.0",
     "growl": "^1.8.1",
     "mocha": "^2.3.4",
