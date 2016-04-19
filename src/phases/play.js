@@ -31,10 +31,10 @@ export default (state) => {
       state.board.neighborCells(row, col)
         .filter((c) => {
           return c.is(
-              (state.turn === piece.BLACK)
-                ? piece.WHITE
-                : piece.BLACK
-            )
+            (state.turn === piece.BLACK)
+              ? piece.WHITE
+              : piece.BLACK
+          )
         })
         .forEach((c) => {
           const cluster = state.board.clusterAt(c.row, c.col)

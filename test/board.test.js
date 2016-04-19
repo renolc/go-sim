@@ -1,3 +1,4 @@
+/* eslint-env mocha */
 import should from 'should'
 
 import piece from '../src/game/piece'
@@ -6,7 +7,9 @@ import board from '../src/game/board'
 describe('board', () => {
   var b
 
-  beforeEach(() => b = board())
+  beforeEach(() => {
+    b = board()
+  })
 
   it('should exist', () => should.exist(b))
 

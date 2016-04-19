@@ -1,4 +1,5 @@
-import should from 'should'
+/* eslint-env mocha */
+import should from 'should' // eslint-disable-line
 
 import piece from '../src/game/piece'
 import phase from '../src/game/phase'
@@ -7,7 +8,9 @@ import sim from '../src/game/sim'
 describe('play', () => {
   var s
 
-  beforeEach(() => s = sim(4))
+  beforeEach(() => {
+    s = sim(4)
+  })
 
   describe('pass', () => {
     it('should alternate turns', () => {

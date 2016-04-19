@@ -1,4 +1,5 @@
-import should from 'should'
+/* eslint-env mocha */
+import should from 'should' // eslint-disable-line
 
 import phase from '../src/game/phase'
 import piece from '../src/game/piece'

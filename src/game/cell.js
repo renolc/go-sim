@@ -11,7 +11,9 @@ export default (state) => {
     state.value = value
   }
 
-  state.toggleMark = () => state.marked = !state.is(piece.EMPTY) && !state.marked
+  state.toggleMark = () => {
+    state.marked = !state.is(piece.EMPTY) && !state.marked
+  }
 
   return state
 }

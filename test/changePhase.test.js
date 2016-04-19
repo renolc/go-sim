@@ -1,3 +1,4 @@
+/* eslint-env mocha */
 import should from 'should'
 
 import sim from '../src/game/sim'
@@ -7,7 +8,9 @@ import changePhase from '../src/helpers/changePhase'
 describe('changePhase', () => {
   var s
 
-  beforeEach(() => s = sim(1))
+  beforeEach(() => {
+    s = sim(1)
+  })
 
   it('should only have play methods', () => {
     should.exist(s.pass)

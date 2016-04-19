@@ -1,3 +1,4 @@
+/* eslint-env mocha */
 import should from 'should'
 
 import piece from '../src/game/piece'
@@ -6,10 +7,12 @@ import cell from '../src/game/cell'
 describe('cell', () => {
   var c
 
-  beforeEach(() => c = cell({
-    row: 2,
-    col: 3
-  }))
+  beforeEach(() => {
+    c = cell({
+      row: 2,
+      col: 3
+    })
+  })
 
   it('should exists', () => should.exist(c))
 
