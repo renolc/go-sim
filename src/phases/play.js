@@ -28,6 +28,7 @@ export default (state) => {
       cell.set(state.turn)
 
       // remove captured clusters
+      var captured = []
       state.board.neighborCells(row, col)
         .filter((c) => {
           return c.is(
@@ -40,6 +41,10 @@ export default (state) => {
           const cluster = state.board.clusterAt(c.row, c.col)
           if (cluster.liberties.length === 0) {
             cluster.cells.forEach((d) => {
+              captured.push({
+                row: d.row,
+                col: d.col
+              })
               d.set(piece.EMPTY)
             })
           }
@@ -56,7 +61,8 @@ export default (state) => {
       state.previousPlay = {
         turn: state.turn,
         type: 'play',
-        position: [row, col]
+        position: [row, col],
+        captured: captured
       }
       alternateTurns(state)
     }

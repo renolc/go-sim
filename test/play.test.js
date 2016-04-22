@@ -64,7 +64,24 @@ describe('play', () => {
       s.previousPlay.should.eql({
         turn: piece.BLACK,
         type: 'play',
-        position: [1, 2]
+        position: [1, 2],
+        captured: []
+      })
+    })
+
+    it('should have captured pieces in previous play', () => {
+      s.previousPlay.should.be.empty()
+      s.play(0, 1)
+      s.play(0, 0)
+      s.play(1, 0)
+      s.previousPlay.should.eql({
+        turn: piece.BLACK,
+        type: 'play',
+        position: [1, 0],
+        captured: [{
+          row: 0,
+          col: 0
+        }]
       })
     })
 
