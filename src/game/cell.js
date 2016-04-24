@@ -2,7 +2,7 @@ import piece from './piece'
 
 export default (state) => {
   state.value = state.value || piece.EMPTY
-  state.marked = false
+  state.marked = state.marked || false
 
   state.is = (value) => state.value === value
 

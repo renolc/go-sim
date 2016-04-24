@@ -18,6 +18,16 @@ describe('cell', () => {
 
   it('should default to empty', () => c.value.should.equal(piece.EMPTY))
 
+  it('should set marked to passed in state value', () => {
+    const c2 = cell({
+      row: 0,
+      col: 0,
+      marked: true
+    })
+
+    c2.marked.should.be.true()
+  })
+
   describe('is', () => {
     it('should return true when values match', () => c.is(piece.EMPTY).should.be.true())
 
