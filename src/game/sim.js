@@ -3,6 +3,7 @@ import piece from './piece'
 import board from './board'
 
 import addPhase from '../helpers/addPhase'
+import changePhase from '../helpers/changePhase'
 
 export default (...args) => {
   var size = 9
@@ -38,10 +39,16 @@ export default (...args) => {
 
   // load a different state into the current instance
   state.load = (load) => {
+    const originalPhase = state.phase
     Object.keys(load).forEach((key) => {
       state[key] = load[key]
     })
     state.board = board(state.board)
+
+    // hack to ensure loaded phase methods are available
+    const newPhase = state.phase
+    state.phase = originalPhase
+    changePhase(state, newPhase)
   }
 
   // initialize current phase

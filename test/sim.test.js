@@ -30,6 +30,21 @@ describe('sim', () => {
     s.serialize().should.eql(orig)
   })
 
+  it('should load with phase specific functions', () => {
+    s.pass()
+    s.pass()
+    const state = s.serialize()
+
+    const s2 = sim()
+    s2.load(state)
+    should.not.exist(s2.play)
+    should.exist(s2.mark)
+
+    const s3 = sim(state)
+    should.not.exist(s3.play)
+    should.exist(s3.mark)
+  })
+
   describe('serialize', () => {
     it('should return a plain JS object of state', () => {
       const serialized = s.serialize()
