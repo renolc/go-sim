@@ -2,11 +2,9 @@ import piece from '../game/piece'
 import range from '../helpers/range'
 
 export default (state) => {
-  const komi = 6.5
-
   var score = {
     black: 0,
-    white: komi
+    white: state.komi
   }
 
   var visited = []
