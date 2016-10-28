@@ -15,7 +15,7 @@ export default (state) => {
 
   const score = {
     black: 0,
-    white: komi
+    white: state.komi
   }
 
   const visited = []

@@ -32,7 +32,7 @@ describe('end', () => {
     s.accept()
   })
 
-  it('it should calculate final score', () => {
+  it('should calculate final score', () => {
     should.exist(s.score)
     s.score.black.should.equal(8)
     s.score.white.should.equal(12.5)
@@ -43,5 +43,18 @@ describe('end', () => {
     s2.resign()
     s2.score.black.should.equal('resigned')
     s2.score.white.should.equal('win')
+  })
+
+  it('should use the set komi', () => {
+    const s2 = sim(4)
+    s2.komi = 7.5
+
+    s2.pass()
+    s2.pass()
+    s2.propose()
+    s2.accept()
+
+    s2.score.black.should.equal(0)
+    s2.score.white.should.equal(7.5)
   })
 })
