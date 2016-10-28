@@ -28,6 +28,7 @@ export default (...args) => {
       state = {
         board: board(size),
         turn: piece.BLACK,
+        komi: 6.5,
         previousBoard: null,
         phase: phase.PLAY,
         previousPlay: {}

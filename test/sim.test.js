@@ -18,6 +18,8 @@ describe('sim', () => {
 
   it('should default phase to play', () => s.phase.should.equal(phase.PLAY))
 
+  it('should default komi to 6.5', () => s.komi.should.equal(6.5))
+
   it('should load another state', () => {
     const orig = s.serialize()
     s.serialize().should.eql(orig)
@@ -43,6 +45,14 @@ describe('sim', () => {
     const s3 = sim(state)
     should.not.exist(s3.play)
     should.exist(s3.mark)
+  })
+
+  it('should persist komi', () => {
+    s.komi = 7.5
+    const state = s.serialize()
+
+    const s2 = sim(state)
+    s2.komi.should.equal(7.5)
   })
 
   describe('serialize', () => {
