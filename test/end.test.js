@@ -38,6 +38,13 @@ describe('end', () => {
     s.score.white.should.equal(12.5)
   })
 
+  it('should state who won by resignation', () => {
+    const s2 = sim()
+    s2.resign()
+    s2.score.black.should.equal('resigned')
+    s2.score.white.should.equal('win')
+  })
+
   it('should use the set komi', () => {
     const s2 = sim(4)
     s2.komi = 7.5

@@ -164,4 +164,26 @@ describe('play', () => {
       })
     })
   })
+
+  describe('resign', () => {
+    it('should advance the turn', () => {
+      s.turn.should.equal(piece.BLACK)
+      s.resign()
+      s.turn.should.equal(piece.WHITE)
+    })
+
+    it('should set who resigned', () => {
+      should.not.exist(s.resigned)
+      const turn = s.turn
+      s.resign()
+      should.exist(s.resigned)
+      s.resigned.should.equal(turn)
+    })
+
+    it('should transition to end phase', () => {
+      s.phase.should.equal(phase.PLAY)
+      s.resign()
+      s.phase.should.equal(phase.END)
+    })
+  })
 })
