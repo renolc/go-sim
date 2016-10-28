@@ -65,6 +65,12 @@ export default (state) => {
         captured: captured
       }
       alternateTurns(state)
+    },
+
+    resign: () => {
+      state.resigned = state.turn
+      alternateTurns(state)
+      changePhase(state, phase.END)
     }
   }
 }

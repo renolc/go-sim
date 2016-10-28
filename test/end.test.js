@@ -37,4 +37,11 @@ describe('end', () => {
     s.score.black.should.equal(8)
     s.score.white.should.equal(12.5)
   })
+
+  it('should state who won by resignation', () => {
+    const s2 = sim()
+    s2.resign()
+    s2.score.black.should.equal('resigned')
+    s2.score.white.should.equal('win')
+  })
 })
